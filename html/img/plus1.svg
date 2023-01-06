@@ -1,0 +1,19 @@
+<svg version="1.2" width="30px" height="30px">
+   <g>
+       <g id="id3">
+        <path fill="none" stroke="rgb(52,101,164)" stroke-width="150" stroke-linejoin="round" d="M 4683,2579 C 4683,2948 4586,3311 4402,3631 4218,3951 3954,4216 3635,4401 3316,4586 2955,4683 2587,4683 2219,4683 1858,4586 1539,4401 1220,4216 956,3951 772,3631 588,3311 491,2948 491,2579 491,2210 588,1847 772,1527 956,1207 1220,942 1539,757 1858,572 2219,475 2587,475 2955,475 3316,572 3635,757 3954,942 4218,1207 4402,1527 4586,1847 4683,2210 4683,2579 L 4683,2579 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape">
+       <g id="id4">
+        <rect class="BoundingBox" stroke="none" fill="none" x="2576" y="925" width="151" height="3231"/>
+        <path fill="none" stroke="rgb(52,101,164)" stroke-width="150" stroke-linejoin="round" d="M 2651,1000 L 2651,4080"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape">
+       <g id="id5">
+        <rect class="BoundingBox" stroke="none" fill="none" x="925" y="2449" width="3326" height="151"/>
+        <path fill="none" stroke="rgb(52,101,164)" stroke-width="150" stroke-linejoin="round" d="M 1000,2524 L 4175,2524"/>
+      </g>
+    </g>
+</svg>

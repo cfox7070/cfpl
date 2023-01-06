@@ -1,0 +1,105 @@
+package cfplhelpers
+
+import scala.scalajs.js
+import scala.scalajs.js.annotation._
+import org.denigma.threejs.{Vector => ThreeVector, _}
+import org.scalajs.dom.{CanvasRenderingContext2D, html, window,document,Event}
+import scala.language.implicitConversions
+
+import vecquat._
+
+package object redrr{
+	*type Context2d = CanvasRenderingContext2D
+	
+        *val $=js.Dynamic.literal
+        
+	def V3(x:Double,y:Double,z:Double=0)=new Vector3(x,y,z)
+    def V3(v : Vec)= vec2vec3(v)
+    def V2(x:Double,y:Double)=new Vector2(x,y)
+	
+	implicit def context2rich(ctx: CanvasRenderingContext2D)=new RichContext(ctx)
+	implicit def vec2vec3(pt: Vec)=new Vector3(pt.x,pt.y,pt.z)
+	implicit def vec2vec2(pt: Vec)=new Vector2(pt.x,pt.y)
+	implicit def vec32Vec(v: Vector3)=Vec(v.x,v.y,v.z)
+
+	implicit def plane32threePlane(p: Plane3) = new Plane(p.n,p.p)
+	
+	*def jsA[T](v1:T*)=js.Array[T](v1: _*)
+	
+	def s(v: Vector3)=s"Vector3: ${v.x},${v.y},${v.z}"
+      //  def s(q: Quad)=s"Quad:  $p0, $p1, $p2, $p3"
+
+	*def max (a1:Double,a2:Double,ax:Double*):Double={
+		var mx=math.max(a1,a2)
+		for(x<-ax) mx=math.max(mx,x)
+		mx
+	}
+    *def min (a1:Double,a2:Double,ax:Double*):Double={
+                var mn=math.min(a1,a2)
+                for(x<-ax) mn=math.min(mn,x)
+                mn
+        }
+        
+        def printmt(m:Matrix4,comment:String=""){
+            println(comment)
+            val e=m.elements
+            println(f""" ${e(0)}%.2f\t  ${e(4)}%.2f\t  ${e(8)}%.2f\t  ${e(12)}%.2f\t
+                        |${e(1)}%.2f\t  ${e(5)}%.2f\t  ${e(9)}%.2f\t  ${e(13)}%.2f\t
+                        |${e(2)}%.2f\t  ${e(6)}%.2f\t  ${e(10)}%.2f\t  ${e(14)}%.2f\t
+                        |${e(3)}%.2f\t  ${e(7)}%.2f\t  ${e(11)}%.2f\t  ${e(15)}%.2f\t
+                     """.stripMargin)
+        }
+}
+
+package redrr{
+	@js.native
+	@JSGlobalScope
+	object Globals extends js.Object {
+	  val lg:Double=js.native;val sg:Double=js.native;val ylt1:Double=js.native;
+	  val ylt2:Double=js.native;val ylb:Double=js.native;val slt:Double=js.native;val slb:Double=js.native;
+
+	  val xll1:Double=js.native;val xll2:Double=js.native;val xlr:Double=js.native;
+	  val sll:Double=js.native;val slr:Double=js.native;
+	  val ctxfont:String=js.native
+	}
+
+	class RichContext(val ctx : CanvasRenderingContext2D){
+	import RichContext._
+		var curPt=Vec(0,0)
+		def polygon(st:Vec,pts:Vec *) : RichContext={
+			//ctx.beginPath()
+			M(st)
+			for (pt <- pts) L(pt)
+			ctx.closePath
+			this
+		}
+		def polygon(pts:Seq[Vec]) : RichContext = polygon(pts.head,pts.tail: _*)
+		def M(x:Double,y:Double)={ctx.moveTo(x*lscale,y*lscale);curPt=Vec(x*lscale,y*lscale);this}
+		def M(pt:Vec):RichContext=M(pt.x,pt.y)
+		def L(x:Double,y:Double)={ctx.lineTo(x*lscale,y*lscale);curPt=Vec(x*lscale,y*lscale);
+                                /*println(f"L ${x*lscale}%2.2f ${x*lscale}%2.2f");*/this}
+		def L(pt:Vec):RichContext=L(pt.x,pt.y)
+		def H(x:Double)=L(x,curPt.y)
+		def V(y:Double)=L(curPt.x,y)
+	}
+	
+  object RichContext{
+       var lscale=1.0
+  }
+	
+  @js.native
+  @JSGlobal("THREE.OrbitControls")
+   class OrbitControls(obj : Camera, domElement : html.Element) extends js.Object{
+       var autoRotate : Boolean =js.native
+       var autoRotateSpeed : Float =js.native
+       def addEventListener(evt:String,listener: js.Function1[Event, _]):Unit=js.native
+       def update():Unit = js.native
+   }
+   
+    @js.native
+    @JSGlobal("Window")
+    class WindowM extends org.scalajs.dom.raw.Window{
+        def closed: Boolean = js.native
+    }
+
+}
