@@ -1,4 +1,4 @@
-package cfx70.cfplhelpers
+package cfx70
  
  package object vecquat{
 	val epsilon=1.0e-7

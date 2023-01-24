@@ -35,11 +35,11 @@ lazy val threejsfacade = (project in file("threejsfacade"))
     commonSettings
    )
 
-lazy val helpers = (project in file("helpers"))
+lazy val core = (project in file("core"))
   .dependsOn(threejsfacade)
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    name := "helpers",
+    name := "core",
    commonSettings
    )
 

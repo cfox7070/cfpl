@@ -1,4 +1,4 @@
-package cfx70.cfplhelpers
+package cfx70.cfpl.core
 
 import scala.scalajs.js
 import org.scalajs.dom
@@ -6,14 +6,25 @@ import org.scalajs.dom
 import org.scalajs.dom.{CanvasRenderingContext2D, html, window,document,Event}
 import scala.language.implicitConversions
 
-import vecquat.Vec
+import cfx70.vecquat.Vec
 import cfx70.threejsfacade.THREE._
 import cfx70.threejsfacade.OrbitControls
 
 
 object CommonHelpers {
+	
+	implicit def vec2vec3(pt: Vec)=new Vector3(pt.x,pt.y,pt.z)
+	//implicit def vec2vec2(pt: Vec)=new Vector2(pt.x,pt.y)
+	implicit def vec3Vec(v: Vector3)=Vec(v.x,v.y,v.z)
+	implicit def plane3threePlane(p: Plane3) = new Plane(p.n,p.p)
+
 	val $=js.Dynamic.literal
 	def jsA[T](v1:T*)=js.Array[T](v1: _*)
+	
+	def V3(x:Double,y:Double,z:Double=0)=new Vector3(x,y,z)
+    def V3(v : Vec)= vec2vec3(v)
+//    def V2(x:Double,y:Double)=new Vector2(x,y)
+
 	def max (a1:Double,a2:Double,ax:Double*):Double={
 		var mx=math.max(a1,a2)
 		for(x<-ax) mx=math.max(mx,x)
@@ -30,6 +41,18 @@ object CommonHelpers {
     def dimsChange(e:dom.Event){
         println("smth changed")
     }
+
+	def s(v: Vector3)=s"Vector3: ${v.x},${v.y},${v.z}"
+	/*def printmt(m:Matrix4,comment:String=""){
+		println(comment)
+		val e=m.elements
+		println(f""" ${e(0)}%.2f\t  ${e(4)}%.2f\t  ${e(8)}%.2f\t  ${e(12)}%.2f\t
+					|${e(1)}%.2f\t  ${e(5)}%.2f\t  ${e(9)}%.2f\t  ${e(13)}%.2f\t
+					|${e(2)}%.2f\t  ${e(6)}%.2f\t  ${e(10)}%.2f\t  ${e(14)}%.2f\t
+					|${e(3)}%.2f\t  ${e(7)}%.2f\t  ${e(11)}%.2f\t  ${e(15)}%.2f\t
+				 """.stripMargin)
+	}*/
+
 }
 
 object Helpers2d{
@@ -58,9 +81,9 @@ object Helpers2d{
 		def V(y:Double)=L(curPt.x,y)
 	}
 	
-  object RichContext{
+  /*object RichContext{
        var lscale=1.0
-  }
+  }*/
 }
 
 object Helpers3d{	
