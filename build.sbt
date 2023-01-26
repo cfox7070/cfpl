@@ -43,6 +43,14 @@ lazy val core = (project in file("core"))
    commonSettings
    )
 
+lazy val draft = (project in file("draft"))
+  .dependsOn(core)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "draft",
+   commonSettings
+   )
+
 lazy val fund_anim = (project in file("fund-anim"))
   .dependsOn(threejsfacade)
   .enablePlugins(ScalaJSPlugin)

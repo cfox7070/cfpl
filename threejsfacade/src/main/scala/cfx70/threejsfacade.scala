@@ -17,6 +17,16 @@ import scalajs.js.typedarray._
 
 object THREE {
 	
+	val DoubleSide = 2
+
+//B	
+	@js.native
+	@JSImport("three", "Box3")
+	class Box3(var min: Vector3 = js.native, var max: Vector3 = js.native) extends js.Object {
+		def setFromObject(`object`: Object3D): Box3 = js.native
+		def getSize(target: Vector3 ): Vector3 = js.native
+	}
+
 	@js.native
 	@JSImport("three", "BoxGeometry")
 	class BoxGeometry(width: Double, height: Double, depth: Double,
@@ -33,8 +43,9 @@ object THREE {
 	class BufferGeometry() extends js.Object {
 		def setFromPoints(points : js.Array[Vector3]) : BufferGeometry = js.native
 		def setAttribute(name: String, attribute: BufferAttribute): BufferGeometry = js.native
+		def dispose(): Unit = js.native
 	}
-//cameras
+//C
 	@js.native
 	@JSImport("three", "Camera")
 	class Camera() extends Object3D 
@@ -46,26 +57,28 @@ object THREE {
 	  def this(hex: Double) = this()
 	  def this(name: String) = this()
 	}
-
+//D
 	@js.native
 	@JSImport("three", "DirectionalLight")
 	class DirectionalLight(var color : Integer = js.native, var intensity : Double = js.native) extends Light(color,intensity)
+//E	
+	@js.native
+	@JSImport("three","EdgesGeometry")
+	class EdgesGeometry(geometry : BufferGeometry, thresholdAngle : Integer =js.native) extends BufferGeometry
 
-//Euler	
 	@js.native
 	@JSImport("three", "Euler")
 	class Euler(var x : Double,var y : Double,var z : Double,var order : String ) extends js.Object{
 	}
 	
-//lights
+//L
 	@js.native
 	@JSImport("three", "Light")
 	class Light(color : Integer = js.native, intensity : Double = js.native) extends Object3D 
 
 	@js.native
 	@JSImport("three","Line")
-	class Line(var geometry: BufferGeometry = js.native, var material:  Material = js.native) extends Object3D {
-	}
+	class Line(var geometry: BufferGeometry = js.native, var material:  Material = js.native) extends Object3D 
 
 	@js.native
 	@JSImport("three", "LineBasicMaterial")
@@ -74,13 +87,19 @@ object THREE {
 	}
 
 	@js.native
+	@JSImport("three","LineSegments")
+	class LineSegments(geometry: BufferGeometry = js.native, material:  Material = js.native) extends Line(geometry,material) 
+	
+//M
+	@js.native
 	@JSImport("three", "Material")
 	class Material() extends js.Object {
+		def dispose(): Unit = js.native
 	}
 
 	@js.native
 	@JSImport("three", "Mesh")
-	class Mesh( geometry : BufferGeometry, material : Material ) extends Object3D 	
+	class Mesh( val geometry : BufferGeometry, val material : Material ) extends Object3D 	
 
 	@js.native
 	@JSImport("three", "MeshBasicMaterial")
@@ -88,13 +107,19 @@ object THREE {
 	}
 
 	@js.native
+	@JSImport("three", "MeshPhongMaterial")
+	class MeshPhongMaterial(params: js.Object = js.native) extends Material {
+	}
+//O
+	@js.native
 	@JSImport("three", "Object3D")
 	class Object3D() extends js.Object {
 		var position : Vector3 = js.native
 		var rotation : Euler = js.native	
+		var children: js.Array[Object3D] = js.native
 		def add ( obj : Object3D* ) : Object3D = js.native
 	}
-
+//P
 	@js.native
 	@JSImport("three", "PerspectiveCamera")
 	class PerspectiveCamera(var fov : Double, var aspect : Double, var near : Double, var far : Double) extends Camera 
@@ -133,19 +158,19 @@ object THREE {
 		var size: Double = js.native
 		var color: Color = js.native
 	}
-
+//S
 	@js.native
 	@JSImport("three", "Scene")
 	class Scene() extends Object3D {
 		var background : Color = js.native		
 	}
-
+//V
 	@js.native
 	@JSImport("three", "Vector3")
-	class Vector3(var x : Double, var y : Double, var z : Double ) extends js.Object{
+	class Vector3(var x : Double = js.native, var y : Double = js.native, var z : Double = js.native ) extends js.Object{
 		def set ( x : Double, y : Double, z : Double ): Vector3 = js.native
 	}
-
+//W
 	@js.native
 	@JSImport("three", "WebGLRenderer")
 	class WebGLRenderer(params: js.Object = js.native) extends js.Object{
