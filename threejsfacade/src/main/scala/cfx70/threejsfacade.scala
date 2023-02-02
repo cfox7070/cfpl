@@ -18,7 +18,10 @@ import scalajs.js.typedarray._
 object THREE {
 	
 	val DoubleSide = 2
-
+//A
+	@js.native
+	@JSImport("three", "AxesHelper")
+	class AxesHelper(size: Double = js.native) extends Line
 //B	
 	@js.native
 	@JSImport("three", "Box3")
@@ -26,6 +29,10 @@ object THREE {
 		def setFromObject(`object`: Object3D): Box3 = js.native
 		def getSize(target: Vector3 ): Vector3 = js.native
 	}
+
+	@js.native
+	@JSImport("three", "Box3Helper")
+	class Box3Helper(box : Box3 = js.native, color : Color = js.native) extends LineSegments
 
 	@js.native
 	@JSImport("three", "BoxGeometry")
@@ -41,9 +48,11 @@ object THREE {
 	@js.native
 	@JSImport("three", "BufferGeometry")
 	class BufferGeometry() extends js.Object {
+		var boundingBox: Box3 = js.native
 		def setFromPoints(points : js.Array[Vector3]) : BufferGeometry = js.native
 		def setAttribute(name: String, attribute: BufferAttribute): BufferGeometry = js.native
 		def dispose(): Unit = js.native
+		def computeBoundingBox(): Unit = js.native
 	}
 //C
 	@js.native
@@ -104,6 +113,7 @@ object THREE {
 	@js.native
 	@JSImport("three", "MeshBasicMaterial")
 	class MeshBasicMaterial(params: js.Object = js.native) extends Material {
+		var color: Color = js.native
 	}
 
 	@js.native
@@ -118,11 +128,14 @@ object THREE {
 		var rotation : Euler = js.native	
 		var children: js.Array[Object3D] = js.native
 		def add ( obj : Object3D* ) : Object3D = js.native
+		def remove(`object`: Object3D): Unit = js.native
 	}
 //P
 	@js.native
 	@JSImport("three", "PerspectiveCamera")
-	class PerspectiveCamera(var fov : Double, var aspect : Double, var near : Double, var far : Double) extends Camera 
+	class PerspectiveCamera(var fov : Double, var aspect : Double, var near : Double, var far : Double) extends Camera {
+		def updateProjectionMatrix(): Unit = js.native
+	}
 
 	@js.native
 	@JSImport("three","Plane")

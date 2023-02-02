@@ -60,6 +60,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title><?= $title ?> </title>
     <style>
             body { margin: 0; }
@@ -119,49 +120,47 @@
 </div>
 </div>
     <script>
-    function openCity(evt,viewName) {
-        let i;
-        let x = document.getElementsByClassName("view");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none"  
-        }
-        let tablinks = document.getElementsByClassName("tablink")
-        for (i = 0; i < x.length; i++) {
-            tablinks[i].classList.remove("w3-theme-l4")
-        }
-        let view = document.getElementById(viewName)
-        view.style.display = "block"
-        evt.currentTarget.classList.add("w3-theme-l4")
-     }
     </script>  
 
-<script src="js/three.js"></script>
-<script src="js/OrbitControls.js"></script>
-<script type="text/javascript" src="js/redrr-jsdeps.js"></script>
-<script type="text/javascript" src="js/redrr-fastopt.js"></script>
+</body>
+<script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
-<script>
-    var lg,sg,ylt1,ylt2,ylb,slt,slb
-    [lg,sg,ylt1,ylt2,ylb,slt,slb]=[8,6,251.5,225.5,-250.5,203.5,-203.5]
-    var xll1,xll2,xlr,sll,slr
-    [xll1,xll2,xlr,sll,slr]=[-351,-325,350,-303.5,303.5]
-    var ctxfont="italic 1.8em sans-serif"
-    
-	    
-window.onload=function(){
-    const inputs = document.querySelectorAll('.dims-input0')
-    const log = document.getElementById('log')
-    let detapp=new DetApp()
-    detapp.setAnimation(false)
-    /*const anim=document.querySelector('#anim')
-    detapp.setAnimation(anim.checked)
-    anim.addEventListener('click', function(e){detapp.setAnimation(anim.checked)})
-    let ir=0*/
-           
-    <?php require $detailscript ?>
-	
+<script type="importmap">
+{
+  "imports": {
+			"three": "./js/three.r140.module.js",
+			"detapp": "./js/det.js",
+			"three/addons/": "./js/addons/"
+  }
 }
 
 </script>
-</body>
+
+<script type="module">
+//import * as THREE from 'three';
+import {DetApp}  from 'detapp';
+//import {OrbitControls} from 'three/addons/OrbitControls.js';
+
+function openCity(evt,viewName) {
+	let i;
+	let x = document.getElementsByClassName("view");
+	for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none"  
+	}
+	let tablinks = document.getElementsByClassName("tablink")
+	for (i = 0; i < x.length; i++) {
+		tablinks[i].classList.remove("w3-theme-l4")
+	}
+	let view = document.getElementById(viewName)
+	view.style.display = "block"
+	evt.currentTarget.classList.add("w3-theme-l4")
+ }
+
+window.openCity=openCity;
+const inputs = document.querySelectorAll('.dims-input0')
+	DetApp.setAnimation(false)
+           
+    <?php require $detailscript ?>
+
+</script>
 </html>
