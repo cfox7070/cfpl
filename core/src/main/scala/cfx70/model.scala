@@ -10,18 +10,7 @@ import cfx70.vecquat._
 import CommonHelpers.{$,vec3Vec}
 
 object Model {
-/*        def MeshBasicMaterial(color:Int = 0xffffff) : MeshBasicMaterial ={ val m = new MeshBasicMaterial()
-                                      m.color.setHex(color)
-                                      m.side=THREE.DoubleSide 
-                                      m}
-	var draftTexture:Option[Texture]=None
-        val basicBlueMaterial = MeshBasicMaterial(0xaa77ee)
-        val basicRedMaterial = MeshBasicMaterial(0xee77aa)
-        val phongBlueMaterial = { val m = new MeshPhongMaterial()
-                                      m.color.setHex(0x79bff8/*0xbafeff*/)
-//                                      m.color.setHex(0xaa66dd)
-                                      m.side=THREE.DoubleSide 
-                                      m}*/
+
     val phongBlueMaterial = new MeshPhongMaterial($(color=0x79bff8,side=THREE.DoubleSide))
 
     def edges(geom: BufferGeometry,mcolor :Int=0x000000) : LineSegments = {    
@@ -39,16 +28,9 @@ object Model {
 }
 
 abstract class Model{
-	def bounds: Vec = {
-            val box = new Box3().setFromObject(meshes)
-            box.getSize(new Vector3())
-	}
+	def whdsize: Vec = new Box3().setFromObject(meshes).getSize(new Vector3())
 	
-	def placement: (Vec,Vec) = {
-		val box = new Box3().setFromObject(meshes)
-		//box.getSize(new Vector3())
-		(box.max - box.min, box.min*0.5+box.max*0.5)
-	}
+	def bsphere: Sphere = new Box3().setFromObject(meshes).getBoundingSphere(new Sphere())
 	
 	val meshes:Object3D
 	

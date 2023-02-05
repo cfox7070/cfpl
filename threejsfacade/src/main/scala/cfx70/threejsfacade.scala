@@ -28,6 +28,7 @@ object THREE {
 	class Box3(var min: Vector3 = js.native, var max: Vector3 = js.native) extends js.Object {
 		def setFromObject(`object`: Object3D): Box3 = js.native
 		def getSize(target: Vector3 ): Vector3 = js.native
+		def getBoundingSphere(target: Sphere ): Sphere = js.native
 	}
 
 	@js.native
@@ -177,6 +178,9 @@ object THREE {
 	class Scene() extends Object3D {
 		var background : Color = js.native		
 	}
+	@js.native
+	@JSImport("three","Sphere")
+	class Sphere(var center: Vector3 = js.native, var radius: Double = js.native) extends js.Object 
 //V
 	@js.native
 	@JSImport("three", "Vector3")

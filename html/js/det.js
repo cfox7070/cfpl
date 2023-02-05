@@ -1416,11 +1416,6 @@ $h_Lcfx70_cfpl_core_CommonHelpers$.prototype = $c_Lcfx70_cfpl_core_CommonHelpers
 $c_Lcfx70_cfpl_core_CommonHelpers$.prototype.vec2vec3__Lcfx70_vecquat_Vec__Lcfx70_threejsfacade_THREE$Vector3 = (function(pt) {
   return new $i_three.Vector3($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(2)))
 });
-$c_Lcfx70_cfpl_core_CommonHelpers$.prototype.vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec = (function(v) {
-  var array = [$uD(v.x), $uD(v.y), $uD(v.z)];
-  var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-  return $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds)
-});
 var $d_Lcfx70_cfpl_core_CommonHelpers$ = new $TypeData().initClass({
   Lcfx70_cfpl_core_CommonHelpers$: 0
 }, false, "cfx70.cfpl.core.CommonHelpers$", {
@@ -1538,13 +1533,8 @@ function $h_Lcfx70_cfpl_core_Model() {
   /*<skip>*/
 }
 $h_Lcfx70_cfpl_core_Model.prototype = $c_Lcfx70_cfpl_core_Model.prototype;
-$c_Lcfx70_cfpl_core_Model.prototype.bounds__Lcfx70_vecquat_Vec = (function() {
-  var box = new $i_three.Box3().setFromObject(this.meshes__Lcfx70_threejsfacade_THREE$Object3D());
-  return $m_Lcfx70_cfpl_core_CommonHelpers$().vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec(box.getSize(new $i_three.Vector3()))
-});
-$c_Lcfx70_cfpl_core_Model.prototype.placement__T2 = (function() {
-  var box = new $i_three.Box3().setFromObject(this.meshes__Lcfx70_threejsfacade_THREE$Object3D());
-  return new $c_T2($m_Lcfx70_cfpl_core_CommonHelpers$().vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec(box.max).$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($m_Lcfx70_cfpl_core_CommonHelpers$().vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec(box.min)), $m_Lcfx70_cfpl_core_CommonHelpers$().vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec(box.min).$times__D__Lcfx70_vecquat_Vec(0.5).$plus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($m_Lcfx70_cfpl_core_CommonHelpers$().vec3Vec__Lcfx70_threejsfacade_THREE$Vector3__Lcfx70_vecquat_Vec(box.max).$times__D__Lcfx70_vecquat_Vec(0.5)))
+$c_Lcfx70_cfpl_core_Model.prototype.bsphere__Lcfx70_threejsfacade_THREE$Sphere = (function() {
+  return new $i_three.Box3().setFromObject(this.meshes__Lcfx70_threejsfacade_THREE$Object3D()).getBoundingSphere(new $i_three.Sphere())
 });
 $c_Lcfx70_cfpl_core_Model.prototype.dispose__V = (function() {
   var array = this.meshes__Lcfx70_threejsfacade_THREE$Object3D().children;
@@ -1799,31 +1789,14 @@ $c_Lcfx70_cfpl_draft_DetApp$.prototype.setAnimation__Z__V = (function(a) {
 $c_Lcfx70_cfpl_draft_DetApp$.prototype.show3d__V = (function() {
   var x1 = this.Lcfx70_cfpl_draft_DetApp$__f_model;
   if ((x1 !== null)) {
-    var bounds = x1.bounds__Lcfx70_vecquat_Vec();
+    var s = x1.bsphere__Lcfx70_threejsfacade_THREE$Sphere();
     var $$x2 = this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.position;
-    $m_Lcfx70_cfpl_core_CommonHelpers$();
-    var a1 = $uD(bounds.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var a2 = $uD(bounds.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var array = [];
-    var elem = $uD(Math.max(a1, a2));
-    var elem$1 = 0.0;
-    elem$1 = elem;
-    var i = 0;
-    var len = $uI(array.length);
-    while ((i < len)) {
-      var index = i;
-      var arg1 = array[index];
-      var x = $uD(arg1);
-      var x$1 = elem$1;
-      elem$1 = $uD(Math.max(x$1, x));
-      i = ((1 + i) | 0)
-    };
-    var $$x1 = elem$1;
-    var x$2 = ($uD(this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.fov) / 2.0);
-    var x$3 = (3.141592653589793 * (x$2 / 180.0));
-    $$x2.z = ($$x1 / $uD(Math.tan(x$3)));
-    this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.position.x = (-$uD(bounds.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)));
-    this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.position.y = $uD(bounds.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+    var $$x1 = $uD(s.radius);
+    var x = ($uD(this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.fov) / 2.0);
+    var x$1 = (3.141592653589793 * (x / 180.0));
+    $$x2.z = ((2.0 * $$x1) / $uD(Math.tan(x$1)));
+    this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.position.x = (-$uD(s.radius));
+    this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.position.y = $uD(s.radius);
     this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.rotation.x = (-0.5235987755982988);
     this.Lcfx70_cfpl_draft_DetApp$__f_camera3d.updateProjectionMatrix();
     this.Lcfx70_cfpl_draft_DetApp$__f_scene.add(this.Lcfx70_cfpl_draft_DetApp$__f_model.meshes__Lcfx70_threejsfacade_THREE$Object3D());
@@ -1997,51 +1970,12 @@ function $m_Lcfx70_cfpl_draft_Dim$() {
 }
 function $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__($thiz, model) {
   $thiz.Lcfx70_cfpl_draft_Draft__f_model = model;
-  $thiz.Lcfx70_cfpl_draft_Draft__f_vsz = 300;
-  $thiz.Lcfx70_cfpl_draft_Draft__f_hsz = 800;
-  var x1 = model.placement__T2();
-  if ((x1 === null)) {
-    throw new $c_s_MatchError(x1)
-  };
-  var sz = $as_Lcfx70_vecquat_Vec(x1.T2__f__1);
-  var st = $as_Lcfx70_vecquat_Vec(x1.T2__f__2);
-  $thiz.Lcfx70_cfpl_draft_Draft__f_x$1 = new $c_T2(sz, st);
-  $thiz.Lcfx70_cfpl_draft_Draft__f_sz = $as_Lcfx70_vecquat_Vec($thiz.Lcfx70_cfpl_draft_Draft__f_x$1.T2__f__1);
-  $thiz.Lcfx70_cfpl_draft_Draft__f_st = $as_Lcfx70_vecquat_Vec($thiz.Lcfx70_cfpl_draft_Draft__f_x$1.T2__f__2);
-  $m_Lcfx70_cfpl_core_CommonHelpers$();
-  var $$x1 = $thiz.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$1 = $thiz.Lcfx70_cfpl_draft_Draft__f_sz;
-  var a1 = ($$x1 / $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
-  var $$x2 = $thiz.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$2 = $thiz.Lcfx70_cfpl_draft_Draft__f_sz;
-  var a2 = ($$x2 / $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(2)));
-  var $$x3 = $thiz.Lcfx70_cfpl_draft_Draft__f_hsz;
-  var this$3 = $thiz.Lcfx70_cfpl_draft_Draft__f_sz;
-  var array = [($$x3 / $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))];
-  var elem = $uD(Math.min(a1, a2));
-  var elem$1 = 0.0;
-  elem$1 = elem;
-  var i = 0;
-  var len = $uI(array.length);
-  while ((i < len)) {
-    var index = i;
-    var arg1 = array[index];
-    var x = $uD(arg1);
-    var x$1 = elem$1;
-    elem$1 = $uD(Math.min(x$1, x));
-    i = ((1 + i) | 0)
-  };
-  $thiz.Lcfx70_cfpl_draft_Draft__f_mscl = elem$1;
+  $thiz.Lcfx70_cfpl_draft_Draft__f_mscl = ((($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0) / (2.1 * $uD(model.bsphere__Lcfx70_threejsfacade_THREE$Sphere().radius)));
   return $thiz
 }
 /** @constructor */
 function $c_Lcfx70_cfpl_draft_Draft() {
   this.Lcfx70_cfpl_draft_Draft__f_model = null;
-  this.Lcfx70_cfpl_draft_Draft__f_vsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_hsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_x$1 = null;
-  this.Lcfx70_cfpl_draft_Draft__f_sz = null;
-  this.Lcfx70_cfpl_draft_Draft__f_st = null;
   this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0
 }
 $c_Lcfx70_cfpl_draft_Draft.prototype = new $h_O();
@@ -2120,9 +2054,9 @@ $c_Lcfx70_cfpl_draft_Draft.prototype.trianglesVisible__Lcfx70_vecquat_Vec__sc_Se
 $c_Lcfx70_cfpl_draft_Draft.prototype.beginDraw__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0.0, 0.0, 1600.0, 1200.0);
-  var this$2 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate((800.0 - ($uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)), 600.0);
+  ctx.fillRect(0.0, 0.0, $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_hsz, $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz);
+  ctx.translate((($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_hsz / 2) | 0), (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 2) | 0));
+  ctx.scale(1.0, (-1.0));
   ctx.lineJoin = "bevel";
   new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx).Lcfx70_cfpl_core_Helpers2d$RichContext__f_lscale = this.Lcfx70_cfpl_draft_Draft__f_mscl
 });
@@ -2130,8 +2064,12 @@ $c_Lcfx70_cfpl_draft_Draft.prototype.beginDraw__Lorg_scalajs_dom_CanvasRendering
 function $c_Lcfx70_cfpl_draft_Draft$() {
   this.Lcfx70_cfpl_draft_Draft$__f_lineWidth = 0.0;
   this.Lcfx70_cfpl_draft_Draft$__f_thinlineWidth = 0.0;
+  this.Lcfx70_cfpl_draft_Draft$__f_vsz = 0;
+  this.Lcfx70_cfpl_draft_Draft$__f_hsz = 0;
   this.Lcfx70_cfpl_draft_Draft$__f_lineWidth = 6.0;
-  this.Lcfx70_cfpl_draft_Draft$__f_thinlineWidth = 1.0
+  this.Lcfx70_cfpl_draft_Draft$__f_thinlineWidth = 1.0;
+  this.Lcfx70_cfpl_draft_Draft$__f_vsz = 1200;
+  this.Lcfx70_cfpl_draft_Draft$__f_hsz = 1600
 }
 $c_Lcfx70_cfpl_draft_Draft$.prototype = new $h_O();
 $c_Lcfx70_cfpl_draft_Draft$.prototype.constructor = $c_Lcfx70_cfpl_draft_Draft$;
@@ -5599,14 +5537,8 @@ $c_Lcfx70_cfpl_draft_HorDim.prototype.$classData = $d_Lcfx70_cfpl_draft_HorDim;
 /** @constructor */
 function $c_Lcfx70_cfpl_draft_RedCCDraft(m) {
   this.Lcfx70_cfpl_draft_Draft__f_model = null;
-  this.Lcfx70_cfpl_draft_Draft__f_vsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_hsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_x$1 = null;
-  this.Lcfx70_cfpl_draft_Draft__f_sz = null;
-  this.Lcfx70_cfpl_draft_Draft__f_st = null;
   this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0;
-  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m);
-  $as_Lcfx70_cfpl_core_RedCC(this.Lcfx70_cfpl_draft_Draft__f_model)
+  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m)
 }
 $c_Lcfx70_cfpl_draft_RedCCDraft.prototype = new $h_Lcfx70_cfpl_draft_Draft();
 $c_Lcfx70_cfpl_draft_RedCCDraft.prototype.constructor = $c_Lcfx70_cfpl_draft_RedCCDraft;
@@ -5621,14 +5553,12 @@ $c_Lcfx70_cfpl_draft_RedCCDraft.prototype.draw__Lorg_scalajs_dom_CanvasRendering
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_thinlineWidth;
   ctx.beginPath();
   ctx.scale(1.0, (-1.0));
-  var $$x1 = this.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$1 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate(0.0, ($$x1 - ($uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)));
+  ctx.translate(0.0, (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0));
   var array = [0.0, 0.0, 1.0];
   var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-  var $$x2 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
-  var this$5 = $as_Lcfx70_cfpl_core_RedCC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedCC__f_cn;
-  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x2, $m_Lcfx70_cfpl_core_BGeometry$().shell__sc_Seq__sc_Seq__sc_Seq(this$5.Lcfx70_cfpl_core_BCone__f_bpts, this$5.Lcfx70_cfpl_core_BCone__f_tpts), ctx);
+  var $$x1 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var this$4 = $as_Lcfx70_cfpl_core_RedCC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedCC__f_cn;
+  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x1, $m_Lcfx70_cfpl_core_BGeometry$().shell__sc_Seq__sc_Seq__sc_Seq(this$4.Lcfx70_cfpl_core_BCone__f_bpts, this$4.Lcfx70_cfpl_core_BCone__f_tpts), ctx);
   ctx.stroke();
   ctx.restore()
 });
@@ -5643,15 +5573,8 @@ $c_Lcfx70_cfpl_draft_RedCCDraft.prototype.$classData = $d_Lcfx70_cfpl_draft_RedC
 /** @constructor */
 function $c_Lcfx70_cfpl_draft_RedRCDraft(m) {
   this.Lcfx70_cfpl_draft_Draft__f_model = null;
-  this.Lcfx70_cfpl_draft_Draft__f_vsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_hsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_x$1 = null;
-  this.Lcfx70_cfpl_draft_Draft__f_sz = null;
-  this.Lcfx70_cfpl_draft_Draft__f_st = null;
   this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0;
-  this.Lcfx70_cfpl_draft_RedRCDraft__f_mm = null;
-  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m);
-  this.Lcfx70_cfpl_draft_RedRCDraft__f_mm = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model)
+  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m)
 }
 $c_Lcfx70_cfpl_draft_RedRCDraft.prototype = new $h_Lcfx70_cfpl_draft_Draft();
 $c_Lcfx70_cfpl_draft_RedRCDraft.prototype.constructor = $c_Lcfx70_cfpl_draft_RedRCDraft;
@@ -5664,94 +5587,89 @@ $c_Lcfx70_cfpl_draft_RedRCDraft.prototype.draw__Lorg_scalajs_dom_CanvasRendering
   ctx.save();
   this.beginDraw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
   ctx.beginPath();
-  ctx.scale(1.0, (-1.0));
-  var $$x1 = this.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$1 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate(0.0, ($$x1 - ($uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)));
+  ctx.translate(0.0, (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0));
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
-  var this$4 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var this$3 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn;
-  var pts = $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$3.Lcfx70_cfpl_core_BRCRed__f_bpts, this$3.Lcfx70_cfpl_core_BRCRed__f_tpts);
-  this$4.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
+  var this$3 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var this$2 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn;
+  var pts = $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$2.Lcfx70_cfpl_core_BRCRed__f_bpts, this$2.Lcfx70_cfpl_core_BRCRed__f_tpts);
+  this$3.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
   ctx.stroke();
   ctx.beginPath();
   new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx).Lcfx70_cfpl_core_Helpers2d$RichContext__f_ctx.fillStyle = "#ffffff";
   var array = [0.0, 0.0, 1.0];
   var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-  var $$x2 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
-  var this$10 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn;
-  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x2, $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$10.Lcfx70_cfpl_core_BRCRed__f_bpts, this$10.Lcfx70_cfpl_core_BRCRed__f_tpts), ctx);
+  var $$x1 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var this$9 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn;
+  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x1, $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$9.Lcfx70_cfpl_core_BRCRed__f_bpts, this$9.Lcfx70_cfpl_core_BRCRed__f_tpts), ctx);
   ctx.fill();
   ctx.beginPath();
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_thinlineWidth;
   var array$1 = [0.0, 0.0, 1.0];
   var crds$1 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1);
-  var $$x3 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1);
-  var this$14 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn;
-  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x3, $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$14.Lcfx70_cfpl_core_BRCRed__f_bpts, this$14.Lcfx70_cfpl_core_BRCRed__f_tpts), ctx);
+  var $$x2 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1);
+  var this$13 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn;
+  this.trianglesVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x2, $m_Lcfx70_cfpl_core_BGeometry$().fan__sc_Seq__sc_Seq__sc_Seq(this$13.Lcfx70_cfpl_core_BRCRed__f_bpts, this$13.Lcfx70_cfpl_core_BRCRed__f_tpts), ctx);
   ctx.stroke();
   ctx.beginPath();
-  var this$16 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var pts$1 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_tpts;
-  this$16.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
+  var this$15 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var pts$1 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_tpts;
+  this$15.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
   ctx.fill();
   ctx.beginPath();
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
-  var this$18 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var pts$2 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_tpts;
-  this$18.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
+  var this$17 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var pts$2 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_tpts;
+  this$17.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
   ctx.stroke();
-  var $$x5 = $m_Lcfx70_cfpl_core_BGeometry$();
-  var $$x4 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d;
-  var array$2 = [this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_da, this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_db, 0.0];
+  var $$x4 = $m_Lcfx70_cfpl_core_BGeometry$();
+  var $$x3 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d;
+  var array$2 = [$as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_da, $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_db, 0.0];
   var crds$2 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$2);
-  var sp1 = $$x5.roundPts__D__Lcfx70_vecquat_Vec__D__D__sc_Seq(($$x4 / 2.0), $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2), 1.5707963267948966, 4.71238898038469);
-  var $$x7 = $m_Lcfx70_cfpl_core_BGeometry$();
-  var $$x6 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d;
-  var array$3 = [(this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_da + (this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d / 7.0)), this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_db, 0.0];
+  var sp1 = $$x4.roundPts__D__Lcfx70_vecquat_Vec__D__D__sc_Seq(($$x3 / 2.0), $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2), 1.5707963267948966, 4.71238898038469);
+  var $$x6 = $m_Lcfx70_cfpl_core_BGeometry$();
+  var $$x5 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d;
+  var array$3 = [($as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_da + ($as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_d / 7.0)), $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.Lcfx70_cfpl_core_BRCRed__f_db, 0.0];
   var crds$3 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$3);
-  var sp2 = $$x7.roundPts__D__Lcfx70_vecquat_Vec__D__D__sc_Seq(($$x6 / 2.0), $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3), 2.0943951023931953, 4.1887902047863905);
-  var $$x8 = $as_sc_GenTraversableOnce(sp2.reverse__O());
-  var this$25 = $m_sc_Seq$();
-  var sp = $as_sc_Seq(sp1.$plus$plus__sc_GenTraversableOnce__scg_CanBuildFrom__O($$x8, this$25.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  var sp2 = $$x6.roundPts__D__Lcfx70_vecquat_Vec__D__D__sc_Seq(($$x5 / 2.0), $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3), 2.0943951023931953, 4.1887902047863905);
+  var $$x7 = $as_sc_GenTraversableOnce(sp2.reverse__O());
+  var this$24 = $m_sc_Seq$();
+  var sp = $as_sc_Seq(sp1.$plus$plus__sc_GenTraversableOnce__scg_CanBuildFrom__O($$x7, this$24.scg_GenTraversableFactory__f_ReusableCBFInstance));
   ctx.beginPath();
   new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx).Lcfx70_cfpl_core_Helpers2d$RichContext__f_ctx.fillStyle = "#000000";
-  var this$29 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  this$29.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(sp.head__O()), $as_sc_Seq(sp.tail__O()));
+  var this$28 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  this$28.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(sp.head__O()), $as_sc_Seq(sp.tail__O()));
   ctx.fill();
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
-  var $$x9 = this.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$30 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate(0.0, ((((-$$x9) | 0) + ($uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)) - ((this.Lcfx70_cfpl_draft_Draft__f_vsz / 2) | 0)));
+  ctx.translate(0.0, ((((-$m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz) | 0) / 2) | 0));
   ctx.scale(1.0, (-1.0));
   ctx.beginPath();
-  var this$34 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x11 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_cn.tophalf__sc_Seq();
+  var this$32 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x9 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_cn.tophalf__sc_Seq();
+  var $$x8 = new $c_sjsr_AnonFunction1(((x$4$2) => {
+    var x$4 = $as_Lcfx70_vecquat_Vec(x$4$2);
+    return x$4.xz__Lcfx70_vecquat_Vec()
+  }));
+  var this$31 = $m_sc_Seq$();
+  var pts$3 = $as_sc_Seq($$x9.map__F1__scg_CanBuildFrom__O($$x8, this$31.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$32.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$3.head__O()), $as_sc_Seq(pts$3.tail__O()));
+  var this$35 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x11 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_fcb.top__sc_Seq();
   var $$x10 = new $c_sjsr_AnonFunction1(((x$5$2) => {
     var x$5 = $as_Lcfx70_vecquat_Vec(x$5$2);
     return x$5.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$33 = $m_sc_Seq$();
-  var pts$3 = $as_sc_Seq($$x11.map__F1__scg_CanBuildFrom__O($$x10, this$33.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$34.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$3.head__O()), $as_sc_Seq(pts$3.tail__O()));
-  var this$37 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x13 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_fcb.top__sc_Seq();
+  var this$34 = $m_sc_Seq$();
+  var pts$4 = $as_sc_Seq($$x11.map__F1__scg_CanBuildFrom__O($$x10, this$34.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$35.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$4.head__O()), $as_sc_Seq(pts$4.tail__O()));
+  var this$38 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x13 = $as_Lcfx70_cfpl_core_RedRC(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRC__f_fct.tophalf__sc_Seq();
   var $$x12 = new $c_sjsr_AnonFunction1(((x$6$2) => {
     var x$6 = $as_Lcfx70_vecquat_Vec(x$6$2);
     return x$6.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$36 = $m_sc_Seq$();
-  var pts$4 = $as_sc_Seq($$x13.map__F1__scg_CanBuildFrom__O($$x12, this$36.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$37.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$4.head__O()), $as_sc_Seq(pts$4.tail__O()));
-  var this$40 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x15 = this.Lcfx70_cfpl_draft_RedRCDraft__f_mm.Lcfx70_cfpl_core_RedRC__f_fct.tophalf__sc_Seq();
-  var $$x14 = new $c_sjsr_AnonFunction1(((x$7$2) => {
-    var x$7 = $as_Lcfx70_vecquat_Vec(x$7$2);
-    return x$7.xz__Lcfx70_vecquat_Vec()
-  }));
-  var this$39 = $m_sc_Seq$();
-  var pts$5 = $as_sc_Seq($$x15.map__F1__scg_CanBuildFrom__O($$x14, this$39.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$40.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$5.head__O()), $as_sc_Seq(pts$5.tail__O()));
+  var this$37 = $m_sc_Seq$();
+  var pts$5 = $as_sc_Seq($$x13.map__F1__scg_CanBuildFrom__O($$x12, this$37.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$38.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$5.head__O()), $as_sc_Seq(pts$5.tail__O()));
   ctx.stroke();
   ctx.restore()
 });
@@ -5766,15 +5684,8 @@ $c_Lcfx70_cfpl_draft_RedRCDraft.prototype.$classData = $d_Lcfx70_cfpl_draft_RedR
 /** @constructor */
 function $c_Lcfx70_cfpl_draft_RedRRDraft(m) {
   this.Lcfx70_cfpl_draft_Draft__f_model = null;
-  this.Lcfx70_cfpl_draft_Draft__f_vsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_hsz = 0;
-  this.Lcfx70_cfpl_draft_Draft__f_x$1 = null;
-  this.Lcfx70_cfpl_draft_Draft__f_sz = null;
-  this.Lcfx70_cfpl_draft_Draft__f_st = null;
   this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0;
-  this.Lcfx70_cfpl_draft_RedRRDraft__f_mm = null;
-  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m);
-  this.Lcfx70_cfpl_draft_RedRRDraft__f_mm = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model)
+  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m)
 }
 $c_Lcfx70_cfpl_draft_RedRRDraft.prototype = new $h_Lcfx70_cfpl_draft_Draft();
 $c_Lcfx70_cfpl_draft_RedRRDraft.prototype.constructor = $c_Lcfx70_cfpl_draft_RedRRDraft;
@@ -5788,93 +5699,88 @@ $c_Lcfx70_cfpl_draft_RedRRDraft.prototype.draw__Lorg_scalajs_dom_CanvasRendering
   this.beginDraw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
   ctx.beginPath();
-  ctx.scale(1.0, (-1.0));
-  var $$x1 = this.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$1 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate(0.0, ($$x1 - ($uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)));
+  ctx.translate(0.0, (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0));
   var array = [0.0, 0.0, 1.0];
   var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-  var $$x3 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
-  var $$x2 = $m_sc_Seq$();
-  var array$1 = [this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq(), this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn.bottom__sc_Seq(), this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn.left__sc_Seq(), this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn.right__sc_Seq()];
-  this.drawVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x3, $as_sc_Seq($$x2.apply__sc_Seq__sc_GenTraversable($ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1))), ctx);
-  var this$7 = this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn;
-  var f = $as_sc_Seq(this$7.Lcfx70_cfpl_core_BPyramid__f_tpts.init__O());
-  var this$9 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  this$9.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(f.head__O()), $as_sc_Seq(f.tail__O()));
+  var $$x2 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var $$x1 = $m_sc_Seq$();
+  var array$1 = [$as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.bottom__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.left__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.right__sc_Seq()];
+  this.drawVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x2, $as_sc_Seq($$x1.apply__sc_Seq__sc_GenTraversable($ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1))), ctx);
+  var this$6 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn;
+  var f = $as_sc_Seq(this$6.Lcfx70_cfpl_core_BPyramid__f_tpts.init__O());
+  var this$8 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  this$8.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(f.head__O()), $as_sc_Seq(f.tail__O()));
   ctx.stroke();
   ctx.beginPath();
   ctx.fillStyle = "#000";
-  var this$23 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var this$22 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
   var st = $as_Lcfx70_vecquat_Vec(f.apply__I__O(0));
-  var $$x10 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
-  var $$x9 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(2));
-  var this$12 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
-  var $$x8 = $uD(this$12.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$13 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(0));
-  var $$x7 = $uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var $$x9 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
+  var $$x8 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(2));
+  var this$11 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
+  var $$x7 = $uD(this$11.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$12 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(0));
+  var $$x6 = $uD(this$12.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$13 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
+  var $$x5 = $uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var this$14 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
-  var $$x6 = $uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var $$x4 = $uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
   var this$15 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
-  var $$x5 = $uD(this$15.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var this$16 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(1));
-  var $$x4 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var this$17 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(2));
-  var array$2 = [($$x8 + (($$x7 - $$x6) / 4.0)), ($$x5 - (($$x4 - $uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 4.0))];
+  var $$x3 = $uD(this$15.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$16 = $as_Lcfx70_vecquat_Vec(f.apply__I__O(2));
+  var array$2 = [($$x7 + (($$x6 - $$x5) / 4.0)), ($$x4 - (($$x3 - $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 4.0))];
   var crds$1 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$2);
-  var array$3 = [$$x10, $$x9, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1)];
-  this$23.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext($uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+  var array$3 = [$$x9, $$x8, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1)];
+  this$22.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext($uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
   var i = 0;
   var len = $uI(array$3.length);
   while ((i < len)) {
     var index = i;
     var arg1 = array$3[index];
     var pt = $as_Lcfx70_vecquat_Vec(arg1);
-    this$23.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    this$22.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
     i = ((1 + i) | 0)
   };
-  this$23.Lcfx70_cfpl_core_Helpers2d$RichContext__f_ctx.closePath();
+  this$22.Lcfx70_cfpl_core_Helpers2d$RichContext__f_ctx.closePath();
   ctx.fill();
-  var $$x12 = $m_Lcfx70_cfpl_draft_Dim$();
+  var $$x11 = $m_Lcfx70_cfpl_draft_Dim$();
   var array$4 = [0.0, 0.0];
   var crds$2 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$4);
-  var $$x11 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2);
+  var $$x10 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2);
   var array$5 = [10.0, 10.0];
   var crds$3 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$5);
-  $$x12.hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x11, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3), 10.0, 10.0, ctx);
+  $$x11.hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x10, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3), 10.0, 10.0, ctx);
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
-  var $$x13 = this.Lcfx70_cfpl_draft_Draft__f_vsz;
-  var this$30 = this.Lcfx70_cfpl_draft_Draft__f_st;
-  ctx.translate(0.0, ((((-$$x13) | 0) + ($uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Draft__f_mscl)) - ((this.Lcfx70_cfpl_draft_Draft__f_vsz / 2) | 0)));
+  ctx.translate(0.0, ((-((Math.imul(3, $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz) / 8) | 0)) | 0));
   ctx.scale(1.0, (-1.0));
   ctx.beginPath();
-  var this$34 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x15 = this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq();
+  var this$32 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x13 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq();
+  var $$x12 = new $c_sjsr_AnonFunction1(((x$1$2) => {
+    var x$1 = $as_Lcfx70_vecquat_Vec(x$1$2);
+    return x$1.xz__Lcfx70_vecquat_Vec()
+  }));
+  var this$31 = $m_sc_Seq$();
+  var pts = $as_sc_Seq($$x13.map__F1__scg_CanBuildFrom__O($$x12, this$31.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$32.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
+  var this$35 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x15 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq();
   var $$x14 = new $c_sjsr_AnonFunction1(((x$2$2) => {
     var x$2 = $as_Lcfx70_vecquat_Vec(x$2$2);
     return x$2.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$33 = $m_sc_Seq$();
-  var pts = $as_sc_Seq($$x15.map__F1__scg_CanBuildFrom__O($$x14, this$33.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$34.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
-  var this$37 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x17 = this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq();
+  var this$34 = $m_sc_Seq$();
+  var pts$1 = $as_sc_Seq($$x15.map__F1__scg_CanBuildFrom__O($$x14, this$34.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$35.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
+  var this$38 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
+  var $$x17 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fct.top__sc_Seq();
   var $$x16 = new $c_sjsr_AnonFunction1(((x$3$2) => {
     var x$3 = $as_Lcfx70_vecquat_Vec(x$3$2);
     return x$3.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$36 = $m_sc_Seq$();
-  var pts$1 = $as_sc_Seq($$x17.map__F1__scg_CanBuildFrom__O($$x16, this$36.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$37.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
-  var this$40 = new $c_Lcfx70_cfpl_core_Helpers2d$RichContext(ctx);
-  var $$x19 = this.Lcfx70_cfpl_draft_RedRRDraft__f_mm.Lcfx70_cfpl_core_RedRR__f_fct.top__sc_Seq();
-  var $$x18 = new $c_sjsr_AnonFunction1(((x$4$2) => {
-    var x$4 = $as_Lcfx70_vecquat_Vec(x$4$2);
-    return x$4.xz__Lcfx70_vecquat_Vec()
-  }));
-  var this$39 = $m_sc_Seq$();
-  var pts$2 = $as_sc_Seq($$x19.map__F1__scg_CanBuildFrom__O($$x18, this$39.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$40.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
+  var this$37 = $m_sc_Seq$();
+  var pts$2 = $as_sc_Seq($$x17.map__F1__scg_CanBuildFrom__O($$x16, this$37.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$38.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
   ctx.stroke();
   ctx.restore()
 });
@@ -23220,4 +23126,4 @@ $L0 = new $c_RTLong(0, 0);
 $d_J.zero = $L0;
 let $e_DetApp = $m_Lcfx70_cfpl_draft_DetApp$();
 export { $e_DetApp as DetApp };
-//# sourceMappingURL=det.js.map
+//# sourceMappingURL=main.js.map

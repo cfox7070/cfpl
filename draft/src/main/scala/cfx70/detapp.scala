@@ -6,7 +6,7 @@ import org.scalajs.dom
 import org.scalajs.dom.{html,document,Event}
 import scala.scalajs.js.timers._
 
-import scala.math.{min=>_,max=>_,_}
+import scala.math._
 
 import cfx70.cfpl.core._
 import cfx70.cfpl.core.CommonHelpers._
@@ -96,10 +96,10 @@ object DetApp{
     
 	def show3d():Unit=model match {
 		case m:Model =>{
-                        val bounds=m.bounds
-                        camera3d.position.z= (max(bounds.x,bounds.y))/tan((camera3d.fov/2).toRadians)
-                        camera3d.position.x= -bounds.x
-                        camera3d.position.y= bounds.y
+                        val s=m.bsphere
+                        camera3d.position.z= (s.radius * 2)/tan((camera3d.fov/2).toRadians)
+                        camera3d.position.x= -s.radius
+                        camera3d.position.y= s.radius
                         camera3d.rotation.x= -Pi/6
 //                        camera3d.rotation.y= -Pi/6
                         camera3d.updateProjectionMatrix()

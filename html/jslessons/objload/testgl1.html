@@ -106,7 +106,7 @@ function main() {
     });
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
-    scene.add(mesh);
+ //   scene.add(mesh);
   }
 
   {
@@ -157,6 +157,7 @@ function main() {
 			
 			   root.traverse(node => {
 				 if ('material' in node) {
+					 console.log(node.material);
 				   node.material = material;
 				 }
 			   });
@@ -180,7 +181,7 @@ function main() {
 		// move the camera to a position distance units way from the center
 		// in whatever direction the camera was from the center already
 		camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));
-
+		light.position.copy(direction.multiplyScalar(distance).add(boxCenter));
 		// pick some near and far values for the frustum that
 		// will contain the box.
 		camera.near = boxSize / 100;

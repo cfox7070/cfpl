@@ -25,20 +25,17 @@ object CommonHelpers {
     def V3(v : Vec)= vec2vec3(v)
 //    def V2(x:Double,y:Double)=new Vector2(x,y)
 
-	def max (a1:Double,a2:Double,ax:Double*):Double={
+	def maxN (a1:Double,a2:Double,ax:Double*):Double={
 		var mx=math.max(a1,a2)
 		for(x<-ax) mx=math.max(mx,x)
 		mx
 	}
-    def min (a1:Double,a2:Double,ax:Double*):Double={
+    def minN (a1:Double,a2:Double,ax:Double*):Double={
 		var mn=math.min(a1,a2)
 		for(x<-ax) mn=math.min(mn,x)
 		mn
 	}
-/*	def max (a1:Double,a2:Double,a3:Double):Double = math.max(math.max(a1,a2),a3)
-	
-    def min (a1:Double,a2:Double,a3:Double):Double = math.min(math.min(a1,a2),a3)*/
-	
+
     def addListener(evt:String,listener: js.Function1[Event, _],els:dom.Element*)=
         for(el <- els) el.addEventListener(evt,listener,false)
     

@@ -13,6 +13,8 @@ import cfx70.cfpl.core.Helpers2d._
 object Draft{
     val lineWidth=6.0
     val thinlineWidth=1.0
+    val vsz=1200; val hsz=1600
+
     
     def apply(m:Model)= m match {
         case rr : RedRR => new RedRRDraft(rr)
@@ -21,11 +23,9 @@ object Draft{
     }
 }
 
-abstract class Draft (val model : Model) {
-   
-   val vsz=1200/4; val hsz=1600/2
-   val (sz,st) = model.placement
-   val mscl = CommonHelpers.min(vsz/sz.y,vsz/sz.z,hsz/sz.x)
+abstract class Draft[M <: Model] (val model : M) {
+   import Draft._
+   val mscl =(vsz/4) /( model.bsphere.radius * 2.1)
    
    def drawVisible(v:Vec,ps:Seq[Seq[Vec]])(implicit ctx : Context2d){
         for(p <- ps){
@@ -47,16 +47,17 @@ abstract class Draft (val model : Model) {
    protected def beginDraw(ctx : Context2d) {
         ctx.beginPath()
         ctx.fillStyle = "#ffffff"
-        ctx.fillRect(0, 0, 1600, 1200)
-        ctx.translate(1600/2-st.x*mscl,1200/2)
+        ctx.fillRect(0, 0, hsz, vsz)
+        ctx.translate(hsz/2,vsz/2)
+        ctx.scale(1,-1)
         ctx.lineJoin = "bevel"
         ctx.lscale=mscl
    }
 }
 
 class RedRRDraft(m:RedRR) extends Draft(m) {
-    val mm = model.asInstanceOf[RedRR]
-    
+   
+   import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
         ctx.save()
@@ -64,10 +65,9 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
          //front
         ctx.lineWidth=Draft.lineWidth
         ctx.beginPath()
-        ctx.scale(1,-1)
-        ctx.translate(0,vsz-st.y*mscl)
-        drawVisible(Vec(0,0,1),Seq(mm.cn.top, mm.cn.bottom, mm.cn.left, mm.cn.right))
-        val f=mm.cn.front
+        ctx.translate(0,vsz/4)
+        drawVisible(Vec(0,0,1),Seq(model.cn.top, model.cn.bottom, model.cn.left, model.cn.right))
+        val f=model.cn.front
         ctx.polygon(f)
         ctx.stroke()
        //shadow
@@ -79,51 +79,50 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         Dim.hor(Vec(0,0),Vec(10,10),10,10)
         //top
         ctx.lineWidth=Draft.lineWidth
-        ctx.translate(0,-vsz+st.y*mscl-vsz/2)
+        ctx.translate(0,-(3*vsz/8))
         ctx.scale(1,-1)
         ctx.beginPath()
-        ctx.polygon(mm.cn.top.map(_.xz))
-        ctx.polygon(mm.fcb.top.map(_.xz))
-        ctx.polygon(mm.fct.top.map(_.xz))
+        ctx.polygon(model.cn.top.map(_.xz))
+        ctx.polygon(model.fcb.top.map(_.xz))
+        ctx.polygon(model.fct.top.map(_.xz))
         ctx.stroke()
-//        RichContext.lscale=1
         ctx.restore()
     }
 }
 
 class RedRCDraft(m:RedRC) extends Draft(m) {
-    val mm = model.asInstanceOf[RedRC]
+ //   val model = model.asInstanceOf[RedRC]
     
+   import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
         ctx.save()
         beginDraw(ctx)
          //front
         ctx.beginPath()
-        ctx.scale(1,-1)
-        ctx.translate(0,vsz-st.y*mscl)
+        ctx.translate(0,vsz/4)
         ctx.lineWidth=Draft.lineWidth
-        ctx.polygon(mm.cn.pts)
+        ctx.polygon(model.cn.pts)
         ctx.stroke()
         ctx.beginPath()
         ctx.ctx.fillStyle = "#ffffff"
-        trianglesVisible(Vec(0,0,1),mm.cn.pts)
+        trianglesVisible(Vec(0,0,1),model.cn.pts)
         ctx.fill()
         ctx.beginPath()
         ctx.lineWidth=Draft.thinlineWidth
-        trianglesVisible(Vec(0,0,1),mm.cn.pts)
+        trianglesVisible(Vec(0,0,1),model.cn.pts)
         ctx.stroke()
         ctx.beginPath()
-        ctx.polygon(mm.cn.tpts)
+        ctx.polygon(model.cn.tpts)
         ctx.fill()
         ctx.beginPath()
         ctx.lineWidth=Draft.lineWidth
-        ctx.polygon(mm.cn.tpts)
+        ctx.polygon(model.cn.tpts)
         ctx.stroke()
 //        Dim.hor(Vec(10,0),Vec(0,10),10,10)
        //shadow
-        val sp1=BGeometry.roundPts(mm.cn.d/2,Vec(mm.cn.da,mm.cn.db,0),Pi/2,3*Pi/2)
-        val sp2=BGeometry.roundPts(mm.cn.d/2,Vec(mm.cn.da+mm.cn.d/7,mm.cn.db,0),2*Pi/3,4*Pi/3)
+        val sp1=BGeometry.roundPts(model.cn.d/2,Vec(model.cn.da,model.cn.db,0),Pi/2,3*Pi/2)
+        val sp2=BGeometry.roundPts(model.cn.d/2,Vec(model.cn.da+model.cn.d/7,model.cn.db,0),2*Pi/3,4*Pi/3)
         val sp = sp1 ++ sp2.reverse
         ctx.beginPath()
         ctx.ctx.fillStyle = "#000000"
@@ -133,12 +132,12 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
 //        Dim.hor(Vec(0,0),Vec(10,10),10,10)
         //top
         ctx.lineWidth=Draft.lineWidth
-        ctx.translate(0,-vsz+st.y*mscl-vsz/2)
+        ctx.translate(0,-vsz/2)
         ctx.scale(1,-1)
         ctx.beginPath()
-        ctx.polygon(mm.cn.tophalf.map(_.xz))
-        ctx.polygon(mm.fcb.top.map(_.xz))
-        ctx.polygon(mm.fct.tophalf.map(_.xz))
+        ctx.polygon(model.cn.tophalf.map(_.xz))
+        ctx.polygon(model.fcb.top.map(_.xz))
+        ctx.polygon(model.fct.tophalf.map(_.xz))
         ctx.stroke()
 //        RichContext.lscale=1
         ctx.restore()
@@ -146,8 +145,9 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
 }
 
 class RedCCDraft(m:RedCC) extends Draft(m) {
-    val mm = model.asInstanceOf[RedCC]
+ //   val model = model.asInstanceOf[RedCC]
     
+   import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
         ctx.save()
@@ -156,7 +156,7 @@ class RedCCDraft(m:RedCC) extends Draft(m) {
         ctx.lineWidth=Draft.thinlineWidth
         ctx.beginPath()
         ctx.scale(1,-1)
-        ctx.translate(0,vsz-st.y*mscl)
+        ctx.translate(0,vsz/4)
         trianglesVisible(Vec(0,0,1),m.cn.pts)
         ctx.stroke()
 //        Dim.hor(Vec(10,0),Vec(0,10),10,10)
