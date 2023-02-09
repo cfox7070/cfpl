@@ -31,17 +31,11 @@ object DetApp{
     val ctxDraft={  val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
 					cnvDraft.getContext("2d").asInstanceOf[Context2d]}
 		ctxDraft.font="italic 1.8em sans-serif"
-		ctxDraft.textBaseline = "middle"
-		ctxDraft.textAlign = "center"
     
     val ctxDev={  val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
 				  cnvDev.getContext("2d").asInstanceOf[Context2d]}
 		ctxDev.font="italic 1.8em sans-serif"
-		ctxDev.textBaseline = "middle"
-		ctxDev.textAlign = "center"
-		
    
-
     val (renderer,scene,camera3d,light,controls) = set3dRenderer("#canvas3d")
 
     var model:Model=null

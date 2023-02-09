@@ -14,7 +14,8 @@ object Draft{
     val lineWidth=6.0
     val thinlineWidth=1.0
     val vsz=1200; val hsz=1600
-
+    val (dimspace, dimstep) = (60,50)
+	
     
     def apply(m:Model)= m match {
         case rr : RedRR => new RedRRDraft(rr)
@@ -25,7 +26,8 @@ object Draft{
 
 abstract class Draft[M <: Model] (val model : M) {
    import Draft._
-   val mscl =(vsz/4) /( model.bsphere.radius * 2.1)
+   val mscl = min((vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.y),
+						(vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.z))
    
    def drawVisible(v:Vec,ps:Seq[Seq[Vec]])(implicit ctx : Context2d){
         for(p <- ps){
@@ -51,7 +53,7 @@ abstract class Draft[M <: Model] (val model : M) {
         ctx.translate(hsz/2,vsz/2)
         ctx.scale(1,-1)
         ctx.lineJoin = "bevel"
-        ctx.lscale=mscl
+        RichContext.lscale=mscl
    }
 }
 
@@ -60,6 +62,7 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
    import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
+		RichContext.ctx=ctx
         ctx.save()
         beginDraw(ctx)
          //front
@@ -76,7 +79,19 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         ctx.polygon(f(0),f(1),f(2),Vec(f(1).x+(f(0).x-f(1).x)/4, f(1).y-(f(1).y-f(2).y)/4))
         ctx.fill()
         //dims
-        Dim.hor(Vec(0,0),Vec(10,10),10,10)
+		val back = model.cn.back
+		val front = model.cn.front
+		if(back(1).y > front(1).y){ //back on top
+			Dim.hor(back(1).xy,back(0).xy,vsz/4-dimspace,0)
+			Dim.hor(front(2).xy,front(3).xy,-vsz/4-dimspace/3,0)
+			if(back(2).x < front(2).x) Dim.hor(back(2).xy,front(2).xy,-vsz/4-dimspace/3,0) 
+			if(back(3).x > front(3).x) Dim.hor(front(3).xy,back(3).xy,-vsz/4-dimspace/3,0) 
+		}else{ //back on bottom
+			Dim.hor(back(2).xy,back(3).xy,-vsz/4+dimspace/3,0)
+			Dim.hor(front(1).xy,front(0).xy,vsz/4-dimspace,0)
+			if(back(1).x < front(1).x) Dim.hor(back(1).xy,front(1).xy,vsz/4-dimspace,0) 
+			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,vsz/4-dimspace,0) 			
+		}
         //top
         ctx.lineWidth=Draft.lineWidth
         ctx.translate(0,-(3*vsz/8))
@@ -96,6 +111,7 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
    import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
+		RichContext.ctx=ctx
         ctx.save()
         beginDraw(ctx)
          //front
@@ -150,6 +166,7 @@ class RedCCDraft(m:RedCC) extends Draft(m) {
    import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
+		RichContext.ctx=ctx
         ctx.save()
         beginDraw(ctx)
          //front

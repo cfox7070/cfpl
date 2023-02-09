@@ -28,7 +28,7 @@ object Model {
 }
 
 abstract class Model{
-	def whdsize: Vec = new Box3().setFromObject(meshes).getSize(new Vector3())
+	def whdsize: Vec = new Box3().setFromObject(meshes).getSize(new Vector3()) //width height depth
 	
 	def bsphere: Sphere = new Box3().setFromObject(meshes).getBoundingSphere(new Sphere())
 	
