@@ -30,7 +30,7 @@ object DetApp{
     
     val ctxDraft={  val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
 					cnvDraft.getContext("2d").asInstanceOf[Context2d]}
-		ctxDraft.font="italic 1.8em sans-serif"
+		ctxDraft.font="italic 2.1em sans-serif"
     
     val ctxDev={  val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
 				  cnvDev.getContext("2d").asInstanceOf[Context2d]}
@@ -43,7 +43,7 @@ object DetApp{
         
    @JSExport
 	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double):Unit = 
-            setModel(new RedRR(a1,b1,a2,b2,h,da,db))	
+          { println(b1/2 -db - b2/2); setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2))}
    @JSExport
         def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f:Double=30):Unit = 
             setModel(new RedRC(a1,b1,d,h,da,db,f))

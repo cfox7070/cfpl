@@ -53,6 +53,7 @@ abstract class Draft[M <: Model] (val model : M) {
         ctx.translate(hsz/2,vsz/2)
         ctx.scale(1,-1)
         ctx.lineJoin = "bevel"
+		RichContext.ctx=ctx
         RichContext.lscale=mscl
    }
 }
@@ -62,7 +63,8 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
    import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
-		RichContext.ctx=ctx
+		val back = model.cn.back
+		val front = model.cn.front
         ctx.save()
         beginDraw(ctx)
          //front
@@ -70,27 +72,41 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         ctx.beginPath()
         ctx.translate(0,vsz/4)
         drawVisible(Vec(0,0,1),Seq(model.cn.top, model.cn.bottom, model.cn.left, model.cn.right))
-        val f=model.cn.front
-        ctx.polygon(f)
+        ctx.polygon(front)
         ctx.stroke()
        //shadow
         ctx.beginPath()
         ctx.fillStyle = "#000"
-        ctx.polygon(f(0),f(1),f(2),Vec(f(1).x+(f(0).x-f(1).x)/4, f(1).y-(f(1).y-f(2).y)/4))
+        ctx.polygon(front(0),front(1),front(2),
+						Vec(front(1).x+(front(0).x-front(1).x)/4, 
+							front(1).y-(front(1).y-front(2).y)/4))
         ctx.fill()
         //dims
-		val back = model.cn.back
-		val front = model.cn.front
+		//h
+		val (ltop,lbot) = (vsz/4-dimspace, -vsz/4-dimspace/3)
 		if(back(1).y > front(1).y){ //back on top
-			Dim.hor(back(1).xy,back(0).xy,vsz/4-dimspace,0)
-			Dim.hor(front(2).xy,front(3).xy,-vsz/4-dimspace/3,0)
-			if(back(2).x < front(2).x) Dim.hor(back(2).xy,front(2).xy,-vsz/4-dimspace/3,0) 
-			if(back(3).x > front(3).x) Dim.hor(front(3).xy,back(3).xy,-vsz/4-dimspace/3,0) 
+			Dim.hor(back(1).xy,back(0).xy,ltop,0)
+			Dim.hor(front(2).xy,front(3).xy,lbot,0)
+			if(back(2).x < front(2).x) Dim.hor(back(2).xy,front(2).xy,lbot,0) 
+			if(back(3).x > front(3).x) Dim.hor(front(3).xy,back(3).xy,lbot,0) 
 		}else{ //back on bottom
-			Dim.hor(back(2).xy,back(3).xy,-vsz/4+dimspace/3,0)
-			Dim.hor(front(1).xy,front(0).xy,vsz/4-dimspace,0)
-			if(back(1).x < front(1).x) Dim.hor(back(1).xy,front(1).xy,vsz/4-dimspace,0) 
-			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,vsz/4-dimspace,0) 			
+			Dim.hor(back(2).xy,back(3).xy,lbot,0)
+			Dim.hor(front(1).xy,front(0).xy,ltop,0)
+			if(back(1).x < front(1).x) Dim.hor(back(1).xy,front(1).xy,ltop,0) 
+			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop,0) 			
+		}
+		//v
+		val (lrt,llt) = (max(back(0).x,front(0).x)+dimstep, min(back(1).x,front(1).x)-dimstep)
+		if(back(1).x > front(1).x){ //back on right
+			Dim.vert( back(3).xy, back(0).xy, lrt, 0 )
+			Dim.vert( front(2).xy, front(1).xy, llt, 0 )
+			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, llt, 0 ) 
+			if(back(0).y > front(0).y) Dim.vert( front(0).xy,back(0).xy, llt, 0 ) 
+		}else{ //back on left
+			Dim.vert( back(2).xy, back(1).xy, llt, 0 )
+			Dim.vert( front(3).xy, front(0).xy, lrt, 0 )
+			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, lrt, 0 )
+			if(back(0).y > front(0).y) Dim.vert( front(0).xy, back(0).xy, lrt, 0 )			
 		}
         //top
         ctx.lineWidth=Draft.lineWidth
@@ -101,6 +117,13 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         ctx.polygon(model.fcb.top.map(_.xz))
         ctx.polygon(model.fct.top.map(_.xz))
         ctx.stroke()
+        //dims
+		Dim.vertM( model.fct.top(1).xz, 
+					model.fcb.top(0).xz, lrt, 0 )
+		Dim.vertM( model.fcb.top(2).xz, 
+					model.fcb.top(3).xz, llt, 0 )
+		Dim.vertM( model.fct.top(2).xz, 
+					model.fct.top(3).xz, llt, 0 )
         ctx.restore()
     }
 }
