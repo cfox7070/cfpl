@@ -51,6 +51,10 @@ abstract class Model{
 	}
 
     def description(lang:String):String	
+    def area : Double = 0.0
+    def areaIns(thk : Double):Double = 0.0
+    def flangeL (n : Int):Double = 0.0
+    def secA (n : Int):Double = 0.0
 }
 ////////////////////////
 class RedRR(val a1:Double,val b1:Double,val a2:Double,val b2:Double,
@@ -64,7 +68,9 @@ class RedRR(val a1:Double,val b1:Double,val a2:Double,val b2:Double,
        val fct = new BBox(a2,b2,hft).translate(Vec(da,db,h-hft))
        val cn  = new BPyramid(a1,b1,a2,b2,h-hfb-hft,da,db).translate(Vec(0,0,hfb))
                                                 
-       val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
+       val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)  
+       
+       override def area : Double = cn.area + fcb.area + fct.area														
 }
 /////////////////////////////
 class RedRC(val a1:Double,val b1:Double,val d:Double,

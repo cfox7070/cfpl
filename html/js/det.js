@@ -1568,6 +1568,9 @@ $c_Lcfx70_cfpl_core_Model.prototype.dispose__V = (function() {
     i = ((1 + i) | 0)
   }
 });
+$c_Lcfx70_cfpl_core_Model.prototype.area__D = (function() {
+  return 0.0
+});
 /** @constructor */
 function $c_Lcfx70_cfpl_core_Model$() {
   this.Lcfx70_cfpl_core_Model$__f_phongBlueMaterial = null;
@@ -1756,10 +1759,6 @@ function $h_Lcfx70_cfpl_draft_DetApp$() {
 }
 $h_Lcfx70_cfpl_draft_DetApp$.prototype = $c_Lcfx70_cfpl_draft_DetApp$.prototype;
 $c_Lcfx70_cfpl_draft_DetApp$.prototype.setRedRR__D__D__D__D__D__D__D__V = (function(a1, b1, a2, b2, da, db, h) {
-  var x = (((b1 / 2.0) - db) - (b2 / 2.0));
-  var this$2 = $m_s_Console$();
-  var this$3 = $as_Ljava_io_PrintStream(this$2.s_Console$__f_outVar.s_util_DynamicVariable__f_v);
-  this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V((x + "\n"));
   this.setModel__Lcfx70_cfpl_core_Model__V(new $c_Lcfx70_cfpl_core_RedRR(a1, b1, a2, b2, h, ((da - (a1 / 2.0)) + (a2 / 2.0)), (((b1 / 2.0) - db) - (b2 / 2.0)), 30.0, 30.0))
 });
 $c_Lcfx70_cfpl_draft_DetApp$.prototype.setRedRC__D__D__D__D__D__D__D__V = (function(a1, b1, d, da, db, h, f) {
@@ -1832,7 +1831,12 @@ $c_Lcfx70_cfpl_draft_DetApp$.prototype.setModel__Lcfx70_cfpl_core_Model__V = (fu
   this.Lcfx70_cfpl_draft_DetApp$__f_model = m;
   this.Lcfx70_cfpl_draft_DetApp$__f_descr.innerHTML = this.Lcfx70_cfpl_draft_DetApp$__f_model.description__T__T("ru");
   this.show3d__V();
-  $m_Lcfx70_cfpl_draft_Draft$().apply__Lcfx70_cfpl_core_Model__Lcfx70_cfpl_draft_Draft(this.Lcfx70_cfpl_draft_DetApp$__f_model).draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(this.Lcfx70_cfpl_draft_DetApp$__f_ctxDraft)
+  $m_Lcfx70_cfpl_draft_Draft$().apply__Lcfx70_cfpl_core_Model__Lcfx70_cfpl_draft_Draft(this.Lcfx70_cfpl_draft_DetApp$__f_model).draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(this.Lcfx70_cfpl_draft_DetApp$__f_ctxDraft);
+  $m_Lcfx70_cfpl_draft_Dev$().apply__Lcfx70_cfpl_core_Model__Lcfx70_cfpl_draft_RedRRDev(this.Lcfx70_cfpl_draft_DetApp$__f_model).draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(this.Lcfx70_cfpl_draft_DetApp$__f_ctxDev);
+  var x = (this.Lcfx70_cfpl_draft_DetApp$__f_model.area__D() / 1000000.0);
+  var this$2 = $m_s_Console$();
+  var this$3 = $as_Ljava_io_PrintStream(this$2.s_Console$__f_outVar.s_util_DynamicVariable__f_v);
+  this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V((x + "\n"))
 });
 $c_Lcfx70_cfpl_draft_DetApp$.prototype.animate__D__V = (function(time) {
   if (this.Lcfx70_cfpl_draft_DetApp$__f_animation) {
@@ -1939,10 +1943,48 @@ function $m_Lcfx70_cfpl_draft_DetApp$() {
   };
   return $n_Lcfx70_cfpl_draft_DetApp$
 }
+/** @constructor */
+function $c_Lcfx70_cfpl_draft_Dev$() {
+  this.Lcfx70_cfpl_draft_Dev$__f_x$1 = null;
+  $n_Lcfx70_cfpl_draft_Dev$ = this;
+  this.Lcfx70_cfpl_draft_Dev$__f_x$1 = new $c_T2$mcII$sp(60, 50);
+  this.Lcfx70_cfpl_draft_Dev$__f_x$1._1$mcI$sp__I();
+  this.Lcfx70_cfpl_draft_Dev$__f_x$1._2$mcI$sp__I()
+}
+$c_Lcfx70_cfpl_draft_Dev$.prototype = new $h_O();
+$c_Lcfx70_cfpl_draft_Dev$.prototype.constructor = $c_Lcfx70_cfpl_draft_Dev$;
+/** @constructor */
+function $h_Lcfx70_cfpl_draft_Dev$() {
+  /*<skip>*/
+}
+$h_Lcfx70_cfpl_draft_Dev$.prototype = $c_Lcfx70_cfpl_draft_Dev$.prototype;
+$c_Lcfx70_cfpl_draft_Dev$.prototype.apply__Lcfx70_cfpl_core_Model__Lcfx70_cfpl_draft_RedRRDev = (function(m) {
+  if ((m instanceof $c_Lcfx70_cfpl_core_RedRR)) {
+    var x2 = $as_Lcfx70_cfpl_core_RedRR(m);
+    return new $c_Lcfx70_cfpl_draft_RedRRDev(x2)
+  } else {
+    throw new $c_s_MatchError(m)
+  }
+});
+var $d_Lcfx70_cfpl_draft_Dev$ = new $TypeData().initClass({
+  Lcfx70_cfpl_draft_Dev$: 0
+}, false, "cfx70.cfpl.draft.Dev$", {
+  Lcfx70_cfpl_draft_Dev$: 1,
+  O: 1
+});
+$c_Lcfx70_cfpl_draft_Dev$.prototype.$classData = $d_Lcfx70_cfpl_draft_Dev$;
+var $n_Lcfx70_cfpl_draft_Dev$;
+function $m_Lcfx70_cfpl_draft_Dev$() {
+  if ((!$n_Lcfx70_cfpl_draft_Dev$)) {
+    $n_Lcfx70_cfpl_draft_Dev$ = new $c_Lcfx70_cfpl_draft_Dev$()
+  };
+  return $n_Lcfx70_cfpl_draft_Dev$
+}
 function $ct_Lcfx70_cfpl_draft_Dim__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__($thiz, p1, p2, cln, hint) {
   $thiz.Lcfx70_cfpl_draft_Dim__f_p1 = p1;
   $thiz.Lcfx70_cfpl_draft_Dim__f_p2 = p2;
   $thiz.Lcfx70_cfpl_draft_Dim__f_cln = cln;
+  $thiz.Lcfx70_cfpl_draft_Dim__f_hint = hint;
   $thiz.Lcfx70_cfpl_draft_Dim__f_rscale = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$().Lcfx70_cfpl_core_Helpers2d$RichContext$__f_lscale;
   return $thiz
 }
@@ -1951,6 +1993,7 @@ function $c_Lcfx70_cfpl_draft_Dim() {
   this.Lcfx70_cfpl_draft_Dim__f_p1 = null;
   this.Lcfx70_cfpl_draft_Dim__f_p2 = null;
   this.Lcfx70_cfpl_draft_Dim__f_cln = 0.0;
+  this.Lcfx70_cfpl_draft_Dim__f_hint = 0;
   this.Lcfx70_cfpl_draft_Dim__f_rscale = 0.0
 }
 $c_Lcfx70_cfpl_draft_Dim.prototype = new $h_O();
@@ -1960,149 +2003,206 @@ function $h_Lcfx70_cfpl_draft_Dim() {
   /*<skip>*/
 }
 $h_Lcfx70_cfpl_draft_Dim.prototype = $c_Lcfx70_cfpl_draft_Dim.prototype;
-$c_Lcfx70_cfpl_draft_Dim.prototype.exoffs__D__F1 = (function(extdir) {
-  return new $c_sjsr_AnonFunction1(((v$2) => {
-    var v = $uD(v$2);
-    return (v + ((extdir * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale))
-  }))
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.exenl__D__F1 = (function(extdir) {
-  return new $c_sjsr_AnonFunction1(((v$2) => {
-    var v = $uD(v$2);
-    return (v + ((extdir * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineEnl) / this.Lcfx70_cfpl_draft_Dim__f_rscale))
-  }))
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.denl__D__D = (function(dimdir) {
-  return ((dimdir * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineEnl) / this.Lcfx70_cfpl_draft_Dim__f_rscale)
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.setOffsets__D__D__T3 = (function(c, d) {
-  return new $c_T3(this.exoffs__D__F1(c), this.exenl__D__F1(c), this.denl__D__D(d))
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.tickH__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(x, y, ctx) {
-  $m_Lcfx70_cfpl_core_Helpers2d$RichContext$().M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$((x + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (y + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)).L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$((x - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (y - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl))
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.tickV__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(x, y, ctx) {
-  $m_Lcfx70_cfpl_core_Helpers2d$RichContext$().M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$((x - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (y + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)).L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$((x + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (y - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl))
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.text__D__D__T__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(x, y, align, scl, rot, ctx) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
-  ctx.textBaseline = "bottom";
-  ctx.translate((x * this.Lcfx70_cfpl_draft_Dim__f_rscale), (y * this.Lcfx70_cfpl_draft_Dim__f_rscale));
-  ctx.rotate(rot);
-  ctx.scale(1.0, scl);
-  ctx.textAlign = align;
-  var this$1 = this.dist__I();
-  ctx.fillText(("" + this$1), 0.0, 0.0);
-  ctx.restore()
-});
-$c_Lcfx70_cfpl_draft_Dim.prototype.bolDbl__Z__D = (function(b) {
+$c_Lcfx70_cfpl_draft_Dim.prototype.bd__Z__D = (function(b) {
   return (b ? 1.0 : (-1.0))
 });
-$c_Lcfx70_cfpl_draft_Dim.prototype.drawHorLines__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
+$c_Lcfx70_cfpl_draft_Dim.prototype.exoffs__Z__F1 = (function(extdir) {
+  return new $c_sjsr_AnonFunction1(((x$1$2) => {
+    var x$1 = $uD(x$1$2);
+    return (x$1 + ((this.bd__Z__D(extdir) * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale))
+  }))
+});
+$c_Lcfx70_cfpl_draft_Dim.prototype.exenl__Z__F1 = (function(extdir) {
+  return new $c_sjsr_AnonFunction1(((x$2$2) => {
+    var x$2 = $uD(x$2$2);
+    return (x$2 + ((this.bd__Z__D(extdir) * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineEnl) / this.Lcfx70_cfpl_draft_Dim__f_rscale))
+  }))
+});
+$c_Lcfx70_cfpl_draft_Dim.prototype.denl__Z__D = (function(dimdir) {
+  return ((this.bd__Z__D(dimdir) * $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineEnl) / this.Lcfx70_cfpl_draft_Dim__f_rscale)
+});
+$c_Lcfx70_cfpl_draft_Dim.prototype.setOffsFnc__Z__Z__T3 = (function(c, d) {
+  return new $c_T3(this.exoffs__Z__F1(c), this.exenl__Z__F1(c), this.denl__Z__D(d))
+});
+$c_Lcfx70_cfpl_draft_Dim.prototype.horPoints__ALcfx70_vecquat_Vec = (function() {
   var cl = (this.Lcfx70_cfpl_draft_Dim__f_cln / this.Lcfx70_cfpl_draft_Dim__f_rscale);
   var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_cln;
   var this$1 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x2 = this.bolDbl__Z__D(($$x3 > $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))));
+  var $$x2 = $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
   var this$2 = this.Lcfx70_cfpl_draft_Dim__f_p2;
   var $$x1 = $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var this$3 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var x1 = this.setOffsets__D__D__T3($$x2, this.bolDbl__Z__D(($$x1 > $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))));
+  var x1 = this.setOffsFnc__Z__Z__T3(($$x3 > $$x2), ($$x1 > $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0))));
   if ((x1 === null)) {
     throw new $c_s_MatchError(x1)
   };
   var o = $as_F1(x1.T3__f__1);
   var e = $as_F1(x1.T3__f__2);
   var dx = $uD(x1.T3__f__3);
-  ctx.beginPath();
-  ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
-  var $$x6 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var this$4 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var $$x18 = $uD(this$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var this$5 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x5 = $uD(this$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$6 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var v1 = $uD(this$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var $$x4 = $$x6.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x5, $uD(o.apply__O__O(v1)));
-  var this$7 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  $$x4.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(this$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(e.apply__O__O(cl)));
-  var $$x9 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var this$9 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  var $$x8 = $uD(this$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$10 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  var v1$1 = $uD(this$10.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var $$x7 = $$x9.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x8, $uD(o.apply__O__O(v1$1)));
-  var this$11 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  $$x7.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(this$11.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(e.apply__O__O(cl)));
-  var $$x11 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var this$13 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x10 = $$x11.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(($uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) - dx), cl);
+  var v1 = $uD(this$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var array = [$$x18, $uD(o.apply__O__O(v1))];
+  var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
+  var $$x19 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var this$9 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$1 = [$uD(this$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(e.apply__O__O(cl))];
+  var crds$1 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1);
+  var $$x17 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1);
+  var this$13 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var $$x15 = $uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var this$14 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  $$x10.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(($uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) + dx), cl);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickWidth;
-  var this$15 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  this.tickH__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V($uD(this$15.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), cl, ctx);
-  var this$16 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  this.tickH__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V($uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), cl, ctx);
-  ctx.stroke()
+  var v1$1 = $uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var array$2 = [$$x15, $uD(o.apply__O__O(v1$1))];
+  var crds$2 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$2);
+  var $$x16 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2);
+  var this$18 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$3 = [$uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(e.apply__O__O(cl))];
+  var crds$3 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$3);
+  var $$x14 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3);
+  var this$22 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$4 = [($uD(this$22.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) - dx), cl];
+  var crds$4 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$4);
+  var $$x13 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$4);
+  var this$26 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$5 = [($uD(this$26.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) + dx), cl];
+  var crds$5 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$5);
+  var $$x12 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$5);
+  var this$30 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$6 = [($uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (cl + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$6 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$6);
+  var $$x11 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$6);
+  var this$34 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$7 = [($uD(this$34.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (cl - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$7 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$7);
+  var $$x10 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$7);
+  var this$38 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$8 = [($uD(this$38.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (cl + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$8 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$8);
+  var $$x9 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$8);
+  var this$42 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$9 = [($uD(this$42.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl), (cl - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$9 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$9);
+  var $$x8 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$9);
+  var this$46 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var $$x6 = $uD(this$46.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$47 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var $$x5 = $uD(this$47.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$48 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$10 = [($$x6 + (($$x5 - $uD(this$48.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0))) / 2.0)), ((this.Lcfx70_cfpl_draft_Dim__f_cln + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale)];
+  var crds$10 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$10);
+  var $$x7 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$10);
+  var this$52 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$11 = [($uD(this$52.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) - dx), ((this.Lcfx70_cfpl_draft_Dim__f_cln + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale)];
+  var crds$11 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$11);
+  var $$x4 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$11);
+  var this$56 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$12 = [($uD(this$56.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) + dx), ((this.Lcfx70_cfpl_draft_Dim__f_cln + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale)];
+  var crds$12 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$12);
+  return new ($d_Lcfx70_vecquat_Vec.getArrayOf().constr)([$$x19, $$x17, $$x16, $$x14, $$x13, $$x12, $$x11, $$x10, $$x9, $$x8, $$x7, $$x4, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$12)])
 });
-$c_Lcfx70_cfpl_draft_Dim.prototype.drawVertLines__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
+$c_Lcfx70_cfpl_draft_Dim.prototype.vertPoints__ALcfx70_vecquat_Vec = (function() {
   var cl = (this.Lcfx70_cfpl_draft_Dim__f_cln / this.Lcfx70_cfpl_draft_Dim__f_rscale);
   var this$1 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x2 = this.bolDbl__Z__D(($uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)) < this.Lcfx70_cfpl_draft_Dim__f_cln));
+  var $$x3 = $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var $$x2 = this.Lcfx70_cfpl_draft_Dim__f_cln;
   var this$2 = this.Lcfx70_cfpl_draft_Dim__f_p2;
   var $$x1 = $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
   var this$3 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var x1 = this.setOffsets__D__D__T3($$x2, this.bolDbl__Z__D(($$x1 > $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))));
+  var x1 = this.setOffsFnc__Z__Z__T3(($$x3 < $$x2), ($$x1 > $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))));
   if ((x1 === null)) {
     throw new $c_s_MatchError(x1)
   };
   var o = $as_F1(x1.T3__f__1);
   var e = $as_F1(x1.T3__f__2);
   var dy = $uD(x1.T3__f__3);
-  ctx.beginPath();
-  ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
-  var $$x6 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var this$4 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var v1 = $uD(this$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var $$x33 = $uD(o.apply__O__O(v1));
   var this$5 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var v1 = $uD(this$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var $$x5 = $uD(o.apply__O__O(v1));
-  var this$6 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x4 = $$x6.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x5, $uD(this$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
-  var $$x3 = $uD(e.apply__O__O(cl));
-  var this$7 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  $$x4.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x3, $uD(this$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
-  var $$x10 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var this$9 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  var v1$1 = $uD(this$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var $$x9 = $uD(o.apply__O__O(v1$1));
-  var this$10 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  var $$x8 = $$x10.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x9, $uD(this$10.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
-  var $$x7 = $uD(e.apply__O__O(cl));
-  var this$11 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  $$x8.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($$x7, $uD(this$11.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
-  var $$x12 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var this$13 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  var $$x11 = $$x12.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(cl, ($uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) - dy));
+  var array = [$$x33, $uD(this$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))];
+  var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
+  var $$x34 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var $$x31 = $uD(e.apply__O__O(cl));
+  var this$9 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$1 = [$$x31, $uD(this$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))];
+  var crds$1 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1);
+  var $$x32 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1);
+  var this$13 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var v1$1 = $uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var $$x29 = $uD(o.apply__O__O(v1$1));
   var this$14 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  $$x11.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(cl, ($uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) + dy));
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickWidth;
-  var this$15 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-  this.tickV__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V(cl, $uD(this$15.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)), ctx);
-  var this$16 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-  this.tickV__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V(cl, $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)), ctx);
-  ctx.stroke()
+  var array$2 = [$$x29, $uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))];
+  var crds$2 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$2);
+  var $$x30 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$2);
+  var $$x27 = $uD(e.apply__O__O(cl));
+  var this$18 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$3 = [$$x27, $uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))];
+  var crds$3 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$3);
+  var $$x28 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$3);
+  var this$22 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$4 = [cl, ($uD(this$22.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) - dy)];
+  var crds$4 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$4);
+  var $$x26 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$4);
+  var this$26 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$5 = [cl, ($uD(this$26.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) + dy)];
+  var crds$5 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$5);
+  var $$x25 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$5);
+  var $$x23 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl;
+  var this$30 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$6 = [(cl - $$x23), ($uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$6 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$6);
+  var $$x24 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$6);
+  var $$x21 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl;
+  var this$34 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$7 = [(cl + $$x21), ($uD(this$34.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$7 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$7);
+  var $$x22 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$7);
+  var $$x19 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl;
+  var this$38 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$8 = [(cl - $$x19), ($uD(this$38.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$8 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$8);
+  var $$x20 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$8);
+  var $$x17 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl;
+  var this$42 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$9 = [(cl + $$x17), ($uD(this$42.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) - $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickl)];
+  var crds$9 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$9);
+  var $$x18 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$9);
+  var $$x15 = this.Lcfx70_cfpl_draft_Dim__f_cln;
+  var $$x14 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap;
+  var $$x13 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+  var this$46 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var $$x12 = $uD(this$46.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$47 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var $$x11 = $uD(this$47.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$48 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$10 = [(($$x15 - $$x14) / $$x13), ($$x12 + (($$x11 - $uD(this$48.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 2.0))];
+  var crds$10 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$10);
+  var $$x16 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$10);
+  var $$x9 = this.Lcfx70_cfpl_draft_Dim__f_cln;
+  var $$x8 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap;
+  var $$x7 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+  var this$52 = this.Lcfx70_cfpl_draft_Dim__f_p1;
+  var array$11 = [(($$x9 + $$x8) / $$x7), ($uD(this$52.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) - dy)];
+  var crds$11 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$11);
+  var $$x10 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$11);
+  var $$x6 = this.Lcfx70_cfpl_draft_Dim__f_cln;
+  var $$x5 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap;
+  var $$x4 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+  var this$56 = this.Lcfx70_cfpl_draft_Dim__f_p2;
+  var array$12 = [(($$x6 + $$x5) / $$x4), ($uD(this$56.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) + dy)];
+  var crds$12 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$12);
+  return new ($d_Lcfx70_vecquat_Vec.getArrayOf().constr)([$$x34, $$x32, $$x30, $$x28, $$x26, $$x25, $$x24, $$x22, $$x20, $$x18, $$x16, $$x10, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$12)])
 });
 /** @constructor */
 function $c_Lcfx70_cfpl_draft_Dim$() {
-  this.Lcfx70_cfpl_draft_Dim$__f_lineWidth = 0;
+  this.Lcfx70_cfpl_draft_Dim$__f_lineWidth = 0.0;
   this.Lcfx70_cfpl_draft_Dim$__f_lineEnl = 0;
   this.Lcfx70_cfpl_draft_Dim$__f_lineGap = 0;
   this.Lcfx70_cfpl_draft_Dim$__f_tickWidth = 0;
   this.Lcfx70_cfpl_draft_Dim$__f_tickl = 0;
-  this.Lcfx70_cfpl_draft_Dim$__f_lineWidth = 1;
+  this.Lcfx70_cfpl_draft_Dim$__f_lineWidth = 1.2;
   this.Lcfx70_cfpl_draft_Dim$__f_lineEnl = 10;
   this.Lcfx70_cfpl_draft_Dim$__f_lineGap = 8;
   this.Lcfx70_cfpl_draft_Dim$__f_tickWidth = 6;
@@ -2830,6 +2930,11 @@ $c_Lcfx70_vecquat_Vec.prototype.$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec =
     }
   };
   return $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), b.result__sci_Vector())
+});
+$c_Lcfx70_vecquat_Vec.prototype.project__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec = (function(v2) {
+  var v2u = v2.normalize__Lcfx70_vecquat_Vec();
+  var a = this.dotProd__Lcfx70_vecquat_Vec__D(v2u);
+  return v2u.$times__D__Lcfx70_vecquat_Vec(a)
 });
 function $as_Lcfx70_vecquat_Vec(obj) {
   return (((obj instanceof $c_Lcfx70_vecquat_Vec) || (obj === null)) ? obj : $throwClassCastException(obj, "cfx70.vecquat.Vec"))
@@ -5747,6 +5852,9 @@ $c_Lcfx70_cfpl_core_RedRR.prototype.description__T__T = (function(lang) {
 $c_Lcfx70_cfpl_core_RedRR.prototype.meshes__Lcfx70_threejsfacade_THREE$Object3D = (function() {
   return this.Lcfx70_cfpl_core_RedRR__f_meshes
 });
+$c_Lcfx70_cfpl_core_RedRR.prototype.area__D = (function() {
+  return ((this.Lcfx70_cfpl_core_RedRR__f_cn.area__D() + this.Lcfx70_cfpl_core_RedRR__f_fcb.area__D()) + this.Lcfx70_cfpl_core_RedRR__f_fct.area__D())
+});
 function $as_Lcfx70_cfpl_core_RedRR(obj) {
   return (((obj instanceof $c_Lcfx70_cfpl_core_RedRR) || (obj === null)) ? obj : $throwClassCastException(obj, "cfx70.cfpl.core.RedRR"))
 }
@@ -5769,6 +5877,7 @@ function $c_Lcfx70_cfpl_draft_HorDim(p1, p2, cln, hint) {
   this.Lcfx70_cfpl_draft_Dim__f_p1 = null;
   this.Lcfx70_cfpl_draft_Dim__f_p2 = null;
   this.Lcfx70_cfpl_draft_Dim__f_cln = 0.0;
+  this.Lcfx70_cfpl_draft_Dim__f_hint = 0;
   this.Lcfx70_cfpl_draft_Dim__f_rscale = 0.0;
   this.Lcfx70_cfpl_draft_HorDim__f_dist = 0;
   $ct_Lcfx70_cfpl_draft_Dim__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__(this, p1, p2, cln, hint);
@@ -5785,27 +5894,72 @@ function $h_Lcfx70_cfpl_draft_HorDim() {
   /*<skip>*/
 }
 $h_Lcfx70_cfpl_draft_HorDim.prototype = $c_Lcfx70_cfpl_draft_HorDim.prototype;
-$c_Lcfx70_cfpl_draft_HorDim.prototype.dist__I = (function() {
-  return this.Lcfx70_cfpl_draft_HorDim__f_dist
-});
 $c_Lcfx70_cfpl_draft_HorDim.prototype.draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
   var x1 = this.Lcfx70_cfpl_draft_HorDim__f_dist;
   if ((x1 > $m_Lcfx70_vecquat_package$().Lcfx70_vecquat_package$__f_epsilon)) {
-    var this$1 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var $$x2 = $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$2 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-    var $$x1 = $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$3 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var array = [($$x2 + (($$x1 - $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0))) / 2.0)), ((this.Lcfx70_cfpl_draft_Dim__f_cln + $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap) / this.Lcfx70_cfpl_draft_Dim__f_rscale), 0.0, (-1.0)];
-    var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-    var txcrd = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+    var pnts = this.horPoints__ALcfx70_vecquat_Vec();
+    var hint = this.Lcfx70_cfpl_draft_Dim__f_hint;
     ctx.save();
-    this.drawHorLines__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
-    var x$1 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var x$2 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var x$4 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(2));
-    var x$5 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(3));
-    this.text__D__D__T__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V(x$1, x$2, "center", x$5, x$4, ctx);
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    var this$2 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt = pnts.get(0);
+    var this$3 = this$2.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$1 = pnts.get(1);
+    this$3.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$5 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$2 = pnts.get(2);
+    var this$6 = this$5.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$3 = pnts.get(3);
+    this$6.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$8 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$4 = pnts.get(4);
+    var this$9 = this$8.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$5 = pnts.get(5);
+    this$9.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickWidth;
+    var this$11 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$6 = pnts.get(6);
+    var this$12 = this$11.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$7 = pnts.get(7);
+    this$12.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$14 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$8 = pnts.get(8);
+    var this$15 = this$14.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$9 = pnts.get(9);
+    this$15.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    ctx.textBaseline = "bottom";
+    if (((this.Lcfx70_cfpl_draft_HorDim__f_dist > 99) || (hint === 0))) {
+      var this$16 = pnts.get(10);
+      var $$x2 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x1 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$17 = pnts.get(10);
+      ctx.translate(($$x2 * $$x1), ($uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "center"
+    } else if ((hint < 0)) {
+      var this$18 = pnts.get(11);
+      var $$x4 = $uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$19 = pnts.get(11);
+      ctx.translate(($$x4 * $$x3), ($uD(this$19.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "right"
+    } else {
+      var this$20 = pnts.get(12);
+      var $$x6 = $uD(this$20.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x5 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$21 = pnts.get(12);
+      ctx.translate(($$x6 * $$x5), ($uD(this$21.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "left"
+    };
+    ctx.scale(1.0, (-1.0));
+    ctx.textAlign = align;
+    var this$22 = this.Lcfx70_cfpl_draft_HorDim__f_dist;
+    ctx.fillText(("" + this$22), 0.0, 0.0);
     ctx.restore()
   } else {
     throw new $c_s_MatchError(x1)
@@ -5969,6 +6123,31 @@ var $d_Lcfx70_cfpl_draft_RedRCDraft = new $TypeData().initClass({
 });
 $c_Lcfx70_cfpl_draft_RedRCDraft.prototype.$classData = $d_Lcfx70_cfpl_draft_RedRCDraft;
 /** @constructor */
+function $c_Lcfx70_cfpl_draft_RedRRDev(m) {
+  this.Lcfx70_cfpl_draft_Draft__f_model = null;
+  this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0;
+  $ct_Lcfx70_cfpl_draft_Draft__Lcfx70_cfpl_core_Model__(this, m)
+}
+$c_Lcfx70_cfpl_draft_RedRRDev.prototype = new $h_Lcfx70_cfpl_draft_Draft();
+$c_Lcfx70_cfpl_draft_RedRRDev.prototype.constructor = $c_Lcfx70_cfpl_draft_RedRRDev;
+/** @constructor */
+function $h_Lcfx70_cfpl_draft_RedRRDev() {
+  /*<skip>*/
+}
+$h_Lcfx70_cfpl_draft_RedRRDev.prototype = $c_Lcfx70_cfpl_draft_RedRRDev.prototype;
+$c_Lcfx70_cfpl_draft_RedRRDev.prototype.draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
+  this.beginDraw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
+  ($m_Lcfx70_cfpl_core_Helpers2d$RichContext$().M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(0.0, 0.0).L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$(500.0, 500.0), $m_Lcfx70_cfpl_core_Helpers2d$RichContext$().Lcfx70_cfpl_core_Helpers2d$RichContext$__f_ctx).stroke()
+});
+var $d_Lcfx70_cfpl_draft_RedRRDev = new $TypeData().initClass({
+  Lcfx70_cfpl_draft_RedRRDev: 0
+}, false, "cfx70.cfpl.draft.RedRRDev", {
+  Lcfx70_cfpl_draft_RedRRDev: 1,
+  Lcfx70_cfpl_draft_Draft: 1,
+  O: 1
+});
+$c_Lcfx70_cfpl_draft_RedRRDev.prototype.$classData = $d_Lcfx70_cfpl_draft_RedRRDev;
+/** @constructor */
 function $c_Lcfx70_cfpl_draft_RedRRDraft(m) {
   this.Lcfx70_cfpl_draft_Draft__f_model = null;
   this.Lcfx70_cfpl_draft_Draft__f_mscl = 0.0;
@@ -5986,164 +6165,175 @@ $c_Lcfx70_cfpl_draft_RedRRDraft.prototype.draw__Lorg_scalajs_dom_CanvasRendering
   var back = $as_sc_Seq(this$1.Lcfx70_cfpl_core_BPyramid__f_bpts.init__O());
   var this$2 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn;
   var front = $as_sc_Seq(this$2.Lcfx70_cfpl_core_BPyramid__f_tpts.init__O());
+  var this$3 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+  var $$x1 = $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$4 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
+  if (($$x1 > $uD(this$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
+    var this$5 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+    var $$x2 = $uD(this$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+    var this$6 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
+    var shifty = ((-($$x2 - $uD(this$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) * this.Lcfx70_cfpl_draft_Draft__f_mscl)
+  } else {
+    var shifty = 0.0
+  };
   ctx.save();
   this.beginDraw__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
   ctx.beginPath();
-  ctx.translate(0.0, (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0));
+  ctx.translate(0.0, ((($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0) + shifty));
   var array = [0.0, 0.0, 1.0];
   var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-  var $$x2 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
-  var $$x1 = $m_sc_Seq$();
+  var $$x4 = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+  var $$x3 = $m_sc_Seq$();
   var array$1 = [$as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.bottom__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.left__sc_Seq(), $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.right__sc_Seq()];
-  this.drawVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x2, $as_sc_Seq($$x1.apply__sc_Seq__sc_GenTraversable($ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1))), ctx);
-  var this$9 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  this$9.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(front.head__O()), $as_sc_Seq(front.tail__O()));
+  this.drawVisible__Lcfx70_vecquat_Vec__sc_Seq__Lorg_scalajs_dom_CanvasRenderingContext2D__V($$x4, $as_sc_Seq($$x3.apply__sc_Seq__sc_GenTraversable($ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$1))), ctx);
+  var this$13 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  this$13.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(front.head__O()), $as_sc_Seq(front.tail__O()));
   ctx.stroke();
   ctx.beginPath();
   ctx.fillStyle = "#000";
-  var this$23 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var this$27 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
   var st = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
-  var $$x9 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var $$x8 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
-  var this$12 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var $$x7 = $uD(this$12.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$13 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
-  var $$x6 = $uD(this$13.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$14 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var $$x5 = $uD(this$14.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$15 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var $$x4 = $uD(this$15.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var $$x11 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  var $$x10 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
   var this$16 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var $$x3 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var this$17 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
-  var array$2 = [($$x7 + (($$x6 - $$x5) / 4.0)), ($$x4 - (($$x3 - $uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 4.0))];
+  var $$x9 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$17 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+  var $$x8 = $uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$18 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  var $$x7 = $uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$19 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  var $$x6 = $uD(this$19.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$20 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  var $$x5 = $uD(this$20.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$21 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
+  var array$2 = [($$x9 + (($$x8 - $$x7) / 4.0)), ($$x6 - (($$x5 - $uD(this$21.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 4.0))];
   var crds$1 = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array$2);
-  var array$3 = [$$x9, $$x8, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1)];
-  this$23.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+  var array$3 = [$$x11, $$x10, $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds$1)];
+  this$27.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(st.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
   var i = 0;
   var len = $uI(array$3.length);
   while ((i < len)) {
     var index = i;
     var arg1 = array$3[index];
     var pt = $as_Lcfx70_vecquat_Vec(arg1);
-    var this$24 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-    this$24.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$28 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    this$28.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
     i = ((1 + i) | 0)
   };
-  this$23.Lcfx70_cfpl_core_Helpers2d$RichContext$__f_ctx.closePath();
+  this$27.Lcfx70_cfpl_core_Helpers2d$RichContext$__f_ctx.closePath();
   ctx.fill();
   var _1$mcI$sp = (((($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz / 4) | 0) - $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_dimspace) | 0);
   var _2$mcI$sp = ((((((-$m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz) | 0) / 4) | 0) - (($m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_dimspace / 3) | 0)) | 0);
-  var this$25 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
-  var $$x10 = $uD(this$25.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-  var this$26 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  if (($$x10 > $uD(this$26.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
-    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcI$sp, 0, ctx);
-    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _2$mcI$sp, 0, ctx);
-    var this$27 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(2));
-    var $$x11 = $uD(this$27.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$28 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
-    if (($$x11 < $uD(this$28.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), _2$mcI$sp, 0, ctx)
+  var this$29 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
+  var $$x12 = $uD(this$29.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+  var this$30 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  if (($$x12 > $uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
+    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), (_1$mcI$sp - shifty), 0, ctx);
+    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), (_2$mcI$sp - shifty), 0, ctx);
+    var this$31 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(2));
+    var $$x13 = $uD(this$31.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+    var this$32 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(2));
+    if (($$x13 < $uD(this$32.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), (_2$mcI$sp - shifty), 0, ctx)
     };
-    var this$29 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(3));
-    var $$x12 = $uD(this$29.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$30 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(3));
-    if (($$x12 > $uD(this$30.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _2$mcI$sp, 0, ctx)
+    var this$33 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(3));
+    var $$x14 = $uD(this$33.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+    var this$34 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(3));
+    if (($$x14 > $uD(this$34.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), (_2$mcI$sp - shifty), 0, ctx)
     }
   } else {
-    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _2$mcI$sp, 0, ctx);
-    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcI$sp, 0, ctx);
-    var this$31 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
-    var $$x13 = $uD(this$31.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$32 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-    if (($$x13 < $uD(this$32.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), _1$mcI$sp, 0, ctx)
+    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), (_2$mcI$sp - shifty), 0, ctx);
+    $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), (_1$mcI$sp - shifty), 0, ctx);
+    var this$35 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
+    var $$x15 = $uD(this$35.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+    var this$36 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+    if (($$x15 < $uD(this$36.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), (_1$mcI$sp - shifty), 0, ctx)
     };
-    var this$33 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
-    var $$x14 = $uD(this$33.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var this$34 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
-    if (($$x14 > $uD(this$34.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcI$sp, 0, ctx)
+    var this$37 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
+    var $$x16 = $uD(this$37.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+    var this$38 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+    if (($$x16 > $uD(this$38.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().hor__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), (_1$mcI$sp - shifty), 0, ctx)
     }
   };
-  var this$35 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
-  var x = $uD(this$35.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$36 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
-  var y = $uD(this$36.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$39 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
+  var x = $uD(this$39.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$40 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+  var y = $uD(this$40.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var _1$mcD$sp = ($uD(Math.max(x, y)) + $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_dimstep);
-  var this$39 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
-  var x$1 = $uD(this$39.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var this$40 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  var y$1 = $uD(this$40.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-  var _2$mcD$sp = ($uD(Math.min(x$1, y$1)) - $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_dimstep);
   var this$43 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
-  var $$x15 = $uD(this$43.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var x$1 = $uD(this$43.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
   var this$44 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
-  if (($$x15 > $uD(this$44.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
+  var y$1 = $uD(this$44.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var _2$mcD$sp = ($uD(Math.min(x$1, y$1)) - $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_dimstep);
+  var this$47 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(1));
+  var $$x17 = $uD(this$47.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+  var this$48 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(1));
+  if (($$x17 > $uD(this$48.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)))) {
     $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx);
     $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx);
-    var this$45 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(3));
-    var $$x16 = $uD(this$45.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$46 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(3));
-    if (($$x16 < $uD(this$46.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx)
-    };
-    var this$47 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
-    var $$x17 = $uD(this$47.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$48 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
-    if (($$x17 > $uD(this$48.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx)
-    }
-  } else {
-    $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx);
-    $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx);
     var this$49 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(3));
     var $$x18 = $uD(this$49.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
     var this$50 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(3));
     if (($$x18 < $uD(this$50.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
-      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx)
+      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx)
     };
     var this$51 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
     var $$x19 = $uD(this$51.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
     var this$52 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
     if (($$x19 > $uD(this$52.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx)
+    }
+  } else {
+    $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(2)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(1)).xy__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx);
+    $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx);
+    var this$53 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(3));
+    var $$x20 = $uD(this$53.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+    var this$54 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(3));
+    if (($$x20 < $uD(this$54.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
+      $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(back.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(front.apply__I__O(3)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx)
+    };
+    var this$55 = $as_Lcfx70_vecquat_Vec(back.apply__I__O(0));
+    var $$x21 = $uD(this$55.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
+    var this$56 = $as_Lcfx70_vecquat_Vec(front.apply__I__O(0));
+    if (($$x21 > $uD(this$56.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)))) {
       $m_Lcfx70_cfpl_draft_Dim$().vert__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec(front.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec(back.apply__I__O(0)).xy__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx)
     }
   };
   ctx.lineWidth = $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_lineWidth;
-  ctx.translate(0.0, ((-((Math.imul(3, $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz) / 8) | 0)) | 0));
+  ctx.translate(0.0, (((-((Math.imul(3, $m_Lcfx70_cfpl_draft_Draft$().Lcfx70_cfpl_draft_Draft$__f_vsz) / 8) | 0)) | 0) - shifty));
   ctx.scale(1.0, (-1.0));
   ctx.beginPath();
-  var this$56 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var $$x21 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq();
-  var $$x20 = new $c_sjsr_AnonFunction1(((x$4$2) => {
+  var this$60 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var $$x23 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_cn.top__sc_Seq();
+  var $$x22 = new $c_sjsr_AnonFunction1(((x$4$2) => {
     var x$4 = $as_Lcfx70_vecquat_Vec(x$4$2);
     return x$4.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$55 = $m_sc_Seq$();
-  var pts = $as_sc_Seq($$x21.map__F1__scg_CanBuildFrom__O($$x20, this$55.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$56.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
-  var this$59 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var $$x23 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq();
-  var $$x22 = new $c_sjsr_AnonFunction1(((x$5$2) => {
+  var this$59 = $m_sc_Seq$();
+  var pts = $as_sc_Seq($$x23.map__F1__scg_CanBuildFrom__O($$x22, this$59.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$60.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts.head__O()), $as_sc_Seq(pts.tail__O()));
+  var this$63 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var $$x25 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq();
+  var $$x24 = new $c_sjsr_AnonFunction1(((x$5$2) => {
     var x$5 = $as_Lcfx70_vecquat_Vec(x$5$2);
     return x$5.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$58 = $m_sc_Seq$();
-  var pts$1 = $as_sc_Seq($$x23.map__F1__scg_CanBuildFrom__O($$x22, this$58.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$59.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
-  var this$62 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
-  var $$x25 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fct.top__sc_Seq();
-  var $$x24 = new $c_sjsr_AnonFunction1(((x$6$2) => {
+  var this$62 = $m_sc_Seq$();
+  var pts$1 = $as_sc_Seq($$x25.map__F1__scg_CanBuildFrom__O($$x24, this$62.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$63.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts$1.head__O()), $as_sc_Seq(pts$1.tail__O()));
+  var this$66 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+  var $$x27 = $as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fct.top__sc_Seq();
+  var $$x26 = new $c_sjsr_AnonFunction1(((x$6$2) => {
     var x$6 = $as_Lcfx70_vecquat_Vec(x$6$2);
     return x$6.xz__Lcfx70_vecquat_Vec()
   }));
-  var this$61 = $m_sc_Seq$();
-  var pts$2 = $as_sc_Seq($$x25.map__F1__scg_CanBuildFrom__O($$x24, this$61.scg_GenTraversableFactory__f_ReusableCBFInstance));
-  this$62.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
+  var this$65 = $m_sc_Seq$();
+  var pts$2 = $as_sc_Seq($$x27.map__F1__scg_CanBuildFrom__O($$x26, this$65.scg_GenTraversableFactory__f_ReusableCBFInstance));
+  this$66.polygon__Lcfx70_vecquat_Vec__sc_Seq__Lcfx70_cfpl_core_Helpers2d$RichContext$($as_Lcfx70_vecquat_Vec(pts$2.head__O()), $as_sc_Seq(pts$2.tail__O()));
   ctx.stroke();
   $m_Lcfx70_cfpl_draft_Dim$().vertM__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec($as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fct.top__sc_Seq().apply__I__O(1)).xz__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec($as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq().apply__I__O(0)).xz__Lcfx70_vecquat_Vec(), _1$mcD$sp, 0, ctx);
   $m_Lcfx70_cfpl_draft_Dim$().vertM__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__Lorg_scalajs_dom_CanvasRenderingContext2D__V($as_Lcfx70_vecquat_Vec($as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq().apply__I__O(2)).xz__Lcfx70_vecquat_Vec(), $as_Lcfx70_vecquat_Vec($as_Lcfx70_cfpl_core_RedRR(this.Lcfx70_cfpl_draft_Draft__f_model).Lcfx70_cfpl_core_RedRR__f_fcb.top__sc_Seq().apply__I__O(3)).xz__Lcfx70_vecquat_Vec(), _2$mcD$sp, 0, ctx);
@@ -6163,6 +6353,7 @@ function $c_Lcfx70_cfpl_draft_VertDim(p1, p2, cln, hint) {
   this.Lcfx70_cfpl_draft_Dim__f_p1 = null;
   this.Lcfx70_cfpl_draft_Dim__f_p2 = null;
   this.Lcfx70_cfpl_draft_Dim__f_cln = 0.0;
+  this.Lcfx70_cfpl_draft_Dim__f_hint = 0;
   this.Lcfx70_cfpl_draft_Dim__f_rscale = 0.0;
   this.Lcfx70_cfpl_draft_VertDim__f_dist = 0;
   $ct_Lcfx70_cfpl_draft_Dim__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__(this, p1, p2, cln, hint);
@@ -6179,30 +6370,73 @@ function $h_Lcfx70_cfpl_draft_VertDim() {
   /*<skip>*/
 }
 $h_Lcfx70_cfpl_draft_VertDim.prototype = $c_Lcfx70_cfpl_draft_VertDim.prototype;
-$c_Lcfx70_cfpl_draft_VertDim.prototype.dist__I = (function() {
-  return this.Lcfx70_cfpl_draft_VertDim__f_dist
-});
 $c_Lcfx70_cfpl_draft_VertDim.prototype.draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
   var x1 = this.Lcfx70_cfpl_draft_VertDim__f_dist;
   if ((x1 > $m_Lcfx70_vecquat_package$().Lcfx70_vecquat_package$__f_epsilon)) {
-    var $$x5 = this.Lcfx70_cfpl_draft_Dim__f_cln;
-    var $$x4 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap;
-    var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
-    var this$1 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var $$x2 = $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$2 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-    var $$x1 = $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$3 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var array = [(($$x5 - $$x4) / $$x3), ($$x2 + (($$x1 - $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 2.0)), 1.5707963267948966, (-1.0)];
-    var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-    var txcrd = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+    var pnts = this.vertPoints__ALcfx70_vecquat_Vec();
+    var hint = this.Lcfx70_cfpl_draft_Dim__f_hint;
     ctx.save();
-    this.drawVertLines__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
-    var x$1 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var x$2 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var x$4 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(2));
-    var x$5 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(3));
-    this.text__D__D__T__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V(x$1, x$2, "center", x$5, x$4, ctx);
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    var this$2 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt = pnts.get(0);
+    var this$3 = this$2.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$1 = pnts.get(1);
+    this$3.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$5 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$2 = pnts.get(2);
+    var this$6 = this$5.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$3 = pnts.get(3);
+    this$6.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$8 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$4 = pnts.get(4);
+    var this$9 = this$8.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$5 = pnts.get(5);
+    this$9.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickWidth;
+    var this$11 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$6 = pnts.get(6);
+    var this$12 = this$11.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$7 = pnts.get(7);
+    this$12.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$14 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$8 = pnts.get(8);
+    var this$15 = this$14.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$9 = pnts.get(9);
+    this$15.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    ctx.textBaseline = "bottom";
+    if (((this.Lcfx70_cfpl_draft_VertDim__f_dist > 99) || (hint === 0))) {
+      var this$16 = pnts.get(10);
+      var $$x2 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x1 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$17 = pnts.get(10);
+      ctx.translate(($$x2 * $$x1), ($uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "center"
+    } else if ((hint < 0)) {
+      var this$18 = pnts.get(11);
+      var $$x4 = $uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$19 = pnts.get(11);
+      ctx.translate(($$x4 * $$x3), ($uD(this$19.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "right"
+    } else {
+      var this$20 = pnts.get(12);
+      var $$x6 = $uD(this$20.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x5 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$21 = pnts.get(12);
+      ctx.translate(($$x6 * $$x5), ($uD(this$21.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "left"
+    };
+    ctx.rotate(1.5707963267948966);
+    ctx.scale(1.0, (-1.0));
+    ctx.textAlign = align;
+    var this$22 = this.Lcfx70_cfpl_draft_VertDim__f_dist;
+    ctx.fillText(("" + this$22), 0.0, 0.0);
     ctx.restore()
   } else {
     throw new $c_s_MatchError(x1)
@@ -6221,6 +6455,7 @@ function $c_Lcfx70_cfpl_draft_VertDimM(p1, p2, cln, hint) {
   this.Lcfx70_cfpl_draft_Dim__f_p1 = null;
   this.Lcfx70_cfpl_draft_Dim__f_p2 = null;
   this.Lcfx70_cfpl_draft_Dim__f_cln = 0.0;
+  this.Lcfx70_cfpl_draft_Dim__f_hint = 0;
   this.Lcfx70_cfpl_draft_Dim__f_rscale = 0.0;
   this.Lcfx70_cfpl_draft_VertDimM__f_dist = 0;
   $ct_Lcfx70_cfpl_draft_Dim__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec__D__I__(this, p1, p2, cln, hint);
@@ -6237,30 +6472,72 @@ function $h_Lcfx70_cfpl_draft_VertDimM() {
   /*<skip>*/
 }
 $h_Lcfx70_cfpl_draft_VertDimM.prototype = $c_Lcfx70_cfpl_draft_VertDimM.prototype;
-$c_Lcfx70_cfpl_draft_VertDimM.prototype.dist__I = (function() {
-  return this.Lcfx70_cfpl_draft_VertDimM__f_dist
-});
 $c_Lcfx70_cfpl_draft_VertDimM.prototype.draw__Lorg_scalajs_dom_CanvasRenderingContext2D__V = (function(ctx) {
   var x1 = this.Lcfx70_cfpl_draft_VertDimM__f_dist;
   if ((x1 > $m_Lcfx70_vecquat_package$().Lcfx70_vecquat_package$__f_epsilon)) {
-    var $$x5 = this.Lcfx70_cfpl_draft_Dim__f_cln;
-    var $$x4 = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineGap;
-    var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
-    var this$1 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var $$x2 = $uD(this$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$2 = this.Lcfx70_cfpl_draft_Dim__f_p2;
-    var $$x1 = $uD(this$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var this$3 = this.Lcfx70_cfpl_draft_Dim__f_p1;
-    var array = [(($$x5 - $$x4) / $$x3), ($$x2 + (($$x1 - $uD(this$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1))) / 2.0)), (-1.5707963267948966), 1.0];
-    var crds = $ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array);
-    var txcrd = $ct_Lcfx70_vecquat_Vec__sc_Seq__(new $c_Lcfx70_vecquat_Vec(), crds);
+    var pnts = this.vertPoints__ALcfx70_vecquat_Vec();
+    var hint = this.Lcfx70_cfpl_draft_Dim__f_hint;
     ctx.save();
-    this.drawVertLines__Lorg_scalajs_dom_CanvasRenderingContext2D__V(ctx);
-    var x$1 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
-    var x$2 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1));
-    var x$4 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(2));
-    var x$5 = $uD(txcrd.Lcfx70_vecquat_Vec__f_crds.apply__I__O(3));
-    this.text__D__D__T__D__D__Lorg_scalajs_dom_CanvasRenderingContext2D__V(x$1, x$2, "center", x$5, x$4, ctx);
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    var this$2 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt = pnts.get(0);
+    var this$3 = this$2.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$1 = pnts.get(1);
+    this$3.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$1.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$5 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$2 = pnts.get(2);
+    var this$6 = this$5.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$2.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$3 = pnts.get(3);
+    this$6.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$3.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$8 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$4 = pnts.get(4);
+    var this$9 = this$8.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$4.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$5 = pnts.get(5);
+    this$9.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$5.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_tickWidth;
+    var this$11 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$6 = pnts.get(6);
+    var this$12 = this$11.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$6.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$7 = pnts.get(7);
+    this$12.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$7.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var this$14 = $m_Lcfx70_cfpl_core_Helpers2d$RichContext$();
+    var pt$8 = pnts.get(8);
+    var this$15 = this$14.M__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$8.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    var pt$9 = pnts.get(9);
+    this$15.L__D__D__Lcfx70_cfpl_core_Helpers2d$RichContext$($uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0)), $uD(pt$9.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = $m_Lcfx70_cfpl_draft_Dim$().Lcfx70_cfpl_draft_Dim$__f_lineWidth;
+    ctx.textBaseline = "bottom";
+    if (((this.Lcfx70_cfpl_draft_VertDimM__f_dist > 99) || (hint === 0))) {
+      var this$16 = pnts.get(10);
+      var $$x2 = $uD(this$16.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x1 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$17 = pnts.get(10);
+      ctx.translate(($$x2 * $$x1), ($uD(this$17.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "center"
+    } else if ((hint < 0)) {
+      var this$18 = pnts.get(11);
+      var $$x4 = $uD(this$18.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x3 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$19 = pnts.get(11);
+      ctx.translate(($$x4 * $$x3), ($uD(this$19.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "right"
+    } else {
+      var this$20 = pnts.get(12);
+      var $$x6 = $uD(this$20.Lcfx70_vecquat_Vec__f_crds.apply__I__O(0));
+      var $$x5 = this.Lcfx70_cfpl_draft_Dim__f_rscale;
+      var this$21 = pnts.get(12);
+      ctx.translate(($$x6 * $$x5), ($uD(this$21.Lcfx70_vecquat_Vec__f_crds.apply__I__O(1)) * this.Lcfx70_cfpl_draft_Dim__f_rscale));
+      var align = "left"
+    };
+    ctx.rotate((-1.5707963267948966));
+    ctx.textAlign = align;
+    var this$22 = this.Lcfx70_cfpl_draft_VertDimM__f_dist;
+    ctx.fillText(("" + this$22), 0.0, 0.0);
     ctx.restore()
   } else {
     throw new $c_s_MatchError(x1)
@@ -9846,6 +10123,30 @@ $c_Lcfx70_cfpl_core_BPyramid.prototype.right__sc_Seq = (function() {
   var $$x1 = $m_sc_Seq$();
   var array = [$as_Lcfx70_vecquat_Vec(this.Lcfx70_cfpl_core_BPyramid__f_bpts.apply__I__O(2)), $as_Lcfx70_vecquat_Vec(this.Lcfx70_cfpl_core_BPyramid__f_tpts.apply__I__O(2)), $as_Lcfx70_vecquat_Vec(this.Lcfx70_cfpl_core_BPyramid__f_tpts.apply__I__O(1)), $as_Lcfx70_vecquat_Vec(this.Lcfx70_cfpl_core_BPyramid__f_bpts.apply__I__O(1))];
   return $as_sc_Seq($$x1.apply__sc_Seq__sc_GenTraversable($ct_sjs_js_WrappedArray__sjs_js_Array__(new $c_sjs_js_WrappedArray(), array)))
+});
+$c_Lcfx70_cfpl_core_BPyramid.prototype.hside__sc_Seq__D = (function(pts) {
+  var _1 = $as_Lcfx70_vecquat_Vec(pts.apply__I__O(1)).$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($as_Lcfx70_vecquat_Vec(pts.apply__I__O(0)));
+  var _2 = $as_Lcfx70_vecquat_Vec(pts.apply__I__O(3)).$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($as_Lcfx70_vecquat_Vec(pts.apply__I__O(0)));
+  if ((_1.dotProd__Lcfx70_vecquat_Vec__D(_2) < $m_Lcfx70_vecquat_package$().Lcfx70_vecquat_package$__f_epsilon)) {
+    var x = _1.norm__D();
+    return $uD(Math.sqrt(x))
+  } else {
+    var vp = _1.project__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec(_2);
+    var this$3 = _1.$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec(vp);
+    var x$1 = this$3.norm__D();
+    return $uD(Math.sqrt(x$1))
+  }
+});
+$c_Lcfx70_cfpl_core_BPyramid.prototype.aside__sc_Seq__D = (function(pts) {
+  var this$1 = $as_Lcfx70_vecquat_Vec(pts.apply__I__O(3)).$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($as_Lcfx70_vecquat_Vec(pts.apply__I__O(0)));
+  var x = this$1.norm__D();
+  var $$x1 = $uD(Math.sqrt(x));
+  var this$4 = $as_Lcfx70_vecquat_Vec(pts.apply__I__O(2)).$minus__Lcfx70_vecquat_Vec__Lcfx70_vecquat_Vec($as_Lcfx70_vecquat_Vec(pts.apply__I__O(1)));
+  var x$1 = this$4.norm__D();
+  return ((($$x1 + $uD(Math.sqrt(x$1))) / 2.0) * this.hside__sc_Seq__D(pts))
+});
+$c_Lcfx70_cfpl_core_BPyramid.prototype.area__D = (function() {
+  return (((this.aside__sc_Seq__D(this.top__sc_Seq()) + this.aside__sc_Seq__D(this.bottom__sc_Seq())) + this.aside__sc_Seq__D(this.left__sc_Seq())) + this.aside__sc_Seq__D(this.right__sc_Seq()))
 });
 function $as_Lcfx70_cfpl_core_BPyramid(obj) {
   return (((obj instanceof $c_Lcfx70_cfpl_core_BPyramid) || (obj === null)) ? obj : $throwClassCastException(obj, "cfx70.cfpl.core.BPyramid"))

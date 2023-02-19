@@ -43,7 +43,7 @@ object DetApp{
         
    @JSExport
 	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double):Unit = 
-          {/* println(b1/2 -db - b2/2);*/ setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2))}
+          setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2))
    @JSExport
         def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f:Double=30):Unit = 
             setModel(new RedRC(a1,b1,d,h,da,db,f))
@@ -116,6 +116,8 @@ object DetApp{
                    descr.innerHTML=model.description("ru")
                    show3d()
                    Draft(model).draw(ctxDraft)
+                   Dev(model).draw(ctxDev)
+                   println(model.area/1000000)
          }
 	
 	    

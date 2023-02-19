@@ -61,6 +61,7 @@ object Helpers2d{
 	
 //	implicit def context2rich(ctx: CanvasRenderingContext2D)=new RichContext(ctx)
 	implicit def context2rich(ctx: CanvasRenderingContext2D) : RichContext.type = RichContext
+	implicit def rich2context(rctx: RichContext.type) : CanvasRenderingContext2D = RichContext.ctx
 	
 	object RichContext{
 //	  import RichContext.lscale

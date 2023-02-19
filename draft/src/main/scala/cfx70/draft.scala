@@ -65,8 +65,11 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         implicit val mctx=ctx
 		val back = model.cn.back
 		val front = model.cn.front
-	    val shifty = if(front(0).y * mscl > vsz/4 - (dimspace + dimstep)){
+	   /* val shifty = if(front(0).y * mscl > vsz/4 - (dimspace + dimstep)){
 						-(front(0).y - (vsz/4 - (dimspace + dimstep)))*mscl
+					}else 0*/
+	    val shifty = if(front(0).y > back(0).y){
+						-(front(0).y - back(0).y)*mscl
 					}else 0
 		//println(shifty)
         ctx.save()

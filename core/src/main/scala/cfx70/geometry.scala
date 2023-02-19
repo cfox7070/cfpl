@@ -274,6 +274,19 @@ class BPyramid(val a1:Double,val b1:Double,
     def bottom=Seq(bpts(1),tpts(1),tpts(0),bpts(0))
     def left=Seq(bpts(0),tpts(0),tpts(3),bpts(3))
     def right=Seq(bpts(2),tpts(2),tpts(1),bpts(1))
+    
+	def hside(pts : Seq[Vec]) : Double = {
+		val(v1,v2) = (pts(1)-pts(0),pts(3)-pts(0))
+		if(v1*v2 < epsilon)
+			v1.mod
+		else{
+			val vp = v1 project v2
+			(v1 - vp).mod
+		}
+	}
+	
+	def aside(pts : Seq[Vec]) : Double = ((pts(3)-pts(0)).mod+(pts(2)-pts(1)).mod)/2*hside(pts)
+    def area : Double = aside(top)+aside(bottom)+aside(left)+aside(right)
 }
 
 class BCylinder(val d:Double, h:Double, dd:Double = 0, ang:Double = 2.0*Pi) extends 
