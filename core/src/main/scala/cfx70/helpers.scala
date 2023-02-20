@@ -59,12 +59,10 @@ object CommonHelpers {
 object Helpers2d{
 	type Context2d = CanvasRenderingContext2D
 	
-//	implicit def context2rich(ctx: CanvasRenderingContext2D)=new RichContext(ctx)
 	implicit def context2rich(ctx: CanvasRenderingContext2D) : RichContext.type = RichContext
 	implicit def rich2context(rctx: RichContext.type) : CanvasRenderingContext2D = RichContext.ctx
 	
 	object RichContext{
-//	  import RichContext.lscale
        var lscale=1.0
 	   var ctx : CanvasRenderingContext2D = null
 	   var curPt=Vec(0,0)
@@ -78,8 +76,7 @@ object Helpers2d{
 		def polygon(pts:Seq[Vec]) : RichContext.type = polygon(pts.head,pts.tail: _*)
 		def M(x:Double,y:Double)={ctx.moveTo(x*lscale,y*lscale);curPt=Vec(x*lscale,y*lscale);this}
 		def M(pt:Vec):RichContext.type=M(pt.x,pt.y)
-		def L(x:Double,y:Double)={ctx.lineTo(x*lscale,y*lscale);curPt=Vec(x*lscale,y*lscale);
-                                /*println(f"L ${x*lscale}%2.2f ${x*lscale}%2.2f");*/this}
+		def L(x:Double,y:Double)={ctx.lineTo(x*lscale,y*lscale);curPt=Vec(x*lscale,y*lscale);this}
 		def L(pt:Vec):RichContext.type=L(pt.x,pt.y)
 		def H(x:Double)=L(x,curPt.y)
 		def V(y:Double)=L(curPt.x,y)

@@ -270,10 +270,15 @@ class BPyramid(val a1:Double,val b1:Double,
     
     def intersect(l:Line3) : Option[Vec] = None 
     
-    def top=Seq(bpts(3),tpts(3),tpts(2),bpts(2))
+/*    def top=Seq(bpts(3),tpts(3),tpts(2),bpts(2))
     def bottom=Seq(bpts(1),tpts(1),tpts(0),bpts(0))
     def left=Seq(bpts(0),tpts(0),tpts(3),bpts(3))
-    def right=Seq(bpts(2),tpts(2),tpts(1),bpts(1))
+    def right=Seq(bpts(2),tpts(2),tpts(1),bpts(1))*/
+
+    def bottom=Seq(bpts(3),tpts(3),tpts(2),bpts(2))
+    def top=Seq(bpts(1),tpts(1),tpts(0),bpts(0))
+    def right=Seq(bpts(0),tpts(0),tpts(3),bpts(3))
+    def left=Seq(bpts(2),tpts(2),tpts(1),bpts(1))
     
 	def hside(pts : Seq[Vec]) : Double = {
 		val(v1,v2) = (pts(1)-pts(0),pts(3)-pts(0))

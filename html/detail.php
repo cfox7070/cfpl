@@ -6,7 +6,6 @@
                 $title="Переход c прямоугольного на прямоугольное";
                 $imgsrc="img/red-r-ra.png";
                 $detailparams="redrr-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="redrr-script.js";
                 break;
             
@@ -14,7 +13,6 @@
                 $title="Переход c прямоугольного на круглое";
                 $imgsrc="img/red-r-c.png";
                 $detailparams="redrc-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="redrc-script.js";
                 break;
 
@@ -22,7 +20,6 @@
                 $title="Переход c круглого на круглое";
                 $imgsrc="img/red-с-c.png";
                 $detailparams="redсc-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="redсc-script.js";
                 break;
 
@@ -36,21 +33,18 @@
                 $title="Отвод круглый";
                 $imgsrc="img/elb-с-с.png";
                 $detailparams="elbcc-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="elbcc-script.js";
                 break;
             case "brunchcc":
                 $title="Врезка круглое в круглое";
                 $imgsrc="img/brunch-c-c.png";
                 $detailparams="brunchcc-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="brunchcc-script.js";
                 break;
             case "cone":
                 $title="cone test";
                 $imgsrc="none";
                 $detailparams="cone-params.php";
-                $detailmat="redrr-mat.php";
                 $detailscript="cone-script.js";
                 break;
             
@@ -116,23 +110,41 @@
 
 			<div id="3d" class="w3-container view">
 			<canvas class="w3-border" id="canvas3d" width="1600" height="1200"></canvas>
+			<a id="download" download="" href="" onclick="download_model(this);">Сохранить</a>
 			</div>
 
 			<div id="draft" class="w3-container view" style="display:none">
 			<canvas class="w3-border" id="canvasdraft" width="1600" height="1200"></canvas>
+			<a id="download" download="" href="" onclick="download_draft(this);">Сохранить</a>
 			</div>
 
 			<div id="dev" class="w3-container view" style="display:none">
 			<canvas class="w3-border" id="canvasdev" width="1600" height="1200"></canvas>
+			<a id="download" download="" href="" onclick="download_dev(this);">Сохранить</a>
 			</div>
 
 			<div id="mat" class="w3-container view" style="display:none">
-				<?php require $detailmat ?> 
+				<table id= "mattbl" class="w3-table w3-bordered w3-theme-light" >
+				</table> 
 			</div>
 		</div>
 	</div>
 </div>
 </body>
+
+<script>
+	download_draft = function(el) {
+	  let cnv = document.getElementById("canvasdraft")
+	  let image = cnv.toDataURL();
+	  el.href = image;
+	};
+	download_dev = function(el) {
+	  let cnv = document.getElementById("canvasdev")
+	  let image = cnv.toDataURL();
+	  el.href = image;
+	};
+</script>
+
 <script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
 <script type="importmap">
@@ -167,6 +179,14 @@ function openCity(evt,viewName) {
  }
 
 window.openCity=openCity;
+
+window.download_model = function(el) {
+	  let cnv = document.getElementById("canvas3d")
+	  DetApp.updateScene()
+	  let image = cnv.toDataURL();
+	  el.href = image;
+	};
+
 const inputs = document.querySelectorAll('.dims-input0')
 	DetApp.setAnimation(false)
            

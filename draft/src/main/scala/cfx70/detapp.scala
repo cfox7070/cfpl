@@ -18,7 +18,7 @@ import cfx70.threejsfacade.THREE._
 import cfx70.vecquat._
 
 
-@JSExportTopLevel("DetApp")
+@JSExportTopLevel(name = "DetApp", moduleID = "det")
 object DetApp{
 
 	/*{val loader = new TextureLoader()
@@ -88,10 +88,13 @@ object DetApp{
     @JSExport
     def setAnimation(a:Boolean){ animation=a;animate(0) }
     
+    @JSExport
+	def updateScene(){renderer.render(scene, camera3d)}
+	
 	def show3d():Unit=model match {
 		case m:Model =>{
                         val s=m.bsphere
-                        camera3d.position.z= (s.radius * 2)/tan((camera3d.fov/2).toRadians)
+                        camera3d.position.z= (s.radius /** 2*/)/tan((camera3d.fov/2).toRadians)
                         camera3d.position.x= -s.radius
                         camera3d.position.y= s.radius
                         camera3d.rotation.x= -Pi/6
@@ -117,7 +120,7 @@ object DetApp{
                    show3d()
                    Draft(model).draw(ctxDraft)
                    Dev(model).draw(ctxDev)
-                   println(model.area/1000000)
+                   Mat(model,document.querySelector("#mattbl").asInstanceOf[html.Table]).writeMats()
          }
 	
 	    
