@@ -16,11 +16,11 @@
                 $detailscript="redrc-script.js";
                 break;
 
-            case "redсc":
+            case "redcc":
                 $title="Переход c круглого на круглое";
                 $imgsrc="img/red-с-c.png";
-                $detailparams="redсc-params.php";
-                $detailscript="redсc-script.js";
+                $detailparams="redcc-params.php";
+                $detailscript="redcc-script.js";
                 break;
 
             case "elbrr":
@@ -79,7 +79,20 @@
 </head>
 <body>
 <div class="w3-container">
-<div class="w3-bar w3-center w3-theme"> <a href="index.php"> выбор детали </a></div>
+<div class="w3-bar w3-center w3-theme"> 
+	<a href="detail.php?type=redrr" class="w3-button">
+		 <img src="img/redrr-icon.png" 
+				class=""  alt="переход с прямоугольного на прямоугольное"
+				 style="width:58px;height:41px;"> </a>
+	<a href="detail.php?type=redrc" class="w3-button">
+		 <img src="img/redrc-icon.png" 
+				class="w3-hover-grayscale"  alt="переход с прямоугольного на круглое"
+				 style="width:58px;height:41px;"> </a>
+	<a href="detail.php?type=redcc" class="w3-button">
+		 <img src="img/redcc-icon.png" 
+				class="w3-hover-grayscale"  alt="переход с круглого на круглое"
+				 style="width:58px;height:41px;"> </a>
+</div>
 <p></p>
 <div class="w3-container">
 
@@ -159,11 +172,10 @@
 </script>
 
 <script type="module">
-//import * as THREE from 'three';
-import {DetApp}  from 'detapp';
-//import {OrbitControls} from 'three/addons/OrbitControls.js';
 
-function openCity(evt,viewName) {
+import {DetApp}  from 'detapp';
+
+window.openCity = function(evt,viewName) {
 	let i;
 	let x = document.getElementsByClassName("view");
 	for (i = 0; i < x.length; i++) {
@@ -177,8 +189,6 @@ function openCity(evt,viewName) {
 	view.style.display = "block"
 	evt.currentTarget.classList.add("w3-theme-l4")
  }
-
-window.openCity=openCity;
 
 window.download_model = function(el) {
 	  let cnv = document.getElementById("canvas3d")

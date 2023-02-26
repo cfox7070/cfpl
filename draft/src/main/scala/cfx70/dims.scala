@@ -2,6 +2,8 @@ package cfx70.cfpl.draft
 
 import scala.language.implicitConversions
 
+import scala.scalajs.js
+
 import cfx70.vecquat._
 
 import scala.math._
@@ -19,8 +21,10 @@ object Dim{
    val tickl=12
    
    def hor(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0)(implicit ctx:Context2d)=new HorDim(p1,p2,cln,hint).draw(ctx)
+   def horD(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0)(implicit ctx:Context2d)=new HorDimD(p1,p2,cln,hint).draw(ctx)
+   def horRev(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0)(implicit ctx:Context2d)=new HorDimRev(p1,p2,cln,hint).draw(ctx)
    def vert(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0)(implicit ctx:Context2d)=new VertDim(p1,p2,cln,hint).draw(ctx)
-   def vertM(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0)(implicit ctx:Context2d)=new VertDimM(p1,p2,cln,hint).draw(ctx)
+   def vertRev(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0)(implicit ctx:Context2d)=new VertDimRev(p1,p2,cln,hint).draw(ctx)
 }
 
 abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0){
@@ -68,10 +72,13 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
    }
    
    def drawDim(pnts :  Array[Vec], hint : Int, 
-					txtr : (Context2d) => Unit)(implicit ctx : Context2d){	 
+					txtr : (Context2d) => Unit,
+					txfl : (Context2d) => Unit = (ctx) => ctx.fillText(dist.toString,0,0) )(implicit ctx : Context2d){	 
 	   ctx.save()
 	   ctx.beginPath()
 	   ctx.lineWidth=Dim.lineWidth
+	   ctx.setLineDash( js.Array() )
+
 	   ctx.M(pnts(0))  L(pnts(1))
 	   ctx.M(pnts(2))  L(pnts(3))
 	   ctx.M(pnts(4))  L(pnts(5))
@@ -83,17 +90,17 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 	   ctx.stroke()
 //	   text
 	   ctx.beginPath()
-	   ctx.lineWidth=Dim.lineWidth
+	   ctx.lineWidth = Dim.lineWidth
 	   ctx.textBaseline = "bottom"	   
 	   val align = if(dist > 99 || hint == 0){
-		ctx.translate(pnts(10).x * rscale,pnts(10).y * rscale);"center"}
+		ctx.translateS( pnts(10).x, pnts(10).y );"center"}
 	   else if(hint < 0){
-		ctx.translate(pnts(11).x * rscale,pnts(11).y * rscale);"right"}    
+		ctx.translateS( pnts(11).x, pnts(11).y );"right"}    
 	   else{
-	   	ctx.translate(pnts(12).x * rscale,pnts(12).y * rscale);"left"}
+	   	ctx.translateS(pnts(12).x, pnts(12).y);"left"}
 		txtr(ctx)
 		ctx.textAlign = align
-		ctx.fillText(dist.toString,0,0)
+		txfl(ctx)
 	   ctx.restore()
    }
    
@@ -102,33 +109,43 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 class HorDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends Dim(p1,p2,cln,hint){
    import Dim._
    val dist = abs(p2.x-p1.x).toInt
-      
    def draw(ctx : Context2d) = dist match {
-       case d if d>epsilon => implicit val mctx=ctx; drawDim(horPoints(), hint, (ctx) => ctx.scale(1,-1))
-	}
-      
+       case d if d>epsilon => drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1))(ctx)
+       case _ =>
+	}     
+}
+
+class HorDimD (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends Dim(p1,p2,cln,hint){
+   import Dim._
+   val dist = abs(p2.x-p1.x).toInt
+   def draw(ctx : Context2d) = dist match {
+       case d if d>epsilon => drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1),
+														(ctx) => ctx.fillText(s"Ø$dist",0,0))(ctx)
+       case _ =>
+	}     
+}
+
+class HorDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends HorDim(p1,p2,cln,hint){
+   override def draw(ctx : Context2d) = dist match {
+       case d if d>epsilon => drawDim(horPoints(), hint,(ctx) => ctx.scale(-1,-1))(ctx)
+       case _ =>
+	}      
 }
 
 class VertDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends Dim(p1,p2,cln,hint){
    import Dim._
-   val dist = abs(p2.y-p1.y).toInt
-      
+   val dist = abs(p2.y-p1.y).toInt     
    def draw(ctx : Context2d) = dist match {
-       case d if d>epsilon => implicit val mctx=ctx; drawDim(vertPoints(), hint, 
-																(ctx) => {ctx.rotate(Pi/2);ctx.scale(1,-1)})
-	}
-      
+       case d if d>epsilon => drawDim(vertPoints(), hint, (ctx) => {ctx.rotate(Pi/2);ctx.scale(1,-1)})(ctx)
+       case _ =>
+	}      
 }
 
-class VertDimM (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends Dim(p1,p2,cln,hint){
-   import Dim._
-   val dist = abs(p2.y-p1.y).toInt
-      
-   def draw(ctx : Context2d) = dist match {
-       case d if d>epsilon => implicit val mctx=ctx; drawDim(vertPoints(), hint, 
-																(ctx) => ctx.rotate(-Pi/2))
-	}
-      
+class VertDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0) extends VertDim(p1,p2,cln,hint){      
+   override def draw(ctx : Context2d) = dist match {
+       case d if d>epsilon => drawDim(vertPoints(), hint, (ctx) => ctx.rotate(-Pi/2))(ctx)
+       case _ =>
+	}      
 }
 
 

@@ -18,9 +18,10 @@ object Draft{
 	
     
     def apply(m:Model)= m match {
-        case rr : RedRR => new RedRRDraft(rr)
-        case rc : RedRC => new RedRCDraft(rc)
-        case cc : RedCC => new RedCCDraft(cc)
+        case rr : RedRR => Some(new RedRRDraft(rr) )
+        case rc : RedRC => Some(new RedRCDraft(rc) )
+        case cc : RedCC => Some(new RedCCDraft(cc) )
+        case _ => None
     }
 }
 
@@ -58,8 +59,7 @@ abstract class Draft[M <: Model] (val model : M) {
    }
 }
 
-class RedRRDraft(m:RedRR) extends Draft(m) {
-    
+class RedRRDraft(m:RedRR) extends Draft(m) {    
    import Draft._
     def draw(ctx : Context2d){
         implicit val mctx=ctx
@@ -108,7 +108,7 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
 		}else{ //back on left
 			Dim.vert( back(2).xy, back(1).xy, llt, 0 )
 			Dim.vert( front(3).xy, front(0).xy, lrt, 0 )
-			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, lrt, 0 )
+			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, lrt, 0 )//???
 			if(back(0).y > front(0).y) Dim.vert( front(0).xy, back(0).xy, lrt, 0 )			
 		}
         //top
@@ -121,28 +121,33 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         ctx.polygon(model.fct.top.map(_.xz))
         ctx.stroke()
         //dims
-		Dim.vertM( model.fct.top(1).xz, 
+		Dim.vertRev( model.fct.top(1).xz, 
 					model.fcb.top(0).xz, lrt, 0 )
-		Dim.vertM( model.fcb.top(2).xz, 
+		Dim.vertRev( model.fcb.top(2).xz, 
 					model.fcb.top(3).xz, llt, 0 )
-		Dim.vertM( model.fct.top(2).xz, 
+		Dim.vertRev( model.fcb.top(2).xz, 
+					model.fct.top(3).xz, llt, 0 )
+		Dim.vertRev( model.fct.top(2).xz, 
 					model.fct.top(3).xz, llt, 0 )
         ctx.restore()
     }
 }
 
-class RedRCDraft(m:RedRC) extends Draft(m) {
- //   val model = model.asInstanceOf[RedRC]
-    
+class RedRCDraft(m:RedRC) extends Draft(m) {    
    import Draft._
+   val segs = BGeometry.segments
     def draw(ctx : Context2d){
         implicit val mctx=ctx
-		RichContext.ctx=ctx
+		val back = model.cn.back
+		val front = model.cn.front
+	    val shifty = if(front(segs/4).y > back(0).y){
+						-(front(segs/4).y - back(0).y)*mscl
+					}else 0
         ctx.save()
         beginDraw(ctx)
          //front
         ctx.beginPath()
-        ctx.translate(0,vsz/4)
+        ctx.translate(0,vsz/4 + shifty)
         ctx.lineWidth=Draft.lineWidth
         ctx.polygon(model.cn.pts)
         ctx.stroke()
@@ -161,7 +166,6 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
         ctx.lineWidth=Draft.lineWidth
         ctx.polygon(model.cn.tpts)
         ctx.stroke()
-//        Dim.hor(Vec(10,0),Vec(0,10),10,10)
        //shadow
         val sp1=BGeometry.roundPts(model.cn.d/2,Vec(model.cn.da,model.cn.db,0),Pi/2,3*Pi/2)
         val sp2=BGeometry.roundPts(model.cn.d/2,Vec(model.cn.da+model.cn.d/7,model.cn.db,0),2*Pi/3,4*Pi/3)
@@ -171,17 +175,50 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
         ctx.polygon(sp)
         ctx.fill()
         //dims
-//        Dim.hor(Vec(0,0),Vec(10,10),10,10)
+        //h
+		val (ltop,lbot) = (vsz/4-dimspace-shifty, -vsz/4-dimspace/3-shifty)
+		if(back(1).y > front(1).y){ //back on top
+			Dim.hor(back(1).xy,back(0).xy,ltop,0)
+			Dim.horD(front(0).xy,front(segs/2).xy,lbot,0)
+			if(back(2).x < front(segs/2).x) Dim.hor(back(2).xy,front(segs/2).xy,lbot,0) 
+			if(back(3).x > front(0).x) Dim.hor(front(0).xy,back(3).xy,lbot,0) 
+		}else{ //back on bottom
+			Dim.hor(back(2).xy,back(3).xy,lbot,0)
+			Dim.horD(front(0).xy,front(segs/2).xy,ltop,0)
+			if(back(1).x < front(segs/2).x) Dim.hor(back(1).xy,front(segs/2).xy,ltop,0) 
+			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop,0) 			
+		}
+        //v
+		val (lrt,llt) = (max(back(0).x,front(0).x)+dimstep, min(back(1).x,front(1).x)-dimstep)
+		if(back(1).x > front(1).x){ //back on right
+			Dim.vert( back(3).xy, back(0).xy, lrt, 0 )
+//			Dim.vert( front(2).xy, front(1).xy, llt, 0 )
+			if(back(2).y < front(segs/4*3).y) Dim.vert( back(2).xy, front(segs/4*3).xy, llt, 0 ) 
+			if(back(1).y > front(segs/4).y) Dim.vert( front(segs/4).xy,back(1).xy, llt, 0 ) 
+		}else{ //back on left
+			Dim.vert( back(2).xy, back(1).xy, llt, 0 )
+//			Dim.vert( front(3).xy, front(0).xy, lrt, 0 )
+			if(back(3).y < front(segs/4*3).y) Dim.vert( back(3).xy, front(segs/4*3).xy, lrt, 0 )
+			if(back(0).y > front(segs/4).y) Dim.vert( front(segs/4).xy, back(0).xy, lrt, 0 )			
+		}
         //top
         ctx.lineWidth=Draft.lineWidth
-        ctx.translate(0,-vsz/2)
+        ctx.translate(0,-(3*vsz/8)-shifty)
         ctx.scale(1,-1)
         ctx.beginPath()
         ctx.polygon(model.cn.tophalf.map(_.xz))
         ctx.polygon(model.fcb.top.map(_.xz))
         ctx.polygon(model.fct.tophalf.map(_.xz))
         ctx.stroke()
-//        RichContext.lscale=1
+        //dims
+		Dim.vertRev( model.fct.tophalf(2).xz, 
+					model.fcb.top(3).xz, lrt, 0 )
+		Dim.vertRev( model.fcb.top(0).xz, 
+					model.fcb.top(1).xz, llt, 0 )
+		Dim.vertRev( model.fcb.top(1).xz, 
+					model.fct.tophalf(0).xz, llt, 0 )
+		Dim.vertRev( model.fct.tophalf(0).xz, 
+					model.fct.tophalf(3).xz, llt, 0 )
         ctx.restore()
     }
 }

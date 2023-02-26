@@ -34,7 +34,7 @@ object DetApp{
     
     val ctxDev={  val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
 				  cnvDev.getContext("2d").asInstanceOf[Context2d]}
-		ctxDev.font="italic 1.8em sans-serif"
+		ctxDev.font="italic 2.1em sans-serif"
    
     val (renderer,scene,camera3d,light,controls) = set3dRenderer("#canvas3d")
 
@@ -118,9 +118,15 @@ object DetApp{
                    model=m
                    descr.innerHTML=model.description("ru")
                    show3d()
-                   Draft(model).draw(ctxDraft)
-                   Dev(model).draw(ctxDev)
-                   Mat(model,document.querySelector("#mattbl").asInstanceOf[html.Table]).writeMats()
+                   Draft(model)match {
+					   case Some(dr) => dr.draw(ctxDraft)
+					   case None =>}
+                   Dev(model) match {
+					   case Some(dv) => dv.draw(ctxDev)
+					   case None =>}
+                   Mats(model,document.querySelector("#mattbl").asInstanceOf[html.Table]) match {
+					   case Some(mt) => mt.writeMats()
+					   case None =>}
          }
 	
 	    

@@ -3,12 +3,10 @@ enablePlugins(ScalaJSPlugin)
 ThisBuild / version      := "0.1.0"
 ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / organization := "cfx70"
-
-//scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
  
 import scala.sys.process._
 import sbt.Keys.streams
-val optLink = taskKey[Unit]("relink fast opt")
+val toHtml = taskKey[Unit]("copy to html//")
 
 lazy val commonSettings = Seq(
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
@@ -20,11 +18,10 @@ lazy val commonSettings = Seq(
           "-encoding", "utf-8",                // Specify character encoding used by source files.
           "-explaintypes",                     // Explain type errors in more detail.
           "-feature"),
-    optLink := {
-       (Compile / fastOptJS).value
+    toHtml := {
        val log = streams.value.log
-       log.info("replacing server file")
-      "./relink.sh" !
+       log.info("replacing server files")
+      "./copy_det.sh" !
     }
 )
 

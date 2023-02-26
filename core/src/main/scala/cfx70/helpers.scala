@@ -80,6 +80,9 @@ object Helpers2d{
 		def L(pt:Vec):RichContext.type=L(pt.x,pt.y)
 		def H(x:Double)=L(x,curPt.y)
 		def V(y:Double)=L(curPt.x,y)
+		def line (p1:Vec,p2:Vec):RichContext.type = {M(p1);L(p2)}
+
+		def translateS(x:Double, y:Double) = ctx.translate(x*lscale, y*lscale)
 	}
 	
  /* object RichContext{

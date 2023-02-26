@@ -269,11 +269,6 @@ class BPyramid(val a1:Double,val b1:Double,
     def normals = shellNormals(bpts,tpts)
     
     def intersect(l:Line3) : Option[Vec] = None 
-    
-/*    def top=Seq(bpts(3),tpts(3),tpts(2),bpts(2))
-    def bottom=Seq(bpts(1),tpts(1),tpts(0),bpts(0))
-    def left=Seq(bpts(0),tpts(0),tpts(3),bpts(3))
-    def right=Seq(bpts(2),tpts(2),tpts(1),bpts(1))*/
 
     def bottom=Seq(bpts(3),tpts(3),tpts(2),bpts(2))
     def top=Seq(bpts(1),tpts(1),tpts(0),bpts(0))
@@ -377,7 +372,7 @@ class BCone(val d1:Double,val d2:Double,val h:Double,val dd:Double = 0,val ang:D
         }
     }
    
-   def tophalf=Seq(bpts(0),bpts(segments/2-1),tpts(segments/2-1),tpts(0))
+   def tophalf=Seq(bpts(0),bpts(segments/2),tpts(segments/2),tpts(0))
 //    override def top=Seq(bpts(3),tpts(3),tpts(2),bpts(2)).map(_.xz)
 }
 

@@ -17,6 +17,10 @@
             <td>b2</td>
             <td><input  id="b2" class="w3-input w3-border dims-input0" type="number" value="250" step="50"></td>
             </tr>
+            <tr>
+            <td >h</td>
+            <td ><input  id="h" class="w3-input w3-border dims-input0" type="number" value="300" step="50"></td>      
+            </tr>
         </table>
     </div>
     <div class="w3-half">
@@ -30,12 +34,12 @@
             <td><input  id="db" class="w3-input w3-border dims-input0" type="number" value="75" step="5"></td>
             </tr>
             <tr>
-            <td >h</td>
-            <td ><input  id="h" class="w3-input w3-border dims-input0" type="number" value="300" step="50"></td>      
+            <td >f1</td>
+            <td ><input  id="f1" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
             </tr>
             <tr>
-            <td >f</td>
-            <td ><input  id="f" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
+            <td >f2</td>
+            <td ><input  id="f2" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
             </tr>
         </table>
     </div>
