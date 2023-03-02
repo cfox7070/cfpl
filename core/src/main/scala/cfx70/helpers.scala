@@ -83,6 +83,17 @@ object Helpers2d{
 		def line (p1:Vec,p2:Vec):RichContext.type = {M(p1);L(p2)}
 
 		def translateS(x:Double, y:Double) = ctx.translate(x*lscale, y*lscale)
+		
+		def drawAx(){
+		   ctx.save()
+		   ctx.beginPath()
+		   ctx.strokeStyle = "#ff0000"
+		   ctx.lineWidth = 6.0
+		   ctx.M(0,0) L(0,100) M(0,0) L(100,0) 
+		   ctx.stroke()
+		   ctx.restore()
+	    }
+
 	}
 	
  /* object RichContext{

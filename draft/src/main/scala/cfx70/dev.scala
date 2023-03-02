@@ -19,7 +19,7 @@ object Dev{
     
     def apply(m:Model)= m match {
         case rr : RedRR => Some(new RedRRDev(rr) )
-//        case rc : RedRC => new RedRCDev(rc)
+        case rc : RedRC => Some(new RedRCDev(rc) )
 //        case cc : RedCC => new RedCCDev(cc)
 		case _ => None
     }
@@ -32,15 +32,17 @@ abstract class Dev[M <: Model] (val model : M) {
         
    def draw(ctx : Context2d)
    
-   def drawAx(ctx : Context2d){
-	   ctx.save()
-       ctx.beginPath()
-       ctx.strokeStyle = "#ff0000"
-	   ctx.lineWidth = 6.0
-	   ctx.M(0,0) L(0,100) M(0,0) L(100,0) 
-	   ctx.stroke()
-	   ctx.restore()
+   def p3c(p1 : Vec, p2 : Vec, l1:Double, l2:Double) : Vec = {
+		val l = (p2 - p1).mod
+		val cosa = (l1 * l1 + l * l - l2 * l2) / (2 * l * l1)
+		val (cosb, sinb) = ((p2.x - p1.x)/l, (p2.y - p1.y)/l )
+		val vecl1 =( Mat(2)(
+		  cosb, -sinb, 
+		  sinb,  cosb) * Vec(cosa,sqrt(1-cosa*cosa)) ) * l1
+		vecl1 + p1		
    }
+   
+   def ##(t1:(Vec, Double), t2:(Vec, Double) ):Vec = p3c(t1._1,t2._1,t1._2,t2._2)
    
    protected def beginDraw(ctx : Context2d) {
         ctx.beginPath()
@@ -169,4 +171,35 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 		drawDev(leftPoints, "C")
 		ctx.restore()
    }
+}
+
+class RedRCDev(m:RedRC) extends Dev(m) {
+    
+   import Dev._
+   
+   val step = 2
+   
+   def topPoints : Seq[Vec] = {
+		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
+		val bp = model.cn.bpts
+		val tp = model.cn.tpts
+		val s = BGeometry.segments
+		val dd = model.d / (s/step)
+		pts :+= p3c(pts(0),pts(1),(tp(s/4)-bp(0)).mod,(tp(s/4)-bp(0)).mod) 
+		for( i <- (s/4 - step) to 0 by -step) pts :+= ##( (pts.last,dd), (pts(1),(tp(i)-bp(0)).mod) )
+		pts
+   }
+
+    def draw(ctx : Context2d){
+		implicit val mctx = ctx
+		ctx.save() 
+		beginDraw(ctx)
+		val pts = topPoints
+		ctx.M(pts(0)) L(pts(1))
+		ctx.M(pts(2)) L(pts(3)) L(pts(4)) L(pts(5))
+		ctx.stroke()
+
+		ctx.restore()
+   }
+
 }
