@@ -1,6 +1,7 @@
 package cfx70.cfpl.draft
 
 import scala.math._
+import scala.language.implicitConversions
 
 import scala.scalajs.js
 
@@ -16,12 +17,42 @@ object Dev{
     val vsz=1200; val hsz=1600
     val (dimspace, dimstep) = (60,50)
 	
-    
     def apply(m:Model)= m match {
         case rr : RedRR => Some(new RedRRDev(rr) )
         case rc : RedRC => Some(new RedRCDev(rc) )
 //        case cc : RedCC => new RedCCDev(cc)
 		case _ => None
+    }
+    
+    implicit def tpl2vpops(tpl : (Vec,Double) ) : PRad = new PRad(tpl._1,tpl._2)
+//    implicit def tpl2vpops(tpl : (Vec,Int) ) : PRad =new PRad(tpl._1,tpl._2.toDouble)
+
+	class PRad(val p : Vec, val rad : Double){
+	  def p3c(p2 : Vec, l2:Double) : Vec = {
+			val l = (p2 - p).mod
+			if( rad+l < l2 || rad+l2 < l || l+l2 < rad){
+				println(s"not intersected $rad $l $l2")
+				Vec(Double.NaN,Double.NaN)
+			}else{
+				val cosa = (rad * rad + l * l - l2 * l2) / (2 * l * rad)
+				val (cosb, sinb) = ((p2.x - p.x)/l, (p2.y - p.y)/l )
+				val matr = Mat(2)(
+				  cosb, -sinb, 
+				  sinb,  cosb)
+				val ortC0 =Vec(cosa, sqrt(1-cosa*cosa) )
+				(matr * ortC0) * rad + p
+		   }					
+	   }
+	   def perp : Vec = {
+		   val mort = p.normalize
+		   Vec(mort.y, -mort.x) * rad
+	   }
+	  def /\( other : PRad ) : Vec = p3c(other.p,other.rad) 		
+	}
+	
+	 object Side extends Enumeration {
+        type Side = Value
+        val TOP, BOTTOM, LEFT, RIGHT = Value
     }
 }
 
@@ -31,19 +62,7 @@ abstract class Dev[M <: Model] (val model : M) {
 						(vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.z))
         
    def draw(ctx : Context2d)
-   
-   def p3c(p1 : Vec, p2 : Vec, l1:Double, l2:Double) : Vec = {
-		val l = (p2 - p1).mod
-		val cosa = (l1 * l1 + l * l - l2 * l2) / (2 * l * l1)
-		val (cosb, sinb) = ((p2.x - p1.x)/l, (p2.y - p1.y)/l )
-		val vecl1 =( Mat(2)(
-		  cosb, -sinb, 
-		  sinb,  cosb) * Vec(cosa,sqrt(1-cosa*cosa)) ) * l1
-		vecl1 + p1		
-   }
-   
-   def ##(t1:(Vec, Double), t2:(Vec, Double) ):Vec = p3c(t1._1,t2._1,t1._2,t2._2)
-   
+      
    protected def beginDraw(ctx : Context2d) {
         ctx.beginPath()
         ctx.fillStyle = "#ffffff"
@@ -176,18 +195,137 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 class RedRCDev(m:RedRC) extends Dev(m) {
     
    import Dev._
-   
+   import Dev.Side._
+    
    val step = 2
    
-   def topPoints : Seq[Vec] = {
-		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
+   /*    9_8_7_2_3_4_5
+    *    /\    /\    /\         |     _
+    *   /  \  /  \  /  \        |    / \
+    *  /____\/____\/____\       |   |   ]0
+     10      0     1     6
+    *  |____||____||____|
+    * 16  15 11  12 13  14
+    */
+
+   def devPoints (side : Side) : Seq[Vec] = {
 		val bp = model.cn.bpts
 		val tp = model.cn.tpts
 		val s = BGeometry.segments
-		val dd = model.d / (s/step)
-		pts :+= p3c(pts(0),pts(1),(tp(s/4)-bp(0)).mod,(tp(s/4)-bp(0)).mod) 
-		for( i <- (s/4 - step) to 0 by -step) pts :+= ##( (pts.last,dd), (pts(1),(tp(i)-bp(0)).mod) )
+		val dd = (Pi * model.d) / (s/step)
+		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
+		var (l1,l2) = side match {
+			case TOP    => ( (tp(s/4)-bp(0)).mod, (tp(s/4)-bp(1)).mod )
+			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
+		}
+		pts :+= (pts(0), l1) /\ (pts(1), l2)
+		val (pnr, flr) = side match {
+			case TOP    =>(Map( (s/4 + step) -> 2, 
+							    (s/4 + 2*step) -> 3, 
+							    (s/4 + 3*step) -> 4),
+							    (i : Int) => (tp(i)-bp(1)).mod
+						)
+			case BOTTOM => (Map( (3*s/4 + step) -> 2, 
+				                 (3*s/4 + 2*step) -> 3, 
+				                 (3*s/4 + 3*step) -> 4),
+				                 (i : Int) => (tp(i)-bp(3)).mod
+						)
+		}
+		for( (i,j) <- pnr ) pts :+= (pts(j), dd) /\ (pts(1), flr(i) )
+		l1 = side match {
+			case TOP    => (tp(s/2) - ((bp(2)-bp(1))*0.5 + bp(1))).mod
+			case BOTTOM => (tp(0) - ((bp(0)-bp(3))*0.5 + bp(3))).mod
+		}
+		pts :+= (pts(5), l1 ) /\ (pts(1), model.b1/2)
+		val (pnl, fll) = side match {
+			case TOP    =>(Map( (s/4 - step) -> 2,
+					            (s/4 - 2*step) -> 7,
+					            (s/4 - 3*step) -> 8 ),
+							    (i : Int) => (tp(i)-bp(0)).mod
+						)
+			case BOTTOM => (Map( (3*s/4 - step) -> 2, 
+				                 (3*s/4 - 2*step) -> 7, 
+				                 (3*s/4 - 3*step) -> 8 ),
+				                 (i : Int) => (tp(i)-bp(2)).mod
+						)
+		}
+		for( (i,j) <- pnl )	pts :+= (pts(0),fll(i) ) /\ (pts(j),dd)
+		l1 = side match {
+			case TOP    => (tp(0) - ((bp(3)-bp(0))*0.5 + bp(0))).mod
+			case BOTTOM => (tp(s/2) - ((bp(1)-bp(2))*0.5 + bp(2))).mod
+		}
+		pts :+= (pts(0), model.b1/2) /\ (pts(9), l1 )
+//		 !!
+		 println( (pts(6) - pts(1)) * (pts(6)-pts(5)) < epsilon )
+		 println( (pts(10) - pts(0)) * (pts(10)-pts(9)) < epsilon)
+		 
+		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(0)
+		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(1)
+
+		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(1)
+		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(6)
+
+		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(0)
+		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(10)
+
+	   pts
+   }
+      
+   def topPoints : Seq[Vec] = {
+		val bp = model.cn.bpts
+		val tp = model.cn.tpts
+		val s = BGeometry.segments
+		val dd = (Pi * model.d) / (s/step)
+		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
+		pts :+= (pts(0), (tp(s/4)-bp(0)).mod ) /\ (pts(1), (tp(s/4)-bp(1)).mod )
+		val pnr = Map( (s/4 + step) -> 2,
+					   (s/4 + 2*step) -> 3,
+					   (s/4 + 3*step) -> 4
+					 )
+		for( (i,j) <- pnr ) pts :+= (pts(j), dd) /\ (pts(1), (tp(i)-bp(1)).mod )
+		 val mrpt = (bp(2)-bp(1))*0.5 + bp(1)
+		 val bpt = (pts(5), (tp(s/2)-mrpt).mod ) /\ (pts(1), model.b1/2)
+		 pts :+= bpt
+		val pnl = Map( (s/4 - step) -> 2,
+					   (s/4 - 2*step) -> 7,
+					   (s/4 - 3*step) -> 8
+					 )
+		for( (i,j) <- pnl )	pts :+= (pts(0),(tp(i)-bp(0)).mod ) /\ (pts(j),dd)
+		 val mlpt = (bp(3)-bp(0))*0.5 + bp(0)
+		 val bpt1 =  (pts(0), model.b1/2) /\ (pts(9), (tp(0)-mlpt).mod )
+		 pts :+= bpt1
+//		 !!
+		 println( (pts(6) - pts(1)) * (pts(6)-pts(5)) < epsilon )
+		 println( (pts(10) - pts(0)) * (pts(10)-pts(9)) < epsilon)
+		 
+		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(0)
+		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(1)
+
+		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(1)
+		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(6)
+
+		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(0)
+		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(10)
+		 
 		pts
+   }
+   def drawDev(pts : Seq[Vec], ctx : Context2d){
+		ctx.beginPath()
+        ctx.lineWidth = Dev.lineWidth
+		ctx M pts(0) L pts(1)
+		ctx M pts(2) L pts(3) L pts(4) L pts(5) L pts(6) L pts(1) 
+		ctx M pts(2) L pts(7) L pts(8) L pts(9) L pts(10) L pts(0)
+		
+		ctx M pts(0) L pts(11) L pts(12) L pts(1)
+		ctx M pts(1) L pts(13) L pts(14) L pts(6)
+		ctx M pts(10) L pts(16) L pts(15) L pts(0) 
+		ctx.stroke()
+		
+		ctx.beginPath()
+        ctx.lineWidth=Dev.thinlineWidth
+        ctx.M(pts(0)) L(pts(2)) M(pts(0)) L(pts(7)) M(pts(0)) L(pts(8)) M(pts(0)) L(pts(9))
+        ctx.M(pts(1)) L(pts(2)) M(pts(1)) L(pts(3)) M(pts(1)) L(pts(4)) M(pts(1)) L(pts(5))
+		ctx.stroke()	   
    }
 
     def draw(ctx : Context2d){
@@ -195,10 +333,29 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		ctx.save() 
 		beginDraw(ctx)
 		val pts = topPoints
-		ctx.M(pts(0)) L(pts(1))
-		ctx.M(pts(2)) L(pts(3)) L(pts(4)) L(pts(5))
+        ctx.translate(0,dimspace)
+		ctx.beginPath()
+        ctx.lineWidth = Dev.lineWidth
+		ctx M pts(0) L pts(1)
+		ctx M pts(2) L pts(3) L pts(4) L pts(5) L pts(6) L pts(1) 
+		ctx M pts(2) L pts(7) L pts(8) L pts(9) L pts(10) L pts(0)
+		
+		ctx M pts(0) L pts(11) L pts(12) L pts(1)
+		ctx M pts(1) L pts(13) L pts(14) L pts(6)
+		ctx M pts(10) L pts(16) L pts(15) L pts(0) 
 		ctx.stroke()
-
+		
+		ctx.beginPath()
+        ctx.lineWidth=Dev.thinlineWidth
+        ctx.M(pts(0)) L(pts(2)) M(pts(0)) L(pts(7)) M(pts(0)) L(pts(8)) M(pts(0)) L(pts(9))
+        ctx.M(pts(1)) L(pts(2)) M(pts(1)) L(pts(3)) M(pts(1)) L(pts(4)) M(pts(1)) L(pts(5))
+		ctx.stroke()
+		
+		ctx translate(0,-vsz/2)
+		ctx beginPath()
+        ctx.lineWidth = Dev.lineWidth
+		ctx M pts(0) L pts(1)
+		ctx stroke()
 		ctx.restore()
    }
 
