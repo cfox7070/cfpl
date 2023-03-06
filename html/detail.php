@@ -49,10 +49,15 @@
                 break;
             
             default:
-				require "404.shtml";
+                $title="Переход c прямоугольного на прямоугольное";
+                $imgsrc="img/red-r-ra.png";
+                $detailparams="redrr-params.php";
+                $detailscript="redrr-script.js";
+                break;
+/*				require "404.shtml";
                 http_response_code(404);
                 exit("not found");
-                break;
+                break;*/
         }
 ?>
 

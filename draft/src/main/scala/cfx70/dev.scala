@@ -58,7 +58,7 @@ object Dev{
 
 abstract class Dev[M <: Model] (val model : M) {
    import Dev._
-   val mscl = min((vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.y),
+   var mscl = min((vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.y),
 						(vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.z))
         
    def draw(ctx : Context2d)
@@ -271,44 +271,6 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   pts
    }
       
-   def topPoints : Seq[Vec] = {
-		val bp = model.cn.bpts
-		val tp = model.cn.tpts
-		val s = BGeometry.segments
-		val dd = (Pi * model.d) / (s/step)
-		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
-		pts :+= (pts(0), (tp(s/4)-bp(0)).mod ) /\ (pts(1), (tp(s/4)-bp(1)).mod )
-		val pnr = Map( (s/4 + step) -> 2,
-					   (s/4 + 2*step) -> 3,
-					   (s/4 + 3*step) -> 4
-					 )
-		for( (i,j) <- pnr ) pts :+= (pts(j), dd) /\ (pts(1), (tp(i)-bp(1)).mod )
-		 val mrpt = (bp(2)-bp(1))*0.5 + bp(1)
-		 val bpt = (pts(5), (tp(s/2)-mrpt).mod ) /\ (pts(1), model.b1/2)
-		 pts :+= bpt
-		val pnl = Map( (s/4 - step) -> 2,
-					   (s/4 - 2*step) -> 7,
-					   (s/4 - 3*step) -> 8
-					 )
-		for( (i,j) <- pnl )	pts :+= (pts(0),(tp(i)-bp(0)).mod ) /\ (pts(j),dd)
-		 val mlpt = (bp(3)-bp(0))*0.5 + bp(0)
-		 val bpt1 =  (pts(0), model.b1/2) /\ (pts(9), (tp(0)-mlpt).mod )
-		 pts :+= bpt1
-//		 !!
-		 println( (pts(6) - pts(1)) * (pts(6)-pts(5)) < epsilon )
-		 println( (pts(10) - pts(0)) * (pts(10)-pts(9)) < epsilon)
-		 
-		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(0)
-		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(1)
-
-		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(1)
-		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(6)
-
-		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(0)
-		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(10)
-		 
-		pts
-   }
    def drawDev(pts : Seq[Vec], ctx : Context2d){
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
@@ -327,35 +289,37 @@ class RedRCDev(m:RedRC) extends Dev(m) {
         ctx.M(pts(1)) L(pts(2)) M(pts(1)) L(pts(3)) M(pts(1)) L(pts(4)) M(pts(1)) L(pts(5))
 		ctx.stroke()	   
    }
+   
+   def maxminY(pts : Seq[Vec]) = {
+	   val m = (v1:Vec, v2:Vec) => {
+		  val mx = if(v1.x>v2.y) v1.x else v2.y
+		  val mn = if(v1.y<v2.y) v1.y else v2.y
+		  Vec(mx,mn)
+	   }
+	   pts.foldLeft(Vec(0,0))(m(_, _))
+   }
+	   
 
     def draw(ctx : Context2d){
-		implicit val mctx = ctx
+		val ptst = devPoints(TOP)
+		val ptsb = devPoints(BOTTOM)
+		val mmt = maxminY(ptst)
+		val mmb = maxminY(ptsb)
+		println(mmt)
+		println(mmb)
+		val figH = vsz/2 - 2 * (dimspace+dimstep)
+		val sclt = figH / (mmt.x - mmt.y) 
+		val sclb = figH / (mmb.x - mmb.y) 
+		mscl = sclt min sclb
 		ctx.save() 
 		beginDraw(ctx)
-		val pts = topPoints
         ctx.translate(0,dimspace)
-		ctx.beginPath()
-        ctx.lineWidth = Dev.lineWidth
-		ctx M pts(0) L pts(1)
-		ctx M pts(2) L pts(3) L pts(4) L pts(5) L pts(6) L pts(1) 
-		ctx M pts(2) L pts(7) L pts(8) L pts(9) L pts(10) L pts(0)
-		
-		ctx M pts(0) L pts(11) L pts(12) L pts(1)
-		ctx M pts(1) L pts(13) L pts(14) L pts(6)
-		ctx M pts(10) L pts(16) L pts(15) L pts(0) 
-		ctx.stroke()
-		
-		ctx.beginPath()
-        ctx.lineWidth=Dev.thinlineWidth
-        ctx.M(pts(0)) L(pts(2)) M(pts(0)) L(pts(7)) M(pts(0)) L(pts(8)) M(pts(0)) L(pts(9))
-        ctx.M(pts(1)) L(pts(2)) M(pts(1)) L(pts(3)) M(pts(1)) L(pts(4)) M(pts(1)) L(pts(5))
-		ctx.stroke()
-		
-		ctx translate(0,-vsz/2)
-		ctx beginPath()
-        ctx.lineWidth = Dev.lineWidth
-		ctx M pts(0) L pts(1)
-		ctx stroke()
+        if(mmt.y < 0) ctx.translateS(0,-mmt.y)
+        drawDev(ptst,ctx)
+        if(mmt.y < 0) ctx.translateS(0,mmt.y)
+        ctx.translate(0,-vsz/2)
+        if(mmb.y < 0) ctx.translateS(0,-mmb.y)
+        drawDev(ptsb,ctx)
 		ctx.restore()
    }
 
