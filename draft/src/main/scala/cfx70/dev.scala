@@ -25,7 +25,6 @@ object Dev{
     }
     
     implicit def tpl2vpops(tpl : (Vec,Double) ) : PRad = new PRad(tpl._1,tpl._2)
-//    implicit def tpl2vpops(tpl : (Vec,Int) ) : PRad =new PRad(tpl._1,tpl._2.toDouble)
 
 	class PRad(val p : Vec, val rad : Double){
 	  def p3c(p2 : Vec, l2:Double) : Vec = {
@@ -272,6 +271,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
    }
       
    def drawDev(pts : Seq[Vec], ctx : Context2d){
+	   implicit val mctx = ctx
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
 		ctx M pts(0) L pts(1)
@@ -285,9 +285,28 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		
 		ctx.beginPath()
         ctx.lineWidth=Dev.thinlineWidth
-        ctx.M(pts(0)) L(pts(2)) M(pts(0)) L(pts(7)) M(pts(0)) L(pts(8)) M(pts(0)) L(pts(9))
-        ctx.M(pts(1)) L(pts(2)) M(pts(1)) L(pts(3)) M(pts(1)) L(pts(4)) M(pts(1)) L(pts(5))
-		ctx.stroke()	   
+        ctx M pts(0) L pts(2) M pts(0) L pts(7) M pts(0) L pts(8) M pts(0) L pts(9)
+        ctx M pts(1) L pts(2) M pts(1) L pts(3) M pts(1) L pts(4) M pts(1) L pts(5)
+		ctx.stroke()
+		//dims
+		Dim.tx( pts(0), pts(10), 0.5, -1)	   
+		Dim.tx( pts(1), pts(6), 0.5,  1)	   
+		Dim.tx( pts(0), pts(1), 0.5,  0)	   
+
+		Dim.tx( pts(9), pts(10), 0.5, -1)	   
+		Dim.tx( pts(5), pts(6), 0.5, 1)
+		//9872
+		Dim.tx( pts(0), pts(9), 0.2, -1)	   
+		Dim.tx( pts(0), pts(8), 0.4, -1)	   
+		Dim.tx( pts(0), pts(7), 0.6, -1)	   
+		Dim.tx( pts(0), pts(2), 0.8, -1)	   
+		//2345
+		Dim.tx( pts(1), pts(2), 0.2, -1)	   
+		Dim.tx( pts(1), pts(3), 0.4, -1)	   
+		Dim.tx( pts(1), pts(4), 0.6, -1)	   
+		Dim.tx( pts(1), pts(5), 0.8, -1)
+		
+		Dim.ld( pts(2), pts(3), 50, 0)   	   
    }
    
    def maxminY(pts : Seq[Vec]) = {

@@ -118,9 +118,7 @@ object DetApp{
                    model=m
                    descr.innerHTML=model.description("ru")
                    show3d()
-                   Draft(model)match {
-					   case Some(dr) => dr.draw(ctxDraft)
-					   case None =>}
+                   Draft(model)match{ case Some(dr) => dr.draw(ctxDraft) case None =>}
                    Dev(model) match {
 					   case Some(dv) => dv.draw(ctxDev)
 					   case None =>}

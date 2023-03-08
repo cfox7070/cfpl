@@ -61,6 +61,14 @@ object Helpers2d{
 	
 	implicit def context2rich(ctx: CanvasRenderingContext2D) : RichContext.type = RichContext
 	implicit def rich2context(rctx: RichContext.type) : CanvasRenderingContext2D = RichContext.ctx
+
+	@js.native
+	trait MTextMetrics extends js.Object {
+		val actualBoundingBoxLeft: Double = js.native
+		val actualBoundingBoxRight: Double = js.native
+		val actualBoundingBoxAscent: Double = js.native
+		val actualBoundingBoxDescent: Double = js.native
+	}
 	
 	object RichContext{
        var lscale=1.0
@@ -83,6 +91,13 @@ object Helpers2d{
 		def line (p1:Vec,p2:Vec):RichContext.type = {M(p1);L(p2)}
 
 		def translateS(x:Double, y:Double) = ctx.translate(x*lscale, y*lscale)
+		
+		def measureText(txt :String) = ctx.measureText(txt).asInstanceOf[MTextMetrics]
+		def textMetrics(txt :String) = { 
+			val tm = measureText(txt)
+			(tm.actualBoundingBoxLeft, tm.actualBoundingBoxRight,
+						tm.actualBoundingBoxAscent,tm.actualBoundingBoxDescent)			
+		}
 		
 		def drawAx(){
 		   ctx.save()
