@@ -129,6 +129,7 @@
 			<div id="3d" class="w3-container view">
 			<canvas class="w3-border" id="canvas3d" width="1600" height="1200"></canvas>
 			<a id="download" download="" href="" onclick="download_model(this);">Сохранить</a>
+			<span class="w3-right"> можно покрутить</span>
 			</div>
 
 			<div id="draft" class="w3-container view" style="display:none">

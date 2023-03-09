@@ -20,7 +20,7 @@ object Dev{
     def apply(m:Model)= m match {
         case rr : RedRR => Some(new RedRRDev(rr) )
         case rc : RedRC => Some(new RedRCDev(rc) )
-//        case cc : RedCC => new RedCCDev(cc)
+        case cc : RedCC => Some(new RedCCDev(cc) )
 		case _ => None
     }
     
@@ -270,7 +270,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   pts
    }
       
-   def drawDev(pts : Seq[Vec], ctx : Context2d){
+   def drawDev(pts : Seq[Vec], letter : String, ctx : Context2d){
 	   implicit val mctx = ctx
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
@@ -306,7 +306,33 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		Dim.tx( pts(1), pts(4), 0.6, -1)	   
 		Dim.tx( pts(1), pts(5), 0.8, -1)
 		
-		Dim.ld( pts(2), pts(3), 50, 0)   	   
+		Dim.ld( pts(2), pts(3), 50, 0, 0.1)  
+
+		ctx.save()
+		ctx.translateS(0, pts(2).y + 150)
+		ctx.scale(1,-1)	
+		ctx.fillStyle = "#000"
+		ctx.textAlign = "middle"
+		ctx.fillText(letter,0,0)
+		ctx.restore()
+		
+   }
+   
+   def drawSleeve(ctx : Context2d){
+		val ls = Pi * (m.d -5)
+		ctx.beginPath()
+        ctx.lineWidth = Dev.lineWidth
+		ctx M(-ls/2,0) L(ls/2,0) L(ls/2,50) L(-ls/2,50) L(-ls/2,0)
+		ctx.stroke()
+		Dim.hor(Vec(-ls/2,0), Vec(ls/2,0),-dimspace)(ctx)
+		ctx.save()
+		ctx.translateS(0, 15)
+		ctx.scale(1,-1)	
+		ctx.fillStyle = "#000"
+		ctx.textAlign = "middle"
+		ctx.fillText(s"Ø${m.d -5}",0,0)
+		ctx.restore()
+
    }
    
    def maxminY(pts : Seq[Vec]) = {
@@ -318,28 +344,39 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   pts.foldLeft(Vec(0,0))(m(_, _))
    }
 	   
-
     def draw(ctx : Context2d){
 		val ptst = devPoints(TOP)
 		val ptsb = devPoints(BOTTOM)
 		val mmt = maxminY(ptst)
 		val mmb = maxminY(ptsb)
-		println(mmt)
-		println(mmb)
 		val figH = vsz/2 - 2 * (dimspace+dimstep)
 		val sclt = figH / (mmt.x - mmt.y) 
 		val sclb = figH / (mmb.x - mmb.y) 
 		mscl = sclt min sclb
 		ctx.save() 
 		beginDraw(ctx)
-        ctx.translate(0,dimspace)
+       ctx.translate(0,vsz/2 - 150)
+	 //  drawSleeve(ctx)
+       ctx.translate(0,-(vsz/2 - 150)+dimspace)
         if(mmt.y < 0) ctx.translateS(0,-mmt.y)
-        drawDev(ptst,ctx)
+        drawDev(ptst,"A",ctx)
         if(mmt.y < 0) ctx.translateS(0,mmt.y)
-        ctx.translate(0,-vsz/2)
-        if(mmb.y < 0) ctx.translateS(0,-mmb.y)
-        drawDev(ptsb,ctx)
+        ctx.translate(0,-(vsz/2-150))
+       if(mmb.y < 0) ctx.translateS(0,-mmb.y)
+        drawDev(ptsb,"B",ctx)
 		ctx.restore()
    }
+}
 
+class RedCCDev(m:RedCC) extends Dev(m) {
+   import Dev._
+   import Dev.Side._
+
+	def draw(ctx : Context2d){
+		 ctx.translate(hsz/2,vsz/2)
+		 ctx.beginPath()
+		 ctx.textAlign = "middle"
+		ctx.fillStyle = "#000"
+		ctx.fillText("Еще не сделал",0,0)
+	}
 }

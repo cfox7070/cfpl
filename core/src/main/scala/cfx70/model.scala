@@ -11,7 +11,7 @@ import CommonHelpers.{$,vec3Vec}
 
 object Model {
 
-    val phongBlueMaterial = new MeshPhongMaterial($(color=0x79bff8,side=THREE.DoubleSide))
+    val phongBlueMaterial = new MeshPhongMaterial($(color=0xc8bfe7/*0x79bff8*/,side=THREE.DoubleSide))
 
     def edges(geom: BufferGeometry,mcolor :Int=0x000000) : LineSegments = {    
         val mat= new LineBasicMaterial($(color = mcolor))
