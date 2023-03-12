@@ -115,7 +115,7 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 
 class HorDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
-   val dist = ((abs(p2.x-p1.x)/prec).round * prec).toString
+   val dist = s"%.${-log10(prec)}f".format((abs(p2.x-p1.x)/prec).round * prec)
    def draw(ctx : Context2d) = drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1))(ctx)
 }
 
@@ -130,7 +130,7 @@ class HorDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 
 
 class VertDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
-   val dist = ((abs(p2.y-p1.y)/prec).round * prec).toString    
+   val dist =  s"%.${-log10(prec)}f".format((abs(p2.y-p1.y)/prec).round * prec)   
    def draw(ctx : Context2d) = drawDim(vertPoints(), hint, (ctx) => {ctx.rotate(Pi/2);ctx.scale(1,-1)})(ctx)
 }
 
@@ -140,7 +140,7 @@ class VertDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double =
 
 class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
-   val dist = ((sqrt( (p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y) )/prec).round * prec).toString
+   val dist =  s"%.${-log10(prec)}f".format((sqrt( (p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y) )/prec).round * prec)
    def draw(ctx : Context2d){ 
 	val p = Vec((p2.x-p1.x)*cln, (p2.y-p1.y)*cln) + p1
 	ctx.save()

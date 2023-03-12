@@ -254,10 +254,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 			case BOTTOM => (tp(s/2) - ((bp(1)-bp(2))*0.5 + bp(2))).mod
 		}
 		pts :+= (pts(0), model.b1/2) /\ (pts(9), l1 )
-//		 !!
-		 println( (pts(6) - pts(1)) * (pts(6)-pts(5)) < epsilon )
-		 println( (pts(10) - pts(0)) * (pts(10)-pts(9)) < epsilon)
-		 
+	 
 		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(0)
 		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(1)
 
@@ -270,8 +267,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   pts
    }
       
-   def drawDev(pts : Seq[Vec], letter : String, ctx : Context2d){
-	   implicit val mctx = ctx
+   def drawDev(pts : Seq[Vec])(implicit ctx : Context2d){
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
 		ctx M pts(0) L pts(1)
@@ -289,9 +285,9 @@ class RedRCDev(m:RedRC) extends Dev(m) {
         ctx M pts(1) L pts(2) M pts(1) L pts(3) M pts(1) L pts(4) M pts(1) L pts(5)
 		ctx.stroke()
 		//dims
-		Dim.tx( pts(0), pts(10), 0.5, -1)	   
-		Dim.tx( pts(1), pts(6), 0.5,  1)	   
-		Dim.tx( pts(0), pts(1), 0.5,  0)	   
+		Dim.tx( pts(15), pts(16), 0.5, -1)	   
+		Dim.tx( pts(13), pts(14), 0.5,  1)	   
+		Dim.tx( pts(11), pts(12), 0.5,  0)	   
 
 		Dim.tx( pts(9), pts(10), 0.5, -1)	   
 		Dim.tx( pts(5), pts(6), 0.5, 1)
@@ -307,15 +303,18 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		Dim.tx( pts(1), pts(5), 0.8, -1)
 		
 		Dim.ld( pts(2), pts(3), 50, 0, 0.1)  
-
+		
+   }
+   
+   def drawLetter(ltr : String, x : Double, y : Double, h : String)(implicit ctx : Context2d){
 		ctx.save()
-		ctx.translateS(0, pts(2).y + 150)
+		ctx.translate(x, y)
 		ctx.scale(1,-1)	
 		ctx.fillStyle = "#000"
 		ctx.textAlign = "middle"
-		ctx.fillText(letter,0,0)
+		ctx.font = "bold " + h + " sans-serif"
+		ctx.fillText(ltr,0,0)
 		ctx.restore()
-		
    }
    
    def drawSleeve(ctx : Context2d){
@@ -334,7 +333,9 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		ctx.restore()
 
    }
-   
+  def dist(p1 : Vec, p2 : Vec) = 
+			(sqrt( (p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y) )/0.1).round * 0.1
+  
    def maxminY(pts : Seq[Vec]) = {
 	   val m = (v1:Vec, v2:Vec) => {
 		  val mx = if(v1.x>v2.y) v1.x else v2.y
@@ -343,27 +344,47 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   }
 	   pts.foldLeft(Vec(0,0))(m(_, _))
    }
-	   
+   
+      
     def draw(ctx : Context2d){
+		implicit val mctx =ctx
 		val ptst = devPoints(TOP)
 		val ptsb = devPoints(BOTTOM)
 		val mmt = maxminY(ptst)
 		val mmb = maxminY(ptsb)
-		val figH = vsz/2 - 2 * (dimspace+dimstep)
+		val figH = vsz/2 - 2 * (dimspace/*+dimstep*/)
 		val sclt = figH / (mmt.x - mmt.y) 
 		val sclb = figH / (mmb.x - mmb.y) 
 		mscl = sclt min sclb
-		ctx.save() 
+		ctx.save()
+		val dst = dist(ptst(2), ptst(3))
+		val sdia = "%1d".format((dst*12/Pi).round)
+		val sdst = "%.1f".format(dst) 
+		val sld1 = "%1d".format(((m.d -5)*Pi).round)	
+		val sld2 = "%1d".format((dst*12).round)				
+		val nfo = s"Ø${m.d -5} --- l = $sld1"
+		val nfo1 =s"$sdst x 12 = $sld2 --- Ø$sdia"
 		beginDraw(ctx)
-       ctx.translate(0,vsz/2 - 150)
-	 //  drawSleeve(ctx)
-       ctx.translate(0,-(vsz/2 - 150)+dimspace)
+        ctx.translate(-hsz/2,vsz/2-40)
+        ctx.scale(1,-1)
+		ctx.fillStyle = "#000"
+		ctx.fillText(nfo,0,0)
+ 		ctx.fillText(nfo1,0,40)
+       ctx.translate(hsz/2,vsz/2-40)
+        ctx.scale(1,-1)
+//		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0); ctx.stroke()
+		drawLetter("A",0,figH+32,"3em")
         if(mmt.y < 0) ctx.translateS(0,-mmt.y)
-        drawDev(ptst,"A",ctx)
+//		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0)
+//		ctx moveTo(-hsz/2,figH); ctx lineTo(hsz/2,figH); ctx.stroke()
+        drawDev(ptst)
         if(mmt.y < 0) ctx.translateS(0,mmt.y)
-        ctx.translate(0,-(vsz/2-150))
+        ctx.translate(0,-(vsz/2-30))
+		drawLetter("B",0,figH+32,"3em")
        if(mmb.y < 0) ctx.translateS(0,-mmb.y)
-        drawDev(ptsb,"B",ctx)
+// 		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0)
+//		ctx moveTo(-hsz/2,figH); ctx lineTo(hsz/2,figH); ctx.stroke()
+       drawDev(ptsb)
 		ctx.restore()
    }
 }

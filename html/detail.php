@@ -1,24 +1,30 @@
 <?php
+function curver($fname){
+	if (file_exists($fname)) {
+		return $fname . "?v=" . filemtime($fname);
+	}
+	return "notfound";
+}
         $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
         switch ($dtype)
         {
             case "redrr":
                 $title="Переход c прямоугольного на прямоугольное";
-                $imgsrc="img/red-r-ra.png";
+                $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
                 break;
             
             case "redrc":
                 $title="Переход c прямоугольного на круглое";
-                $imgsrc="img/red-r-c.png";
+                $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
                 break;
 
             case "redcc":
                 $title="Переход c круглого на круглое";
-                $imgsrc="img/red-с-c.png";
+                $imgsrc=curver("img/red-с-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
                 break;
@@ -146,9 +152,16 @@
 				<table id= "mattbl" class="w3-table w3-bordered w3-theme-light" >
 				</table> 
 			</div>
+			<p></p>
 		</div>
 	</div>
 </div>
+	<footer class="w3-container w3-theme">
+		<p class="w3-left" style="font: 12px Arial, sans-serif;">&copy; 2023 cfox7070@gmail.com</p>
+		<p> <?= curver("./redrr-script.js");?>
+		</p>
+		<p class="w3-right">feedback: <a href="mailto:info@cfx70.ru?subject=detail">info@cfx70.ru</a></p>
+	</footer>
 </body>
 
 <script>
@@ -170,7 +183,7 @@
 {
   "imports": {
 			"three": "./js/three.r140.module.js",
-			"detapp": "./js/det.js",
+			"detapp": "<?= curver("./js/det.js");?>",
 			"three/addons/": "./js/addons/"
   }
 }
