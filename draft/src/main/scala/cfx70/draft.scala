@@ -121,13 +121,13 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
         ctx.polygon(model.fct.top.map(_.xz))
         ctx.stroke()
         //dims
-		Dim.vertRev( model.fct.top(1).xz, 
+		Dim.vertR( model.fct.top(1).xz, 
 					model.fcb.top(0).xz, lrt, 0 )
-		Dim.vertRev( model.fcb.top(2).xz, 
+		Dim.vertR( model.fcb.top(2).xz, 
 					model.fcb.top(3).xz, llt, 0 )
-		Dim.vertRev( model.fcb.top(2).xz, 
+		Dim.vertR( model.fcb.top(2).xz, 
 					model.fct.top(3).xz, llt, 0 )
-		Dim.vertRev( model.fct.top(2).xz, 
+		Dim.vertR( model.fct.top(2).xz, 
 					model.fct.top(3).xz, llt, 0 )
         ctx.restore()
     }
@@ -211,13 +211,13 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
         ctx.polygon(model.fct.tophalf.map(_.xz))
         ctx.stroke()
         //dims
-		Dim.vertRev( model.fct.tophalf(2).xz, 
+		Dim.vertR( model.fct.tophalf(2).xz, 
 					model.fcb.top(3).xz, lrt, 0 )
-		Dim.vertRev( model.fcb.top(0).xz, 
+		Dim.vertR( model.fcb.top(0).xz, 
 					model.fcb.top(1).xz, llt, 0 )
-		Dim.vertRev( model.fcb.top(1).xz, 
+		Dim.vertR( model.fcb.top(1).xz, 
 					model.fct.tophalf(0).xz, llt, 0 )
-		Dim.vertRev( model.fct.tophalf(0).xz, 
+		Dim.vertR( model.fct.tophalf(0).xz, 
 					model.fct.tophalf(3).xz, llt, 0 )
         ctx.restore()
     }

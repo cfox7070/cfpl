@@ -11,6 +11,8 @@ import scala.math._
 import cfx70.cfpl.core._
 import cfx70.cfpl.core.CommonHelpers._
 import cfx70.cfpl.core.Helpers2d._
+import cfx70.cfpl.core.Side._
+
 
 
 object Dim{
@@ -27,9 +29,9 @@ object Dim{
    
    def hor(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new HorDim(p1,p2,cln,hint,prec).draw(ctx)
    def horD(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new HorDimD(p1,p2,cln,hint,prec).draw(ctx)
-   def horRev(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new HorDimRev(p1,p2,cln,hint,prec).draw(ctx)
+//   def horRev(p1 : Vec,p2 : Vec, cln : Double , hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new HorDimRev(p1,p2,cln,hint,prec).draw(ctx)
    def vert(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new VertDim(p1,p2,cln,hint,prec).draw(ctx)
-   def vertRev(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new VertDimRev(p1,p2,cln,hint,prec).draw(ctx)
+   def vertR(p1 : Vec,p2 : Vec, cln : Double, hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d)=new VertDimRev(p1,p2,cln,hint,prec).draw(ctx)
    def tx(p1:Vec,p2 : Vec,cln : Double, hint : Int = 0,prec : Double = 1d)(implicit ctx:Context2d) = new TxDim (p1,p2,cln,hint,prec).draw(ctx)
    def ld(p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d)(implicit ctx:Context2d) = new LdDim (p1,p2,cln,hint,prec).draw(ctx)
 }
@@ -78,9 +80,9 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 		)		
    }
    
-   def drawDim(pnts :  Seq[Vec], hint : Int, 
-					txtr : (Context2d) => Unit,
-					txfl : (Context2d) => Unit = (ctx) => ctx.fillText(dist,0,0) )(implicit ctx : Context2d){	 
+   def drawDim(pnts :  Seq[Vec], hint : Int, dtxt:String, tang :Double = 0)(implicit ctx : Context2d){
+			//		txtr : (Context2d) => Unit,
+			//		txfl : (Context2d) => Unit = (ctx) => ctx.fillText(dist,0,0) )(implicit ctx : Context2d){	 
 	   ctx.save()
 	   ctx.beginPath()
 	   ctx.lineWidth=Dim.lineWidth
@@ -98,7 +100,7 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 //	   text
 	   ctx.beginPath()
 	   ctx.lineWidth = Dim.lineWidth
-	   ctx.textBaseline = "bottom"	   
+/*	   ctx.textBaseline = "bottom"	   
 	   val align = if(dist.toDouble > 99d || hint == 0){
 		ctx.translateS( pnts(10).x, pnts(10).y );"center"}
 	   else if(hint < 0){
@@ -107,7 +109,13 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 	   	ctx.translateS(pnts(12).x, pnts(12).y);"left"}
 		txtr(ctx)
 		ctx.textAlign = align
-		txfl(ctx)
+		txfl(ctx)*/
+	   if(dist.toDouble > 99d || hint == 0)
+		ctx.text(dtxt, pnts(10), CENTER, ang=tang)
+	   else if(hint < 0)
+		ctx.text(dtxt, pnts(11), RIGHT, ang=tang)    
+	   else
+	   	ctx.text(dtxt, pnts(12), LEFT, ang=tang)
 	   ctx.restore()
    }
    
@@ -116,26 +124,26 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 class HorDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
    val dist = s"%.${-log10(prec)}f".format((abs(p2.x-p1.x)/prec).round * prec)
-   def draw(ctx : Context2d) = drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1))(ctx)
+   def draw(ctx : Context2d) = drawDim(horPoints(), hint, dist)(ctx) //drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1))(ctx)
 }
 
 class HorDimD (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends HorDim(p1,p2,cln,hint,prec){
-   override def draw(ctx : Context2d) = drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1),
-														(ctx) => ctx.fillText(s"Ø$dist",0,0))(ctx)
+   override def draw(ctx : Context2d) = drawDim(horPoints(), hint,s"Ø$dist")(ctx) //drawDim(horPoints(), hint,(ctx) => ctx.scale(1,-1),
+														//(ctx) => ctx.fillText(s"Ø$dist",0,0))(ctx)
 }
 
-class HorDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends HorDim(p1,p2,cln,hint,prec){
-   override def draw(ctx : Context2d) = drawDim(horPoints(), hint,(ctx) => ctx.scale(-1,-1))(ctx)
-}
+//class HorDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends HorDim(p1,p2,cln,hint,prec){
+//   override def draw(ctx : Context2d) = drawDim(horPoints(), hint,(ctx) => ctx.scale(-1,-1))(ctx)
+//}
 
 class VertDim (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
    val dist =  s"%.${-log10(prec)}f".format((abs(p2.y-p1.y)/prec).round * prec)   
-   def draw(ctx : Context2d) = drawDim(vertPoints(), hint, (ctx) => {ctx.rotate(Pi/2);ctx.scale(1,-1)})(ctx)
+   def draw(ctx : Context2d) = drawDim(vertPoints(), hint, dist, Pi/2)(ctx) //drawDim(vertPoints(), hint, (ctx) => {ctx.rotate(Pi/2);ctx.scale(1,-1)})(ctx)
 }
 
 class VertDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double = 1d) extends VertDim(p1,p2,cln,hint,prec){      
-   override def draw(ctx : Context2d) = drawDim(vertPoints(), hint, (ctx) => ctx.rotate(-Pi/2))(ctx)
+   override def draw(ctx : Context2d) =drawDim(vertPoints(), hint, dist, -Pi/2)(ctx)// drawDim(vertPoints(), hint, (ctx) => ctx.rotate(-Pi/2))(ctx)
 }
 
 class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
@@ -152,7 +160,13 @@ class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 	ctx.fillStyle = "#000"
 	ctx.arc(0,0,7,0,Pi*2) 
 	ctx.fill()  
-	val align = if(hint == 0) "center"; else if(hint < 0) "right";else "left"
+	if(hint == 0) 
+		ctx.text(dist, (0d,0d), CENTER)
+	else if(hint < 0) 
+		ctx.text(dist, (0d,0d), RIGHT)
+	else 
+		ctx.text(dist, (0d,0d), LEFT)
+/*	val align = if(hint == 0) "center"; else if(hint < 0) "right";else "left"
 	ctx.beginPath()
 	ctx.fillStyle = "#fff"
 	ctx.textAlign = align
@@ -160,7 +174,7 @@ class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 	ctx.fillRect(-(l+1),-(a+1),(r+l+2),(a+d+2) )
 	ctx.beginPath()
 	ctx.fillStyle = "#000"
-	ctx.fillText(dist,0,0)
+	ctx.fillText(dist,0,0)*/
 	ctx.restore()
   }
 }
@@ -191,14 +205,15 @@ class LdDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 		ctx M pl1 L pl2 L pl3
 		ctx.stroke()
 		drawArrow(pl1,pl2)
-		ctx.beginPath()
+		ctx.text(dist,pl2 + (0d,5d),RIGHT)
+	/*	ctx.beginPath()
 		ctx.textBaseline = "bottom"
 		ctx.textAlign = "right"
 		ctx.translateS(pl2.x, pl2.y+5 )
 		ctx.scale(1,-1)	
 		ctx.fillStyle = "#000"
 		ctx.fillText(dist,0,0)
-		ctx.restore()
+		ctx.restore()*/
 	}
 }
 

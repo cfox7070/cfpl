@@ -3,13 +3,15 @@ function curver($fname){
 	if (file_exists($fname)) {
 		return $fname . "?v=" . filemtime($fname);
 	}
-	return "notfound";
+	return "";
 }
-        $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
+		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
+        if(!isset($dtype) && $_SERVER['REQUEST_URI']=='/') $dtype="redrr";
         switch ($dtype)
         {
             case "redrr":
                 $title="Переход c прямоугольного на прямоугольное";
+                $descr="3d модель, эскиз и развертка перехода с прямоугольника на прямоугольник.";
                 $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
@@ -17,6 +19,7 @@ function curver($fname){
             
             case "redrc":
                 $title="Переход c прямоугольного на круглое";
+                $descr="3d модель, эскиз и развертка перехода с прямоугольника на круг.";
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
@@ -24,12 +27,13 @@ function curver($fname){
 
             case "redcc":
                 $title="Переход c круглого на круглое";
+                $descr="3d модель, эскиз и развертка перехода с круга на круг.";
                 $imgsrc=curver("img/red-с-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
                 break;
 
-            case "elbrr":
+        /*    case "elbrr":
                 $title="Отвод прямоугольный";
                 $imgsrc="img/elb-r-r.png";
                 $detailparams="elbrr-params.php";
@@ -52,19 +56,13 @@ function curver($fname){
                 $imgsrc="none";
                 $detailparams="cone-params.php";
                 $detailscript="cone-script.js";
-                break;
+                break;*/
             
             default:
-                $title="Переход c прямоугольного на прямоугольное";
-                $imgsrc="img/red-r-ra.png";
-                $detailparams="redrr-params.php";
-                $detailscript="redrr-script.js";
-                break;
-/*				require "404.shtml";
-                http_response_code(404);
-                exit("not found");
-                break;*/
-        }
+				http_response_code(404);
+				include("404.shtml");
+				die();
+       }
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +71,7 @@ function curver($fname){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title><?= $title ?> </title>
+	<meta name="description" content="<?= $descr ?>"/>
     <style>
             body { margin: 0; }
             .container{position:relative;
@@ -85,6 +84,7 @@ function curver($fname){
                         }
             .x11Lgray { background-color : #D3D3D3!important;}
     </style>
+  <link rel="icon" href="https://hvac.cfx70.ru/favicon.ico" type="image/png">
   <link rel="stylesheet" href="css/w3.css"/>
   <link rel="stylesheet" href="css/w3-theme-blue-grey.css"/>
 </head>
@@ -112,7 +112,7 @@ function curver($fname){
 	<div class="w3-third">
 	  <!--div class="w3-row"-->
 		  <div class=" w3-container"> <!--params-->
-				<img src=<?= $imgsrc ?> style="width:100%">
+				<img src=<?= $imgsrc ?> style="width:100%" alt=<?= $title ?>>
 		  </div>
 		  
 		  <div class=" w3-container"> 
@@ -124,7 +124,7 @@ function curver($fname){
 	<div class="w3-twothird">
 		
 		<div class="w3-container"><!--canvas-->
-			<h1 id="descr" class="w3-large w3-center">*</h1>
+			<h1 id="descr" class="w3-large w3-center">Деталь</h1>
 			<div class="w3-bar w3-theme">
 				<button class="w3-bar-item w3-button tablink w3-theme-l4" onclick="openCity(event,'3d')">Модель</button>
 				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'draft')">Эскиз</button>
@@ -157,9 +157,7 @@ function curver($fname){
 	</div>
 </div>
 	<footer class="w3-container w3-theme">
-		<p class="w3-left" style="font: 12px Arial, sans-serif;">&copy; 2023 cfox7070@gmail.com</p>
-		<p> <?= curver("./redrr-script.js");?>
-		</p>
+		<p class="w3-left" style="font: 12px Arial, sans-serif;">&copy; 2023 cfx70</p>
 		<p class="w3-right">feedback: <a href="mailto:info@cfx70.ru?subject=detail">info@cfx70.ru</a></p>
 	</footer>
 </body>

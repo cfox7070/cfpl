@@ -10,6 +10,7 @@ import cfx70.vecquat._
 import cfx70.cfpl.core._
 import cfx70.cfpl.core.CommonHelpers._
 import cfx70.cfpl.core.Helpers2d._
+import cfx70.cfpl.core.Side._
 
 object Dev{
     val lineWidth=4.0
@@ -49,10 +50,10 @@ object Dev{
 	  def /\( other : PRad ) : Vec = p3c(other.p,other.rad) 		
 	}
 	
-	 object Side extends Enumeration {
+	/* object Side extends Enumeration {
         type Side = Value
         val TOP, BOTTOM, LEFT, RIGHT = Value
-    }
+    }*/
 }
 
 abstract class Dev[M <: Model] (val model : M) {
@@ -194,7 +195,6 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 class RedRCDev(m:RedRC) extends Dev(m) {
     
    import Dev._
-   import Dev.Side._
     
    val step = 2
    
@@ -391,7 +391,6 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 
 class RedCCDev(m:RedCC) extends Dev(m) {
    import Dev._
-   import Dev.Side._
 
 	def draw(ctx : Context2d){
 		 ctx.translate(hsz/2,vsz/2)
