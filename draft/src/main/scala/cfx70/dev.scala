@@ -147,16 +147,16 @@ class RedRRDev(m:RedRR) extends Dev(m) {
        
 	   val (dtop, dbot) = (vsz/2-dimspace-dimstep, dimstep)
        Dim.hor(pts(0),pts(3),dbot,0)
-	   if(pts(7).x < pts(3).x) Dim.hor(pts(7),pts(3),dbot,0) 
-	   if(pts(0).x < pts(4).x) Dim.hor(pts(0),pts(4),dbot,0) 
+	   if(pts(7).x < pts(3).x) Dim.hor(pts(7),pts(3),dbot,1) 
+	   if(pts(0).x < pts(4).x) Dim.hor(pts(0),pts(4),dbot,-1) 
        Dim.hor(pts(5),pts(6),dtop,0)
-	   if(pts(7).x > pts(3).x) Dim.hor(pts(7),pts(3),dtop,0) 
-	   if(pts(0).x > pts(4).x) Dim.hor(pts(0),pts(4),dtop,0) 
+	   if(pts(7).x > pts(3).x) Dim.hor(pts(7),pts(3),dtop,1) 
+	   if(pts(0).x > pts(4).x) Dim.hor(pts(0),pts(4),dtop,-1) 
        
        val (dr, dl) = (max(pts(0).x,pts(5).x)+dimspace, min(pts(3).x,pts(7).x) - dimspace )
-       Dim.vert(pts(0),pts(1),dr,0)
+       Dim.vert(pts(0),pts(1),dr,-1)
        Dim.vert(pts(1),pts(4),dr,0)
-       Dim.vert(pts(4),pts(5),dr,0)
+       Dim.vert(pts(4),pts(5),dr,1)
        Dim.vert(pts(3),pts(6),dl,0)
        
        val l1 = new Line3(Vec(pts(1).x,pts(1).y,0), Vec(pts(7).x,pts(7).y,0) )
@@ -344,8 +344,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 	   }
 	   pts.foldLeft(Vec(0,0))(m(_, _))
    }
-   
-      
+         
     def draw(ctx : Context2d){
 		implicit val mctx =ctx
 		val ptst = devPoints(TOP)
@@ -372,18 +371,13 @@ class RedRCDev(m:RedRC) extends Dev(m) {
  		ctx.fillText(nfo1,0,40)
        ctx.translate(hsz/2,vsz/2-40)
         ctx.scale(1,-1)
-//		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0); ctx.stroke()
 		drawLetter("A",0,figH+32,"3em")
         if(mmt.y < 0) ctx.translateS(0,-mmt.y)
-//		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0)
-//		ctx moveTo(-hsz/2,figH); ctx lineTo(hsz/2,figH); ctx.stroke()
         drawDev(ptst)
         if(mmt.y < 0) ctx.translateS(0,mmt.y)
         ctx.translate(0,-(vsz/2-30))
 		drawLetter("B",0,figH+32,"3em")
        if(mmb.y < 0) ctx.translateS(0,-mmb.y)
-// 		ctx moveTo(-hsz/2,0); ctx lineTo(hsz/2,0)
-//		ctx moveTo(-hsz/2,figH); ctx lineTo(hsz/2,figH); ctx.stroke()
        drawDev(ptsb)
 		ctx.restore()
    }

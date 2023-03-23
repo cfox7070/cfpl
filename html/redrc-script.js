@@ -7,5 +7,7 @@
                         Number(document.querySelector('#d').value),
                         Number(document.querySelector('#da').value),
                         Number(document.querySelector('#db').value),
-                        Number(document.querySelector('#h').value))
+                        Number(document.querySelector('#h').value),
+                        Number(document.querySelector('#f1').value),
+                        Number(document.querySelector('#f2').value))
     }

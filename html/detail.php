@@ -11,7 +11,7 @@ function curver($fname){
         {
             case "redrr":
                 $title="Переход c прямоугольного на прямоугольное";
-                $descr="3d модель, эскиз и развертка перехода с прямоугольника на прямоугольник.";
+                $descr="3d модель, эскиз и развертка перехода с прямоугольника на прямоугольник online.";
                 $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
@@ -19,7 +19,7 @@ function curver($fname){
             
             case "redrc":
                 $title="Переход c прямоугольного на круглое";
-                $descr="3d модель, эскиз и развертка перехода с прямоугольника на круг.";
+                $descr="3d модель, эскиз и развертка перехода с прямоугольника на круг online.";
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
@@ -27,7 +27,7 @@ function curver($fname){
 
             case "redcc":
                 $title="Переход c круглого на круглое";
-                $descr="3d модель, эскиз и развертка перехода с круга на круг.";
+                $descr="3d модель, эскиз и развертка перехода с круга на круг online.";
                 $imgsrc=curver("img/red-с-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";

@@ -90,26 +90,26 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
 		if(back(1).y > front(1).y){ //back on top
 			Dim.hor(back(1).xy,back(0).xy,ltop-shifty,0)
 			Dim.hor(front(2).xy,front(3).xy,lbot-shifty,0)
-			if(back(2).x < front(2).x) Dim.hor(back(2).xy,front(2).xy,lbot-shifty,0) 
-			if(back(3).x > front(3).x) Dim.hor(front(3).xy,back(3).xy,lbot-shifty,0) 
+			if(back(2).x < front(2).x) Dim.hor(back(2).xy,front(2).xy,lbot-shifty,-1) 
+			if(back(3).x > front(3).x) Dim.hor(front(3).xy,back(3).xy,lbot-shifty,1) 
 		}else{ //back on bottom
 			Dim.hor(back(2).xy,back(3).xy,lbot-shifty,0)
 			Dim.hor(front(1).xy,front(0).xy,ltop-shifty,0)
-			if(back(1).x < front(1).x) Dim.hor(back(1).xy,front(1).xy,ltop-shifty,0) 
-			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop-shifty,0) 			
+			if(back(1).x < front(1).x) Dim.hor(back(1).xy,front(1).xy,ltop-shifty,-1) 
+			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop-shifty,1) 			
 		}
 		//v
 		val (lrt,llt) = (max(back(0).x,front(0).x)+dimstep, min(back(1).x,front(1).x)-dimstep)
 		if(back(1).x > front(1).x){ //back on right
 			Dim.vert( back(3).xy, back(0).xy, lrt, 0 )
 			Dim.vert( front(2).xy, front(1).xy, llt, 0 )
-			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, llt, 0 ) 
-			if(back(0).y > front(0).y) Dim.vert( front(0).xy,back(0).xy, llt, 0 ) 
+			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, llt, -1 ) 
+			if(back(0).y > front(0).y) Dim.vert( front(0).xy,back(0).xy, llt, 1 ) 
 		}else{ //back on left
 			Dim.vert( back(2).xy, back(1).xy, llt, 0 )
 			Dim.vert( front(3).xy, front(0).xy, lrt, 0 )
-			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, lrt, 0 )//???
-			if(back(0).y > front(0).y) Dim.vert( front(0).xy, back(0).xy, lrt, 0 )			
+			if(back(3).y < front(3).y) Dim.vert( back(3).xy, front(3).xy, lrt, -1 )//???
+			if(back(0).y > front(0).y) Dim.vert( front(0).xy, back(0).xy, lrt, 1 )			
 		}
         //top
         ctx.lineWidth=Draft.lineWidth
@@ -180,26 +180,26 @@ class RedRCDraft(m:RedRC) extends Draft(m) {
 		if(back(1).y > front(1).y){ //back on top
 			Dim.hor(back(1).xy,back(0).xy,ltop,0)
 			Dim.horD(front(0).xy,front(segs/2).xy,lbot,0)
-			if(back(2).x < front(segs/2).x) Dim.hor(back(2).xy,front(segs/2).xy,lbot,0) 
-			if(back(3).x > front(0).x) Dim.hor(front(0).xy,back(3).xy,lbot,0) 
+			if(back(2).x < front(segs/2).x) Dim.hor(back(2).xy,front(segs/2).xy,lbot,-1) 
+			if(back(3).x > front(0).x) Dim.hor(front(0).xy,back(3).xy,lbot,1) 
 		}else{ //back on bottom
 			Dim.hor(back(2).xy,back(3).xy,lbot,0)
 			Dim.horD(front(0).xy,front(segs/2).xy,ltop,0)
-			if(back(1).x < front(segs/2).x) Dim.hor(back(1).xy,front(segs/2).xy,ltop,0) 
-			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop,0) 			
+			if(back(1).x < front(segs/2).x) Dim.hor(back(1).xy,front(segs/2).xy,ltop,-1) 
+			if(back(0).x > front(0).x) Dim.hor(front(0).xy,back(0).xy,ltop,1) 			
 		}
         //v
 		val (lrt,llt) = (max(back(0).x,front(0).x)+dimstep, min(back(1).x,front(1).x)-dimstep)
 		if(back(1).x > front(1).x){ //back on right
 			Dim.vert( back(3).xy, back(0).xy, lrt, 0 )
 //			Dim.vert( front(2).xy, front(1).xy, llt, 0 )
-			if(back(2).y < front(segs/4*3).y) Dim.vert( back(2).xy, front(segs/4*3).xy, llt, 0 ) 
-			if(back(1).y > front(segs/4).y) Dim.vert( front(segs/4).xy,back(1).xy, llt, 0 ) 
+			if(back(2).y < front(segs/4*3).y) Dim.vert( back(2).xy, front(segs/4*3).xy, llt, -1) 
+			if(back(1).y > front(segs/4).y) Dim.vert( front(segs/4).xy,back(1).xy, llt, 1 ) 
 		}else{ //back on left
 			Dim.vert( back(2).xy, back(1).xy, llt, 0 )
 //			Dim.vert( front(3).xy, front(0).xy, lrt, 0 )
-			if(back(3).y < front(segs/4*3).y) Dim.vert( back(3).xy, front(segs/4*3).xy, lrt, 0 )
-			if(back(0).y > front(segs/4).y) Dim.vert( front(segs/4).xy, back(0).xy, lrt, 0 )			
+			if(back(3).y < front(segs/4*3).y) Dim.vert( back(3).xy, front(segs/4*3).xy, lrt, -1 )
+			if(back(0).y > front(segs/4).y) Dim.vert( front(segs/4).xy, back(0).xy, lrt, 1 )			
 		}
         //top
         ctx.lineWidth=Draft.lineWidth

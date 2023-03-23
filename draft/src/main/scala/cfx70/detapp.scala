@@ -42,11 +42,11 @@ object DetApp{
     var animation:Boolean=true
         
    @JSExport
-	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double):Unit = 
-          setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2))
+	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double,f1:Double,f2:Double):Unit = 
+          setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2,f1,f2))
    @JSExport
-        def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f:Double=30):Unit = 
-            setModel(new RedRC(a1,b1,d,h,da,db,f))
+        def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f1:Double=30,f2:Double=40):Unit = 
+            setModel(new RedRC(a1,b1,d,h,da-a1/2,db-b1/2,f1,f2))
    @JSExport
         def setRedCC(d1:Double,d2:Double,dc:Double,h:Double,f1:Double=40,f2:Double=40):Unit = 
             setModel(new RedCC(d1,d2,dc,h,f1,f2))

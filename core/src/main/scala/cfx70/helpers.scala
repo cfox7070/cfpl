@@ -81,7 +81,6 @@ object Helpers2d{
 	   var ctx : CanvasRenderingContext2D = null
 	   var curPt=Vec(0,0)
 		def polygon(st:Vec,pts:Vec *) : RichContext.type={
-			//ctx.beginPath()
 			M(st)
 			for (pt <- pts) L(pt)
 			ctx.closePath
@@ -152,15 +151,7 @@ object Helpers2d{
 			ctx.fillText(tx,0,0)
 			ctx.restore()
 		}
-	  //  def text(ang:Double = 0)(tx:String, pt:Vec, halign:Side.Side = LEFT, valign:Side.Side = BOTTOM) :Unit = text(ang)(tx,pt.x,pt.y,halign,valign)
-		
-		
-
 	}
-	
- /* object RichContext{
-       var lscale=1.0
-  }*/
 }
 
 object Helpers3d{	
@@ -175,8 +166,10 @@ object Helpers3d{
         scene.background=new Color(0xF3F3FA)
         
         val camera3d = new PerspectiveCamera(75, 800.0/600.0, 0.1, 2000)
-        val light = new DirectionalLight(0xffffff, 0.5)
+        val light = new DirectionalLight(0xffffff, 0.6)
+		val alight = new AmbientLight(0xffffff, 0.5)
         scene.add(light)
+        scene.add(alight)
     
         val controls = new OrbitControls( camera3d, renderer.domElement )
         controls.addEventListener("change",(e:dom.Event)=>{    

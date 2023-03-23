@@ -20,6 +20,10 @@ object THREE {
 	val DoubleSide = 2
 //A
 	@js.native
+	@JSImport("three", "DirectionalLight")
+	class AmbientLight(var color : Integer = js.native, var intensity : Double = js.native) extends Light(color,intensity)
+
+	@js.native
 	@JSImport("three", "AxesHelper")
 	class AxesHelper(size: Double = js.native) extends Line
 //B	

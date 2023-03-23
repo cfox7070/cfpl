@@ -23,11 +23,11 @@
         <table class="w3-table w3-bordered w3-theme-d2" >
 			<tr>
 			  <td>da</td>
-			  <td><input  id="da" class="w3-input w3-border dims-input0" type="number" value="200" step="5"></td>
+			  <td><input  id="da" class="w3-input w3-border dims-input0" type="number" value="325" step="5"></td>
 			</tr>
 			<tr>
 			  <td>db</td>
-			  <td><input  id="db" class="w3-input w3-border dims-input0" type="number" value="200" step="5"></td>
+			  <td><input  id="db" class="w3-input w3-border dims-input0" type="number" value="225" step="5"></td>
 			</tr>
 			<tr>
 			  <td >f1</td>
@@ -35,7 +35,7 @@
 			</tr>
 			<tr>
 			  <td >f2</td>
-			  <td ><input  id="f2" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
+			  <td ><input  id="f2" class="w3-input w3-border dims-input0" type="number" value="40" step="5"></td>      
 			</tr>
         </table>
     </div>
