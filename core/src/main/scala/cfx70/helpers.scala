@@ -1,9 +1,7 @@
 package cfx70.cfpl.core
 
-//import scala.scalajs.js.annotation._
 import scala.scalajs.js
 import org.scalajs.dom
-//import scala.scalajs.js.timers._
 import org.scalajs.dom.{CanvasRenderingContext2D, html, window,document,Event}
 import scala.language.implicitConversions
 

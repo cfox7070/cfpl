@@ -5,29 +5,30 @@ function curver($fname){
 	}
 	return "";
 }
+$detimport = curver("./js/det.js");
 		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
         if(!isset($dtype) && $_SERVER['REQUEST_URI']=='/') $dtype="redrr";
         switch ($dtype)
         {
             case "redrr":
-                $title="Переход c прямоугольного на прямоугольное";
-                $descr="3d модель, эскиз и развертка перехода с прямоугольника на прямоугольник online.";
+                $title="Развертка перехода с прямоугольника на прямоугольник.";
+                $descr="Построение развертки перехода с прямоугольного на прямоугольное сечение онлайн.";
                 $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
                 break;
             
             case "redrc":
-                $title="Переход c прямоугольного на круглое";
-                $descr="3d модель, эскиз и развертка перехода с прямоугольника на круг online.";
+                $title="Развертка перехода с прямоугольника на круг.";
+                $descr="Построение развертки перехода с прямоугольного на круглое сечение онлайн.";
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
                 break;
 
             case "redcc":
-                $title="Переход c круглого на круглое";
-                $descr="3d модель, эскиз и развертка перехода с круга на круг online.";
+                $title="Развертка перехода с круга на круг.";
+                $descr="Построение развертки перехода с круглого на круглое сечение онлайн.";
                 $imgsrc=curver("img/red-с-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
@@ -76,8 +77,9 @@ function curver($fname){
             body { margin: 0; }
             .container{position:relative;
                        }
-            h1, h2 {font-family:"Lucida Console", Monaco, monospace;
-                    font-style: italic;
+            .det-label {font-family:"Lucida Console", Monaco, monospace;
+                        font-style: italic;
+                        font-size: 18px;
                     }
             canvas {
                         width: 100%;
@@ -124,7 +126,7 @@ function curver($fname){
 	<div class="w3-twothird">
 		
 		<div class="w3-container"><!--canvas-->
-			<h1 id="descr" class="w3-large w3-center">Деталь</h1>
+			<p id="descr" class="w3-large w3-center det-label">Деталь</p>
 			<div class="w3-bar w3-theme">
 				<button class="w3-bar-item w3-button tablink w3-theme-l4" onclick="openCity(event,'3d')">Модель</button>
 				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'draft')">Эскиз</button>
@@ -173,26 +175,7 @@ function curver($fname){
 	  let image = cnv.toDataURL();
 	  el.href = image;
 	};
-</script>
-
-<script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-
-<script type="importmap">
-{
-  "imports": {
-			"three": "./js/three.r140.module.js",
-			"detapp": "<?= curver("./js/det.js");?>",
-			"three/addons/": "./js/addons/"
-  }
-}
-
-</script>
-
-<script type="module">
-
-import {DetApp}  from 'detapp';
-
-window.openCity = function(evt,viewName) {
+    openCity = function(evt,viewName) {
 	let i;
 	let x = document.getElementsByClassName("view");
 	for (i = 0; i < x.length; i++) {
@@ -206,6 +189,26 @@ window.openCity = function(evt,viewName) {
 	view.style.display = "block"
 	evt.currentTarget.classList.add("w3-theme-l4")
  }
+</script>
+
+<script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+			"three": "./js/three.r140.module.js",
+			"detapp": "<?= $detimport ?>",
+			"three/addons/": "./js/addons/"
+  }
+}
+
+</script>
+
+<script type="module">
+           
+import {DetApp}  from 'detapp';
+
+DetApp.setAnimation(false)
 
 window.download_model = function(el) {
 	  let cnv = document.getElementById("canvas3d")
@@ -215,8 +218,6 @@ window.download_model = function(el) {
 	};
 
 const inputs = document.querySelectorAll('.dims-input0')
-	DetApp.setAnimation(false)
-           
     <?php require $detailscript ?>
 
 </script>
