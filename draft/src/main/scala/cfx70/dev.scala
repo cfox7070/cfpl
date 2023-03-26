@@ -120,7 +120,6 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 		   0, 1)
 		(fcb ++ fct).map( scl * _ )
    }
-   
    def drawDev(pnts : Seq[Vec],letter : String)(implicit ctx:Context2d){
 	   
 	   def leftmost(l:Vec, r:Vec) = if(l.x < r.x) l else Vec(r.x,l.y)
@@ -189,6 +188,47 @@ class RedRRDev(m:RedRR) extends Dev(m) {
         ctx.translate( 0, vsz/2)
 		drawDev(leftPoints, "C")
 		ctx.restore()
+	//	println(drawdxf)
+   }
+   
+   def drawdxf():String = {
+	   def dxfLine(b : Vec, e:Vec) : String = {
+s"""0
+LINE
+10
+${b.x}
+20
+${b.y}
+30
+0.0
+11
+${e.x}
+21
+${e.y}
+31
+0.0
+"""
+	   }
+	   var dxf = """0
+SECTION
+2
+ENTITIES
+"""
+	  var pts = topPoints
+	  dxf += dxfLine(pts(0),pts(1))
+	  dxf += dxfLine(pts(1),pts(4))
+	  dxf += dxfLine(pts(4),pts(5))
+	  dxf += dxfLine(pts(5),pts(6))
+	  dxf += dxfLine(pts(6),pts(7))
+	  dxf += dxfLine(pts(7),pts(2))
+	  dxf += dxfLine(pts(2),pts(3))
+	  dxf += dxfLine(pts(3),pts(0))
+	 dxf +="""0
+ENDSEC
+0
+EOF
+"""
+	dxf
    }
 }
 
