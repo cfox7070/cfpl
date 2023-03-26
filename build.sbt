@@ -11,8 +11,10 @@ val toHtml = taskKey[Unit]("copy to html//")
 lazy val commonSettings = Seq(
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
     libraryDependencies +="org.scalactic" %%% "scalactic" % "3.2.14",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % "test",
+//    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % "test",
+	libraryDependencies += "com.lihaoyi" %%% "utest" % "0.8.1" % "test",
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.3.0",
+    testFrameworks += new TestFramework("utest.runner.Framework"),
     scalacOptions ++= Seq(
           "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
           "-encoding", "utf-8",                // Specify character encoding used by source files.
@@ -39,6 +41,13 @@ lazy val core = (project in file("core"))
     name := "core",
    commonSettings
    )
+   
+lazy val idb = (project in file("idb"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "idb",
+   commonSettings
+   )
 
 lazy val draft = (project in file("draft"))
   .dependsOn(core)
@@ -47,7 +56,15 @@ lazy val draft = (project in file("draft"))
     name := "draft",
    commonSettings
    )
-
+   
+lazy val scheme = (project in file("scheme"))
+  .dependsOn(core)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "scheme",
+   commonSettings
+   )
+   
 lazy val fund_anim = (project in file("fund-anim"))
   .dependsOn(threejsfacade)
   .enablePlugins(ScalaJSPlugin)
