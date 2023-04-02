@@ -178,7 +178,11 @@ class LdDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 		ctx.lineWidth = Dim.lineWidth
 		ctx M pl1 L pl2 L pl3
 		ctx.stroke()
-		drawArrow(pl1,pl2)
+//		drawArrow(pl1,pl2)
+		ctx.beginPath()
+		ctx.fillStyle = "#000"
+		ctx.arc(pl1.x*rscale,pl1.y*rscale,7,0,Pi*2) 
+		ctx.fill()  
 		ctx.text(dist,pl2 + (0d,5d),RIGHT)
 		ctx.restore()
 	}

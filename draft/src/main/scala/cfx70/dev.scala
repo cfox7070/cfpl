@@ -49,11 +49,10 @@ object Dev{
 	   }
 	  def /\( other : PRad ) : Vec = p3c(other.p,other.rad) 		
 	}
-	
-	/* object Side extends Enumeration {
-        type Side = Value
-        val TOP, BOTTOM, LEFT, RIGHT = Value
-    }*/
+	def dist(p1 : Vec, p2 : Vec, acc : Double = 0) ={
+			if(acc == 0) (p2 - p1).mod
+			else ((p2 - p1).mod/acc).round * acc}
+
 }
 
 abstract class Dev[M <: Model] (val model : M) {
@@ -333,8 +332,6 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		ctx.restore()
 
    }
-  def dist(p1 : Vec, p2 : Vec) = 
-			(sqrt( (p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y) )/0.1).round * 0.1
   
    def maxminY(pts : Seq[Vec]) = {
 	   val m = (v1:Vec, v2:Vec) => {
@@ -356,7 +353,7 @@ class RedRCDev(m:RedRC) extends Dev(m) {
 		val sclb = figH / (mmb.x - mmb.y) 
 		mscl = sclt min sclb
 		ctx.save()
-		val dst = dist(ptst(2), ptst(3))
+		val dst = dist(ptst(2), ptst(3),0.1)
 		val sdia = "%1d".format((dst*12/Pi).round)
 		val sdst = "%.1f".format(dst) 
 		val sld1 = "%1d".format(((m.d -5)*Pi).round)	
@@ -383,14 +380,132 @@ class RedRCDev(m:RedRC) extends Dev(m) {
    }
 }
 
-class RedCCDev(m:RedCC) extends Dev(m) {
-   import Dev._
+class RedCCDev(m:RedCC, val step : Int = 2) extends Dev(m) {
+   import Dev._   
+   
+/*                  0  3  6  9  12
+					0  2  4  6  8  10  12
+					1  2  4
+			   __ __ __ __     dd2
+			  | /| /| /| /|
+			  |/_|/_|/_|/_]
+					0  3  5    dd1
+ 12 14 16 18 20  22 0  2  4  6
+       12 15 18  21 0
+*/
+   
+   def devPoints()/* : Seq[Vec]*/ ={
+		val bp = model.cn.bpts
+		val tp = model.cn.tpts
+		val s = BGeometry.segments
+		val dd1 = (Pi * model.d1) / (s/step)
+		val dd2 = (Pi * model.d2) / (s/step)
+		var hp = dist(bp(0),tp(0))
+		var dd3 = 0d
+		var ptsb = Seq( Vec(0,0) )
+		var ptst = Seq( Vec(0,hp) )
+		for(i <- step to s/2 by step){
+			dd3 = dist(bp(i-step),tp(i))           
+            val ptp = (ptst.last, dd2) /\ (ptsb.last, dd3 )
+			ptst :+= ptp
+			val hp = dist(bp(i),tp(i))
+			val pbt= (ptp, hp) /\ (ptsb.last, dd1 )
+			ptsb :+= pbt
+		}
+		var ptsb1 = Seq( Vec(0,0) )
+		var ptst1 = Seq( Vec(0,hp) )
+		for(i <- (s-step) to s/2 by -step){
+			dd3 = dist(bp(i+step),tp(i))           
+            val ptp = (ptsb1.last, dd3 ) /\  (ptst1.last, dd2)
+			ptst1 :+= ptp
+			val hp = dist(bp(i),tp(i))
+			val pbt= (ptsb1.last, dd1 ) /\  (ptp, hp)
+			ptsb1 :+= pbt
+		}
+	   (ptsb, ptst, ptsb1, ptst1)
+   }
+   
+   def drawDev(ptsb : Seq[Vec],ptst : Seq[Vec],ptsb1 : Seq[Vec],ptst1 : Seq[Vec], ctx : Context2d){
+	   def ln(pts :Seq[Vec]){
+		   ctx M pts(0)
+		   for(i <- 1 until pts.size)
+			   ctx L pts(i)
+		   ctx.stroke() 
+	   }
+	   
+	   def makeFlipper(a:Int,b:Int) = {
+		  var count = a
+		  val cnt = () => {if(count==a) count = b else count = a; 1d/count.toDouble}
+		  cnt
+		}
+	   def thln(b :Seq[Vec],t :Seq[Vec]){	
+		   ctx M t(0)	   
+		   for(i <- 1 until b.size) ctx L b(i-1) L t(i)
+		   ctx.stroke()
+		   val f1 = makeFlipper(4,3)
+		   val f2 = makeFlipper(2,3)
+		   for(i <- 1 until b.size){
+				Dim.tx( t(i-1), b(i-1), f1(), 0)(ctx)	   
+		        Dim.tx( b(i-1), t(i), f2(), 0)(ctx)
+			}	   
+	   }
+
+	   ctx.beginPath()
+	   ctx.lineWidth = Dev.lineWidth
+	   ln(ptsb)
+	   ln(ptst) 
+	   ln(ptsb1)
+	   ln(ptst1)
+	  // println(s"${ptsb.last} ${ptst.last
+	   ctx M ptsb.last L ptst.last
+	   ctx M ptsb1.last L ptst1.last
+	   ctx.stroke()
+	   Dim.tx( ptsb.last, ptst.last, 0.5, 0)(ctx)	   
+	   Dim.tx( ptsb1.last, ptst1.last, 0.5, 0)(ctx)	   
+
+	   	Dim.ld( ptst(0), ptst(1), 50, 0, 0.1)(ctx)  
+		Dim.ld( ptsb(0), ptsb(1), -50, 0, 0.1)(ctx) 
+
+ 	   ctx.beginPath()
+	   ctx.lineWidth = Dev.thinlineWidth
+	   thln(ptsb,ptst)	   
+	   thln(ptsb1,ptst1)
+	   
+	   	   
+  }
 
 	def draw(ctx : Context2d){
-		 ctx.translate(hsz/2,vsz/2)
-		 ctx.beginPath()
-		 ctx.textAlign = "middle"
+		val (ptsb,ptst,ptsb1,ptst1) = devPoints()
+		val dst = dist(ptst(0), ptst(1), 0.1)
+		val sdia = "%1d".format((dst*12/Pi).round)
+		val sdst = "%.1f".format(dst) 
+		val sld1 = "%1d".format(((model.d2 -5)*Pi).round)	
+		val sld2 = "%1d".format((dst*12).round)				
+		val nfo = s"Ø${model.d2 -5} --- l = $sld1"
+		val nfo1 =s"$sdst x 12 = $sld2 --- Ø$sdia"
+		val dst1 = dist(ptsb(0), ptsb(1), 0.1)
+		val sdia1 = "%1d".format((dst1*12/Pi).round)
+		val sdst1 = "%.1f".format(dst1) 
+		val sld11 = "%1d".format(((model.d1 -5)*Pi).round)	
+		val sld21 = "%1d".format((dst1*12).round)				
+		val nfo2 = s"Ø${model.d1 -5} --- l = $sld11"
+		val nfo3 =s"$sdst1 x 12 = $sld21 --- Ø$sdia1"
+		ctx.save()
+		mscl*=1.4
+		beginDraw(ctx)
+        ctx.translate(-hsz/2,vsz/2-40)
+        ctx.scale(1,-1)
 		ctx.fillStyle = "#000"
-		ctx.fillText("Еще не сделал",0,0)
+		ctx.fillText(nfo,0,0)
+ 		ctx.fillText(nfo1,0,40)
+ 		ctx.fillText(nfo2,0,80)
+ 		ctx.fillText(nfo3,0,120)
+		ctx.translate(hsz/2,vsz/2)
+        ctx.scale(1,-1)
+        ctx.translateS(0,ptsb.head.y-ptst.head.y)
+//        ctx.drawAx()
+		ctx.beginPath()
+		drawDev(ptsb,ptst,ptsb1,ptst1, ctx)
+		ctx.restore()
 	}
 }
