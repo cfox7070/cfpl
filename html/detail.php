@@ -6,32 +6,49 @@ function curver($fname){
 	return $fname;
 }
 $detimport = curver("./js/det.js");
+$selpoints = <<<END
+<span class="w3-right"> Окружность из
+	<select class="w3-select" id="pts" style="width:inherit;" onchange = "selchange(event)">
+	<option value="4">6</option>
+	<option value="3" selected>8</option>
+	<option value="2">12</option>
+  </select>
+  точек.
+ </span>
+END;
+
 		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
         if(!isset($dtype) && $_SERVER['REQUEST_URI']=='/') $dtype="redrr";
         switch ($dtype)
         {
             case "redrr":
                 $title="Развертка перехода с прямоугольника на прямоугольник.";
+                $title1="Переход с прямоугольника на прямоугольник.";
                 $descr="Построение развертки перехода с прямоугольного на прямоугольное сечение по заданным размерам онлайн.";
                 $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
+                $rpoints = "";
                 break;
             
             case "redrc":
                 $title="Развертка перехода с прямоугольника на круг.";
+                $title1="Переход с прямоугольника на круг.";
                 $descr="Построение развертки перехода с прямоугольного на круглое сечение по заданным размерам онлайн.";
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
+                $rpoints = $selpoints;
                 break;
 
             case "redcc":
                 $title="Развертка перехода с круга на круг.";
+                $title1="Переход с круга на круг.";
                 $descr="Построение развертки перехода с круглого на круглое сечение по заданным размерам онлайн.";
                 $imgsrc=curver("img/red-c-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
+                $rpoints = $selpoints;
                 break;
 
         /*    case "elbrr":
@@ -126,7 +143,7 @@ $detimport = curver("./js/det.js");
 	<div class="w3-twothird">
 		
 		<div class="w3-container"><!--canvas-->
-			<p id="descr" class="w3-large w3-center det-label">Деталь</p>
+			<h1 id="descr" class="w3-large w3-center det-label"><?=$title1?></h1>
 			<div class="w3-bar w3-theme">
 				<button class="w3-bar-item w3-button tablink w3-theme-l4" onclick="openCity(event,'3d')">Модель</button>
 				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'draft')">Эскиз</button>
@@ -147,7 +164,8 @@ $detimport = curver("./js/det.js");
 
 			<div id="dev" class="w3-container view" style="display:none">
 			<canvas class="w3-border" id="canvasdev" width="1600" height="1200"></canvas>
-			<a id="download" download="" href="" onclick="download_dev(this);">Сохранить</a>
+			<a id="download" download="" href="" onclick="download_dev(this);">Сохранить .png</a>
+			<?=$rpoints?>
 			</div>
 
 			<div id="mat" class="w3-container view" style="display:none">
@@ -188,7 +206,12 @@ $detimport = curver("./js/det.js");
 	let view = document.getElementById(viewName)
 	view.style.display = "block"
 	evt.currentTarget.classList.add("w3-theme-l4")
- }
+	}
+	
+	let selchange = function(e){
+	console.log(e.target.value)
+	}
+
 </script>
 
 <script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
@@ -196,7 +219,7 @@ $detimport = curver("./js/det.js");
 <script type="importmap">
 {
   "imports": {
-			"three": "./js/three.r140.module.js",
+			"three": "./js/three.module.js",
 			"detapp": "<?= $detimport ?>",
 			"three/addons/": "./js/addons/"
   }

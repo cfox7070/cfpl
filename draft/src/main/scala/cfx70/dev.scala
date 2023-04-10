@@ -231,11 +231,9 @@ EOF
    }
 }
 
-class RedRCDev(m:RedRC) extends Dev(m) {
+class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     
    import Dev._
-    
-   val step = 2
    
    /*    9_8_7_2_3_4_5
     *    /\    /\    /\         |     _
