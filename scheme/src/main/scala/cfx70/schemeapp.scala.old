@@ -1,0 +1,202 @@
+package cfx70.redrr
+
+import scala.scalajs.js.annotation._
+import scala.scalajs.js
+import scala.scalajs.js.JSON
+
+import org.scalajs.dom
+import org.scalajs.dom.{html,document,Event,window,Blob}
+import org.scalajs.dom.html.Anchor
+import org.scalajs.dom.raw.{BlobPropertyBag,URL}
+
+import scala.scalajs.js.timers._
+
+import js.JSConverters._
+
+import scala.math._
+
+import org.denigma.threejs.{Vector => ThreeVector, _}
+import org.denigma.{threejs => THREE}
+
+import cfx70.vecquat._
+
+import scala.concurrent.{Future, Promise}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
+
+import scala.language.postfixOps
+
+import scala.collection.mutable
+
+//import java.util.Date 
+
+
+@JSExportTopLevel("SchemeApp")
+class SchemeApp() {
+
+    window.name = "mscheme" //check if open
+
+    val (renderer,scene,camera3d,light,controls)=App.set3dRenderer("#canvasSch")
+    
+    val axesHelper = new AxesHelper(150)
+    
+    var hDoc : HDoc = null
+    val fname  = IndexedDb.getName()
+    fname foreach {
+         name => {hDoc = new HDoc(name,this)
+                  val hDocLoadF = hDoc.load()
+                  hDocLoadF foreach  {_  => println("Load success")
+                                            showScheme()}
+            }
+    }
+    
+    @JSExport    
+    def addStr(){
+        val l=itf.sl.value toDouble
+        val pars = new SchemeEntityParams()
+        pars.dims ++= Seq[Double](0.0,0.0,l) toJSArray
+        val commandOpt = hDoc.addConnectPartRCommand("forv",pars)
+        commandOpt foreach {command => CmdMan exec command }       
+    }
+
+    @JSExport    
+    def addTurn(dir : String){
+   //     val l=itf.sl.value toDouble
+        val pars = new SchemeEntityParams()
+        pars.dims ++= Seq[Double](0.0,0.0,90) toJSArray
+        val commandOpt = hDoc.addConnectPartRCommand(dir,pars)
+        commandOpt foreach {command => CmdMan exec command }       
+    }
+    
+    @JSExport    
+    def table(){
+        window.open("table.php","table") 
+    }
+    
+    @JSExport
+    def toFile(){
+        def getDBString():Future[String] = {
+            val p = Promise[String]()
+            IndexedDb.getParts() onComplete {
+                case Success(prl) => var s:String="{ \"parts\" : ["
+                                    for(r <- prl){
+                                       //val rs = PartRecord.jsonString(r)
+                                       val jrs = JSON.stringify(r)
+                                        s=s + jrs +",\n"
+                                    }
+                                   s=s.dropRight(2)
+                                    s=s+"]\n}"
+                                    println(s)
+                                    val os = JSON.parse(s)
+                                    println(os)
+                                    p.success(s)
+                case Failure(e) => p.failure(e)
+            }
+            p.future
+        }
+        val dbsf = getDBString()
+        dbsf onComplete {
+            case Success(s) => 
+                val a = document.createElement("a").asInstanceOf[Anchor]
+                    val blob = new Blob(jsA(s),BlobPropertyBag("application/json"))
+                    a.href = URL.createObjectURL(blob)
+                    a.setAttribute("download","sample.dsch")
+                    a.click()
+            case Failure(e) => 
+            }
+    }
+
+    @JSExport
+    def fromFile(){
+    }
+
+    @JSExport
+    def clear(){
+    }
+    
+    //TODO: two windows???
+
+    def delPart(id :Int){
+        val pidf = IndexedDb delPart id
+        pidf foreach {id => println(s"part delete id=$id")}
+    }
+    
+    
+    def getParts(){
+        val pobjf = IndexedDb.getParts()
+        pobjf foreach {
+                obj => println(s"part retrieved: $obj")
+        }
+    }
+    
+    def updateScene() {
+        scene.clear()
+        scene.add(axesHelper)
+        for(v <- hDoc.mparts.values if v.eparams.hsystem != "_")
+            scene.add(v)
+		itf.update()
+    }
+ 
+    camera3d.position.z=300
+    camera3d.position.y=300
+    camera3d.position.x=300
+    camera3d.rotation.x= -Pi/6
+    camera3d.rotation.y= -Pi/6
+    
+    @JSExport
+    def showScheme(){
+        updateScene()
+        controls.update()
+        light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
+        renderer.render(scene, camera3d)
+    }
+    
+    @JSExport
+    def zoomPlus(){
+        camera3d.zoom +=0.2
+        camera3d.updateProjectionMatrix ()
+        showScheme()
+    }
+
+    @JSExport
+    def zoomMinus(){
+        camera3d.zoom -=0.2
+        camera3d.updateProjectionMatrix ()
+        showScheme()
+    }
+
+    @JSExport
+    def undo(){ CmdMan.undo()}
+    @JSExport
+    def redo(){ CmdMan.redo()}
+	
+	object itf {
+		val undo = (document querySelector "#undo").asInstanceOf[html.Button]
+		val redo = (document querySelector "#redo").asInstanceOf[html.Button]
+		val a = document querySelector "#a"
+		val xd = document querySelector "#xd"
+		val bd = document querySelector "#bd"
+		val sl = (document querySelector "#sL").asInstanceOf[html.Input]
+		val sA = (document querySelector "#sA").asInstanceOf[html.Input]
+		
+		def update() {
+			undo.disabled = !CmdMan.canUndo
+			redo.disabled = !CmdMan.canRedo
+			hDoc.curConn foreach {c => if(c.d == 0){
+                                            a.innerText = c.a.toString
+                                            xd.innerText = "x"
+                                            bd.innerText = c.b.toString
+                                       } else {
+                                            a.innerText = ""
+                                            xd.innerText = "Ø"
+                                            bd.innerText = c.d.toString
+                                       }
+                                 }
+        }
+	 }
+}
+
+
+
+
+

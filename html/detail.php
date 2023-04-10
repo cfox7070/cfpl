@@ -3,7 +3,7 @@ function curver($fname){
 	if (file_exists($fname)) {
 		return $fname . "?v=" . filemtime($fname);
 	}
-	return "";
+	return $fname;
 }
 $detimport = curver("./js/det.js");
 		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
@@ -12,7 +12,7 @@ $detimport = curver("./js/det.js");
         {
             case "redrr":
                 $title="Развертка перехода с прямоугольника на прямоугольник.";
-                $descr="Построение развертки перехода с прямоугольного на прямоугольное сечение онлайн.";
+                $descr="Построение развертки перехода с прямоугольного на прямоугольное сечение по заданным размерам онлайн.";
                 $imgsrc=curver("img/red-r-ra.png");
                 $detailparams="redrr-params.php";
                 $detailscript="redrr-script.js";
@@ -20,7 +20,7 @@ $detimport = curver("./js/det.js");
             
             case "redrc":
                 $title="Развертка перехода с прямоугольника на круг.";
-                $descr="Построение развертки перехода с прямоугольного на круглое сечение онлайн.";
+                $descr="Построение развертки перехода с прямоугольного на круглое сечение по заданным размерам онлайн.";
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
@@ -28,8 +28,8 @@ $detimport = curver("./js/det.js");
 
             case "redcc":
                 $title="Развертка перехода с круга на круг.";
-                $descr="Построение развертки перехода с круглого на круглое сечение онлайн.";
-                $imgsrc=curver("img/red-с-c.png");
+                $descr="Построение развертки перехода с круглого на круглое сечение по заданным размерам онлайн.";
+                $imgsrc=curver("img/red-c-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
                 break;

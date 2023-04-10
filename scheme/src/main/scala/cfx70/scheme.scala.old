@@ -1,0 +1,142 @@
+package cfx70.redrr
+
+import scala.scalajs.js
+
+import scala.math._
+
+import cfx70.vecquat._
+
+import org.denigma.threejs.{Vector => ThreeVector, _}
+
+//import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.language.postfixOps
+import scala.collection.mutable
+
+
+object Scheme {
+//    val congeom = new BoxGeometry(10,10,20)
+    val congeom = new ConeGeometry(5,10,4)
+}
+
+class Connector(val ent: SchemeEntity,val nmb : Int,
+                    val d : Double =0, val a : Double =0, val b: Double =0,
+                         color :Int =0xee77aa) extends Object3D {
+    val m=Model.MeshBasicMaterial(color)
+    val mesh = new Mesh(Scheme.congeom,m)
+    mesh.rotateX(Pi/2)
+    
+    val edges = Model.edges(Scheme.congeom,0x000088)
+    edges.rotateX(Pi/2)
+    
+    val axesHelper = new AxesHelper(20) //??
+    this.add(axesHelper)//??
+    this.add(mesh)
+    this.add(edges)
+    
+    var connectedTo : Option[Connector] = None
+    
+    def connectTo(con : Connector) :Connector= {
+        val mp=con.ent.conPlacement(con)
+        val mr=new Matrix4().makeRotationY(Pi)
+        mp.multiply(mr)
+        val mg=ent.fromGlobal(mp,this)
+        ent.matrix.copy(mg)
+        connectedTo = Some(con)
+        this
+    }
+    
+}
+
+abstract class SchemeEntity (val eid :Int, val eparams : SchemeEntityParams) extends Object3D{
+    matrixAutoUpdate = false
+    val cn : Vector[Connector]
+    
+    def updateMatrixes(){
+        for(e <- cn) e.updateMatrix
+    }
+    
+   def info() = {
+        printmt(matrix,"my matrix")
+        var n=0
+        val m=new Matrix4()
+        val nm=new Matrix4()
+        for(e <- cn) {
+            printmt(e.matrix,s"cn($n) matrix")
+            m.copy(e.matrix)
+            nm.copy(e.matrix)
+            m.multiply(matrix)
+            printmt(m,s"cn($n) global transform")
+            printmt(conPlacement(n),s"cn($n) placement")
+            nm.invert()                         //!!!
+            nm.multiply(m)                      //!!!
+            printmt(nm,s"cn($n) source")
+            printmt(fromGlobal(m,n),s"fromGlobal cn($n)")
+            n=n+1
+        }
+        
+    }
+    
+    def conPlacement(con : Connector) : Matrix4 = new Matrix4().copy(con.matrix).premultiply(matrix)
+    def conPlacement(nmb : Int) : Matrix4 = new Matrix4().copy(cn(nmb).matrix).premultiply(matrix)
+    def fromGlobal(g : Matrix4, nmb : Int) : Matrix4 = new Matrix4().copy(cn(nmb).matrix).invert().premultiply(g)
+    def fromGlobal(g : Matrix4, con : Connector) : Matrix4 = new Matrix4().copy(con.matrix).invert().premultiply(g)
+}
+
+class StrPartR(id :Int, sparams : SchemeEntityParams) extends SchemeEntity (id, sparams) {
+    val dims = eparams.dims
+    val cn=Vector(new Connector(this,0, a= dims(0), b= dims(1)),
+						new Connector(this,1, a= dims(0), b= dims(1), color = 0x008888))
+    val a : Double = dims(0)/10
+    val b : Double = dims(1)/10
+    val l : Double = dims(2)/10
+    this.add(cn(0).translateZ(l/2))
+    this.add(cn(1).translateZ(-l/2).rotateY(Pi))
+    cn(0).updateMatrix();cn(1).updateMatrix()
+    
+    val bgeom = new BoxGeometry(a,b,l)
+    val edges = Model.edges(bgeom, 0x000088)
+    this.add( edges )
+ //   val mesh = new Mesh(bgeom,Model.basicBlueMaterial)
+ //   mesh.matrixAutoUpdate = false
+    //add(mesh) 
+}
+
+class StrPartC(hsystem : HSystem, val d:Double,val l:Double,val  ins:Double =0) extends SchemeEntity(0,null) {
+    val cn=null
+}
+
+class SElbR(id :Int, sparams : SchemeEntityParams) extends SchemeEntity (id, sparams) {
+    val dims = eparams.dims
+    val cn=Vector(new Connector(this,0, a= dims(0), b= dims(1)),
+						new Connector(this,1, a= dims(0), b= dims(1), color = 0x008888))
+    val a : Double = dims(0)/10
+    val b : Double = dims(1)/10
+    val ang : Double =Pi/180*dims(2)
+    this.add(cn(0).translateX((10+a/2)*cos(ang/2)).translateY((10+a/2)*sin(ang/2)).rotateX(-Pi/2).rotateY(-ang/2).rotateZ(Pi))
+    this.add(cn(1).translateX((10+a/2)*cos(ang/2)).translateY(-(10+a/2)*sin(ang/2)).rotateX(Pi/2).rotateY(-ang/2))
+    if(eparams.triggs.length != 0 ) 
+        if (eparams.triggs(0) == 0)
+            cn(1).rotateZ(Pi/2)
+        else if (eparams.triggs(0) == 1)
+            cn(0).rotateZ(Pi/2)
+    cn(0).updateMatrix(); cn(1).updateMatrix()
+
+    val mod = new ElbR(a,b,10,ang,0)
+    val edges=mod.edges(0x000088)
+    this.add(edges)
+    mod.dispose
+}
+
+class HConnection (val mcon : Int, val otherId : Int, val otherCon : Int) extends js.Object {}
+
+class SchemeEntityParams () extends js.Object {
+	var hsystem : String = "_"
+    var connected : js.Array[HConnection]= js.Array[HConnection]()
+    var placement : js.UndefOr[Vector3] = js.undefined                          
+    var ins : Double = 0
+	var dims : js.Array[Double] = js.Array[Double]()
+	var triggs : js.Array[Int] = js.Array[Int]()
+}
+
+

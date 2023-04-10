@@ -227,38 +227,45 @@ class RedCCDraft(m:RedCC) extends Draft(m) {
  //   val model = model.asInstanceOf[RedCC]
     
    import Draft._
+   val segs = BGeometry.segments
     def draw(ctx : Context2d){
         implicit val mctx=ctx
-		RichContext.ctx=ctx
         ctx.save()
         beginDraw(ctx)
          //front
         ctx.lineWidth=Draft.thinlineWidth
         ctx.beginPath()
         ctx.scale(1,-1)
-        ctx.translate(0,vsz/4)
-        trianglesVisible(Vec(0,0,1),m.cn.pts)
+		ctx.translateS(0,-model.h/2)
+		ctx.lineWidth=Draft.lineWidth
+        ctx.polygon(model.cn.tophalf.map(_.xz))
+        ctx.polygon(model.fcb.tophalf.map(_.xz))
+        ctx.polygon(model.fct.tophalf.map(_.xz))
         ctx.stroke()
-//        Dim.hor(Vec(10,0),Vec(0,10),10,10)
- /*       val f=m.cn.front
-        ctx.polygon(f)
-        ctx.stroke()
-       //shadow
-        ctx.beginPath()
-        ctx.polygon(f(0),f(1),f(2),Vec(f(1).x+(f(0).x-f(1).x)/4, f(1).y-(f(1).y-f(2).y)/4))
-        ctx.fill()
         //dims
-        Dim.hor(Vec(0,0),Vec(10,10),10,10)
-        //top
-        ctx.lineWidth=Draft.lineWidth
-        ctx.translate(0,-vsz+st.y*mscl-vsz/2)
-        ctx.scale(1,-1)
+		val back = model.cn.back
+		val front = model.cn.front
+	    val shifty = if(front(0).y > back(0).y){
+						-(front(0).y - back(0).y)*mscl
+					}else 0
+		val (lrt,llt) = ((max(back(segs/2).x,front(segs/2).x)+dimspace+dimstep)*mscl, (min(back(0).x,front(0).x)-dimstep)*mscl)
+		val (ltop,lbot) = (-dimspace-shifty, model.h*mscl+dimspace+shifty)
         ctx.beginPath()
-        ctx.polygon(m.cn.top.map(_.xz))
-        ctx.polygon(m.fcb.top.map(_.xz))
-        ctx.polygon(m.fct.top.map(_.xz))
-        ctx.stroke()
-        RichContext.lscale=1*/
+		Dim.vertR( model.fct.tophalf(3).xz, 
+					model.fcb.tophalf(0).xz, lrt, 0 )
+		Dim.vertR( model.fcb.tophalf(1).xz, 
+					model.fcb.tophalf(2).xz, llt, 0 )
+		Dim.vertR( model.fcb.tophalf(2).xz, 
+					model.fct.tophalf(1).xz, llt, 0 )
+		Dim.vertR( model.fct.tophalf(1).xz, 
+					model.fct.tophalf(2).xz, llt, 0 )
+		        //h
+		Dim.horD(back(0).xz,back(segs/2).xz,ltop,0)
+		Dim.horD(front(0).xz,front(segs/2).xz,lbot,0)
+		if(back(segs/2).x > front(segs/2).x) Dim.hor(back(segs/2).xz,front(segs/2).xz,lbot,0) 
+		if(back(segs/2).x < front(segs/2).x) Dim.hor(back(segs/2).xz,front(segs/2).xz,ltop,0) 
+		if(back(0).x < front(0).x) Dim.hor(front(0).xz,back(0).xz,lbot,0) 
+		if(back(0).x > front(0).x) Dim.hor(front(0).xz,back(0).xz,ltop,0) 
         ctx.restore()
     }
 }
