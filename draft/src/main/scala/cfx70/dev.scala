@@ -18,10 +18,10 @@ object Dev{
     val vsz=1200; val hsz=1600
     val (dimspace, dimstep) = (60,50)
 	
-    def apply(m:Model)= m match {
+    def apply(m:Model,step:Int = 1)= m match {
         case rr : RedRR => Some(new RedRRDev(rr) )
-        case rc : RedRC => Some(new RedRCDev(rc) )
-        case cc : RedCC => Some(new RedCCDev(cc) )
+        case rc : RedRC => Some(new RedRCDev(rc, step) )
+        case cc : RedCC => Some(new RedCCDev(cc, step) )
 		case _ => None
     }
     
@@ -418,7 +418,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
    }
 }
 
-class RedCCDev(m:RedCC, val step : Int = 2) extends Dev(m) {
+class RedCCDev(m:RedCC, val step : Int = 3) extends Dev(m) {
    import Dev._   
    
 /*                  0  3  6  9  12

@@ -62,7 +62,7 @@ class RedRR(val a1:Double,val b1:Double,val a2:Double,val b2:Double,
                             val hfb:Double=30.0,val hft:Double=30.0 ) extends Model{
         import Model._                                          
 		def description(lang:String):String = 
-			s"Переход $a1 &times; $b1 &minus; $a2 &times; $b2 l=$h"
+			s"Переход $a1 &times; $b1 &minus; $a2 &times; $b2 L=$h"
 		
        val fcb = new BBox(a1,b1,hfb)
        val fct = new BBox(a2,b2,hft).translate(Vec(da,db,h-hft))
@@ -78,7 +78,7 @@ class RedRC(val a1:Double,val b1:Double,val d:Double,
                 val df1:Double=30.0,val df2:Double=50) extends Model{
 
         import Model._                                          
-    def description(lang:String):String = s"Переход $a1 &times; $b1 &minus; &Oslash;$d l=$h"
+    def description(lang:String):String = s"Переход $a1 &times; $b1 &minus; &Oslash;$d L=$h"
 
        val fcb = new BBox(a1,b1,df1)
        val fct = new BCylinder(d,df2).translate(Vec(da,db,h-df2))
@@ -91,7 +91,7 @@ class RedCC(val d1:Double,val d2:Double,val dc:Double,val h:Double,
 						val f1:Double,val f2:Double) extends Model{
         import Model._						
 	def description(lang:String):String = 
-			s"Переход &Oslash;$d1 &minus; &Oslash;$d2 l=$h"
+			s"Переход &Oslash;$d1 &minus; &Oslash;$d2 L=$h"
 		       
        val fcb = new BCylinder(d1,f1)
        val fct = new BCylinder(d2,f2).translate(Vec(dc,0,h-f2))

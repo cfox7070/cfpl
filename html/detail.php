@@ -6,9 +6,18 @@ function curver($fname){
 	return $fname;
 }
 $detimport = curver("./js/det.js");
-$selpoints = <<<END
+$selpointsrc = <<<END
 <span class="w3-right"> Окружность из
-	<select class="w3-select" id="pts" style="width:inherit;" onchange = "selchange(event)">
+	<select class="w3-select" id="stp" style="width:inherit;" onchange = "selchange(event)">
+	<option value="3" selected>8</option>
+	<option value="2">12</option>
+  </select>
+  точек.
+ </span>
+END;
+$selpointscc = <<<END
+<span class="w3-right"> Окружность из
+	<select class="w3-select" id="stp" style="width:inherit;" onchange = "selchange(event)">
 	<option value="4">6</option>
 	<option value="3" selected>8</option>
 	<option value="2">12</option>
@@ -16,7 +25,6 @@ $selpoints = <<<END
   точек.
  </span>
 END;
-
 		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
         if(!isset($dtype) && $_SERVER['REQUEST_URI']=='/') $dtype="redrr";
         switch ($dtype)
@@ -38,7 +46,7 @@ END;
                 $imgsrc=curver("img/red-r-c.png");
                 $detailparams="redrc-params.php";
                 $detailscript="redrc-script.js";
-                $rpoints = $selpoints;
+                $rpoints = $selpointsrc;
                 break;
 
             case "redcc":
@@ -48,7 +56,7 @@ END;
                 $imgsrc=curver("img/red-c-c.png");
                 $detailparams="redcc-params.php";
                 $detailscript="redcc-script.js";
-                $rpoints = $selpoints;
+                $rpoints = $selpointscc;
                 break;
 
         /*    case "elbrr":
@@ -208,9 +216,6 @@ END;
 	evt.currentTarget.classList.add("w3-theme-l4")
 	}
 	
-	let selchange = function(e){
-	console.log(e.target.value)
-	}
 
 </script>
 

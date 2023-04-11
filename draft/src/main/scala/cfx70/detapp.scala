@@ -40,10 +40,18 @@ object DetApp{
 
     var model:Model=null
     var animation:Boolean=true
+	
+	@JSExport
+	def setDev(st:Int=1){
+	   Dev(model,st) match {
+		   case Some(dv) => dv.draw(ctxDev)
+		   case None =>}		
+	}
         
    @JSExport
-	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double,f1:Double,f2:Double):Unit = 
-          setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2,f1,f2))
+	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double,f1:Double,f2:Double):Unit = {
+          setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2,f1,f2))		  
+		}
    @JSExport
         def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f1:Double=30,f2:Double=40):Unit = 
             setModel(new RedRC(a1,b1,d,h,da-a1/2,db-b1/2,f1,f2))
@@ -119,9 +127,6 @@ object DetApp{
                    descr.innerHTML=model.description("ru")
                    show3d()
                    Draft(model)match{ case Some(dr) => dr.draw(ctxDraft) case None =>}
-                   Dev(model) match {
-					   case Some(dv) => dv.draw(ctxDev)
-					   case None =>}
                    Mats(model,document.querySelector("#mattbl").asInstanceOf[html.Table]) match {
 					   case Some(mt) => mt.writeMats()
 					   case None =>}
