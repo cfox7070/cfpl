@@ -235,6 +235,63 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     
    import Dev._
    
+   /*          0  1  2
+    *         _2_1_2_3
+    *    /\    /\    /\         |     _
+    *   /  \  /  \  /  \        |    / \
+    *  /____\/____\/____\       |   |   ]0
+     10      0     1     4(3)
+    *  |____||____||____|
+    * 16  15 3    2 1    0
+    */
+
+   def devPoints (side : Side) : Seq[Seq[Vec]] = {
+		val bp = model.cn.bpts
+		val tp = model.cn.tpts
+		val s = BGeometry.segments
+		val dd = (Pi * model.d) / (s/step)
+		val p0 = Vec(-model.a1/2,0)
+		val p1 = Vec(model.a1/2,0)		 
+		var (l1,l2) = side match {
+			case TOP    => ( (tp(s/4)-bp(0)).mod, (tp(s/4)-bp(1)).mod )
+			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
+		}
+		val p2 = (pts(0), l1) /\ (pts(1), l2)
+		
+		def flng(p1:Vec,p2:Vec) : Seq[Vec] = Seq(p1,p2,
+							(pts(2)-pts(1),model.df1).perp + pts(2),
+							(pts(2)-pts(1),model.df1).perp + pts(1))
+		
+		def quat(p0:Vec,p1:Vec,bi:Int,ti:Int,dir:int) : Seq[Vec] = {
+			var p = p1
+			var pts = Seq(p)
+			for(i <- 1 to s/4/step){
+				val l = (tp(ti+i*step*dir)-bp(bi)).mod
+				p = (p,dd) /\ (p0,l)
+				pts :+= p
+			}
+			val l1 = (pts.last - ((bp(bi+1)-bp(bi))*0.5 + bp(bi))).mod
+			pts :+= (pts.last, l1 ) /\ (p0, model.b1/2)
+			pts
+		}
+		var mpts = Seq(flng(p0,p1))
+		var q = side match {
+			case TOP    => quat(p1,p2,1,s/4,1)
+			case BOTTOM => quat(p1,p2,3,s*3/4,1)
+			}
+		mpts :+= q
+		mpts :+= flng(p1,q.last)
+		q = side match {
+			case TOP    => quat(p0,p2,0,s/4,-1)
+			case BOTTOM => quat(p0,p2,2,s*3/4,-1)
+			}
+		mpts :+= q
+		mpts :+= flng(p0,q.last)
+		mpts
+   }
+   
+   
+   
    /*    9_8_7_2_3_4_5
     *    /\    /\    /\         |     _
     *   /  \  /  \  /  \        |    / \
@@ -244,7 +301,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     * 16  15 11  12 13  14
     */
 
-   def devPoints (side : Side) : Seq[Vec] = {
+   def devPoints0 (side : Side) : Seq[Vec] = {
 		val bp = model.cn.bpts
 		val tp = model.cn.tpts
 		val s = BGeometry.segments
