@@ -256,15 +256,15 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 			case TOP    => ( (tp(s/4)-bp(0)).mod, (tp(s/4)-bp(1)).mod )
 			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
 		}
-		val p2 = (pts(0), l1) /\ (pts(1), l2)
+		val p2 = (p0, l1) /\ (p1, l2)
 		
 		def flng(p1:Vec,p2:Vec) : Seq[Vec] = Seq(p1,p2,
-							(pts(2)-pts(1),model.df1).perp + pts(2),
-							(pts(2)-pts(1),model.df1).perp + pts(1))
+							(p2-p1,model.df1).perp + p2,
+							(p2-p1,model.df1).perp + p1)
 		
-		def quat(p0:Vec,p1:Vec,bi:Int,ti:Int,dir:int) : Seq[Vec] = {
+		def quat(p0:Vec,p1:Vec,bi:Int,ti:Int,dir:Int) : Seq[Vec] = {
 			var p = p1
-			var pts = Seq(p)
+			var pts = Seq(p0,p)
 			for(i <- 1 to s/4/step){
 				val l = (tp(ti+i*step*dir)-bp(bi)).mod
 				p = (p,dd) /\ (p0,l)
@@ -290,7 +290,49 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		mpts
    }
    
-   
+    def drawDev(pts : Seq[Seq[Vec]])(implicit ctx : Context2d){
+		def flng(pts:Seq[Vec], d:Int){			
+			ctx.beginPath()
+			ctx.lineWidth=Dev.thinlineWidth
+			ctx M pts(0) L pts(1)
+			ctx.stroke()
+			ctx.beginPath()
+			ctx.lineWidth = Dev.lineWidth
+			ctx M pts(1) L pts(2)  L pts(3) L pts(0)
+			ctx.stroke()
+			Dim.tx( pts(2), pts(3), 0.5, d)
+		}
+		def quat(pts:Seq[Vec]){			
+			ctx.beginPath()
+			ctx.lineWidth = Dev.thinlineWidth
+			val s = BGeometry.segments
+			val dh : Double =1/(s/4/step+1)
+			var dhh = dh
+			ctx M pts(0) L pts(1)  
+			Dim.tx( pts(0), pts(1), dhh, -1)
+			for(i <- 2 to s/4/step+1){
+				 ctx M pts(0)  L pts(i)	
+				 dhh = dhh + dh
+				 Dim.tx( pts(0), pts(i), dhh, -1)
+			}	
+			ctx.stroke()
+			ctx.beginPath()
+			ctx.lineWidth = Dev.lineWidth
+			ctx M pts(1)
+			for(i <- 2 to s/4/step+1) ctx L pts(i)		
+			ctx L pts.last
+			Dim.tx( pts(pts.size-2), pts(pts.size-1), 0.5, 0)
+			ctx.stroke()
+		}
+		
+		flng(pts(0),0)
+		/*quat(pts(1))
+		flng(pts(2),1)
+		quat(pts(3))
+		flng(pts(4),-1)
+		Dim.ld( pts(1)(1), pts(1)(2), 50, 0, 0.1)  */
+		
+   }  
    
    /*    9_8_7_2_3_4_5
     *    /\    /\    /\         |     _
@@ -301,7 +343,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     * 16  15 11  12 13  14
     */
 
-   def devPoints0 (side : Side) : Seq[Vec] = {
+ /*  def devPoints0 (side : Side) : Seq[Vec] = {
 		val bp = model.cn.bpts
 		val tp = model.cn.tpts
 		val s = BGeometry.segments
@@ -361,7 +403,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 	   pts
    }
       
-   def drawDev(pts : Seq[Vec])(implicit ctx : Context2d){
+   def drawDev0(pts : Seq[Vec])(implicit ctx : Context2d){
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
 		ctx M pts(0) L pts(1)
@@ -399,7 +441,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		Dim.ld( pts(2), pts(3), 50, 0, 0.1)  
 		
    }
-   
+ */  
    def drawLetter(ltr : String, x : Double, y : Double, h : String)(implicit ctx : Context2d){
 		ctx.save()
 		ctx.translate(x, y)
@@ -428,13 +470,15 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 
    }
   
-   def maxminY(pts : Seq[Vec]) = {
+   def maxminY(pts : Seq[Seq[Vec]]) = {
 	   val m = (v1:Vec, v2:Vec) => {
 		  val mx = if(v1.x>v2.y) v1.x else v2.y
 		  val mn = if(v1.y<v2.y) v1.y else v2.y
 		  Vec(mx,mn)
 	   }
-	   pts.foldLeft(Vec(0,0))(m(_, _))
+	   var v =Vec(0,0)
+	   for (pp <- pts) v = m(v, pp.foldLeft(Vec(0,0))(m(_, _)))
+	   v
    }
          
     def draw(ctx : Context2d){
@@ -448,7 +492,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		val sclb = figH / (mmb.x - mmb.y) 
 		mscl = sclt min sclb
 		ctx.save()
-		val dst = dist(ptst(2), ptst(3),0.1)
+		val dst = dist(ptst(1)(1), ptst(1)(2),0.1)
 		val sdia = "%1d".format((dst*12/Pi).round)
 		val sdst = "%.1f".format(dst) 
 		val sld1 = "%1d".format(((m.d -5)*Pi).round)	
