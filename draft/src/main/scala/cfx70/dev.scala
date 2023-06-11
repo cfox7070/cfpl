@@ -470,19 +470,24 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 
    }
   
-   def maxminY(pts : Seq[Seq[Vec]]) = {
-	   val m = (v1:Vec, v2:Vec) => {
-		  val mx = if(v1.x>v2.y) v1.x else v2.y
-		  val mn = if(v1.y<v2.y) v1.y else v2.y
-		  Vec(mx,mn)
-	   }
-	   var v =Vec(0,0)
-	   for (pp <- pts) v = m(v, pp.foldLeft(Vec(0,0))(m(_, _)))
-	   v
-   }
          
     def draw(ctx : Context2d){
 		implicit val mctx =ctx
+	   def maxminY(pts : Seq[Seq[Vec]]) = {
+		   val m = (v1:Vec, v2:Vec) => {
+			  val mx = if(v1.x > v2.y) v1.x else v2.y
+			  val mn = if(v1.y < v2.y) v1.y else v2.y
+			  Vec(mx,mn)
+		   }
+		   var v =Vec(0,0)
+		   for (pp <- pts) {
+		    val fpp = pp.foldLeft(Vec(0,0))(m(_, _))
+			val mx = if(v.x > fpp.x) v.x else fpp.x
+			val mn = if(v.y < fpp.y) v.y else fpp.y
+			v = Vec(mx,mn)
+			}
+		   v
+	   }
 		val ptst = devPoints(TOP)
 		val ptsb = devPoints(BOTTOM)
 		val mmt = maxminY(ptst)
