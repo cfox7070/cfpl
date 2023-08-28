@@ -326,8 +326,8 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		}
 		
 		flng(pts(0),0)
-		/*quat(pts(1))
-		flng(pts(2),1)
+		quat(pts(1))
+		/*flng(pts(2),1)
 		quat(pts(3))
 		flng(pts(4),-1)
 		Dim.ld( pts(1)(1), pts(1)(2), 50, 0, 0.1)  */
