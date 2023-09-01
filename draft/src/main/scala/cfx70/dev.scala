@@ -257,6 +257,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
 		}
 		val p2 = (p0, l1) /\ (p1, l2)
+		///println(s"p2=$p2")
 		
 		def flng(p1:Vec,p2:Vec) : Seq[Vec] = Seq(p1,p2,
 							(p2-p1,model.df1).perp + p2,
@@ -264,10 +265,11 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		
 		def quat(p0:Vec,p1:Vec,bi:Int,ti:Int,dir:Int) : Seq[Vec] = {
 			var p = p1
-			var pts = Seq(p0,p)
+			var pts = Seq(p0,p1)
 			for(i <- 1 to s/4/step){
 				val l = (tp(ti+i*step*dir)-bp(bi)).mod
 				p = (p,dd) /\ (p0,l)
+				println(s"p=$p")
 				pts :+= p
 			}
 			val l1 = (pts.last - ((bp(bi+1)-bp(bi))*0.5 + bp(bi))).mod
@@ -469,8 +471,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		ctx.restore()
 
    }
-  
-         
+           
     def draw(ctx : Context2d){
 		implicit val mctx =ctx
 	   def maxminY(pts : Seq[Seq[Vec]]) = {
