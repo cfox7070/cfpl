@@ -15,7 +15,7 @@ class Vec(val crds:Vector[Double]){
 
     def this(ncrds:Double*){ this(ncrds.toVector) }
     
-    override def toString()=crds.mkString("Vec(",",",")")
+    override def toString()=crds.map((a:Double) => f"$a%.2f").mkString("V(",",",")")
 
     override def equals(that: Any): Boolean =    //change
         that match {
@@ -84,6 +84,8 @@ class Vec(val crds:Vector[Double]){
                             (ang,cp.normalize)
                         }
                     }
+     def dist(v2:Vec) : Double = (v2 - this).mod
+     def <->(v2:Vec) = dist(v2)
     
     def toHmg:Vec = { crds.length match {
 			case 4 => this

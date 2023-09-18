@@ -14,6 +14,11 @@ object Side extends Enumeration {
 	val TOP, BOTTOM, LEFT, RIGHT, CENTER, MIDDLE = Value
 }
 
+object Ordinal extends Enumeration {
+	type Ordinal = Value
+	val FIRST, SECOND, THIRD, FORTH = Value
+}
+
 object CommonHelpers {
 	
 	implicit def vec2vec3(pt: Vec)=new Vector3(pt.x,pt.y,pt.z)

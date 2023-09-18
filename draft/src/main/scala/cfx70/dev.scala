@@ -244,206 +244,105 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     *  |____||____||____|
     * 16  15 3    2 1    0
     */
+    
+   class HalfDev(mp : BRCRed#Half){
+	   val segments = BGeometry.segments
+	   val dd = (Pi * (model.d +5)) / (segments/step) //inscribe-owterscribe???
+	   val pl = Vec(-model.a1/2,0)
+	   val pr = Vec(model.a1/2,0)
+	   val pc = (pl,mp.pl <-> mp.pc) /\ (pr,mp.pr <-> mp.pc)
+	   private var lastP = pc
+	   val left = for((p,ind) <- mp.left.zipWithIndex if ind!=0 && ind % step == 0) yield {
+						val np = (pl,mp.pl <-> p) /\ (lastP,dd)
+						lastP = np
+						np						
+					}
+	   val pll = (pl,mp.pl <-> mp.pll) /\ (left.last,mp.left.last <-> mp.pll)	
+	   
+	   lastP = pc
+	   val right = for((p,ind) <- mp.right.zipWithIndex if  ind!=0 && ind % step == 0) yield {
+						val np = (lastP,dd) /\ (pr,mp.pr <-> p)
+						lastP = np
+						np						
+					}
+	   val prr = (right.last,mp.right.last <-> mp.prr) /\ (pr,mp.pr <-> mp.prr)	
 
-   def devPoints (side : Side) : Seq[Seq[Vec]] = {
-		val bp = model.cn.bpts
-		val tp = model.cn.tpts
-		val s = BGeometry.segments
-		val dd = (Pi * model.d) / (s/step)
-		val p0 = Vec(-model.a1/2,0)
-		val p1 = Vec(model.a1/2,0)		 
-		var (l1,l2) = side match {
-			case TOP    => ( (tp(s/4)-bp(0)).mod, (tp(s/4)-bp(1)).mod )
-			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
-		}
-		val p2 = (p0, l1) /\ (p1, l2)
-		///println(s"p2=$p2")
-		
-		def flng(p1:Vec,p2:Vec) : Seq[Vec] = Seq(p1,p2,
+	   val (flC, flL, flR) = (flng(pl,pr), flng(pll,pl), flng(pr,prr) )
+	   
+	   private def flng(p1:Vec,p2:Vec) : Seq[Vec] = Seq(p1,p2,
 							(p2-p1,model.df1).perp + p2,
 							(p2-p1,model.df1).perp + p1)
-		
-		def quat(p0:Vec,p1:Vec,bi:Int,ti:Int,dir:Int) : Seq[Vec] = {
-			var p = p1
-			var pts = Seq(p0,p1)
-			for(i <- 1 to s/4/step){
-				val l = (tp(ti+i*step*dir)-bp(bi)).mod
-				p = (p,dd) /\ (p0,l)
-				println(s"p=$p")
-				pts :+= p
-			}
-			val l1 = (pts.last - ((bp(bi+1)-bp(bi))*0.5 + bp(bi))).mod
-			pts :+= (pts.last, l1 ) /\ (p0, model.b1/2)
-			pts
-		}
-		var mpts = Seq(flng(p0,p1))
-		var q = side match {
-			case TOP    => quat(p1,p2,1,s/4,1)
-			case BOTTOM => quat(p1,p2,3,s*3/4,1)
-			}
-		mpts :+= q
-		mpts :+= flng(p1,q.last)
-		q = side match {
-			case TOP    => quat(p0,p2,0,s/4,-1)
-			case BOTTOM => quat(p0,p2,2,s*3/4,-1)
-			}
-		mpts :+= q
-		mpts :+= flng(p0,q.last)
-		mpts
-   }
-   
-    def drawDev(pts : Seq[Seq[Vec]])(implicit ctx : Context2d){
-		def flng(pts:Seq[Vec], d:Int){			
-			ctx.beginPath()
+
+	   def draw(implicit ctx : Context2d) {
+		   	//flanges bottom
+		   	ctx.beginPath()
 			ctx.lineWidth=Dev.thinlineWidth
-			ctx M pts(0) L pts(1)
+			ctx M flL(0) L flC(0) L flR(0) L flR(1)
 			ctx.stroke()
 			ctx.beginPath()
 			ctx.lineWidth = Dev.lineWidth
-			ctx M pts(1) L pts(2)  L pts(3) L pts(0)
+			ctx M flL(1) L flL(2)  L flL(3) L flL(0)
+			ctx M flC(1) L flC(2)  L flC(3) L flC(0)
+			ctx M flR(1) L flR(2)  L flR(3) L flR(0)
 			ctx.stroke()
-			Dim.tx( pts(2), pts(3), 0.5, d)
-		}
-		def quat(pts:Seq[Vec]){			
+			Dim.tx( flL(2), flL(3), 0.5, 0)
+			Dim.tx( flC(2), flC(3), 0.5, 0)
+			Dim.tx( flR(2), flR(3), 0.5, 0)
+			//left
+			val f = makeFlipper(0.25,0.5,0.75)
 			ctx.beginPath()
 			ctx.lineWidth = Dev.thinlineWidth
-			val s = BGeometry.segments
-			val dh : Double =1/(s/4/step+1)
-			var dhh = dh
-			ctx M pts(0) L pts(1)  
-			Dim.tx( pts(0), pts(1), dhh, -1)
-			for(i <- 2 to s/4/step+1){
-				 ctx M pts(0)  L pts(i)	
-				 dhh = dhh + dh
-				 Dim.tx( pts(0), pts(i), dhh, -1)
-			}	
-			ctx.stroke()
+			ctx M pl L pc 
+			ctx.stroke() 
+			Dim.tx( pl, pc, f(), 1)
+			for(p <- left){
+				ctx M pl L p 
+				ctx.stroke() 
+			    Dim.tx( pl, p, f(), 1)
+			}
+		//	ctx.stroke()
 			ctx.beginPath()
 			ctx.lineWidth = Dev.lineWidth
-			ctx M pts(1)
-			for(i <- 2 to s/4/step+1) ctx L pts(i)		
-			ctx L pts.last
-			Dim.tx( pts(pts.size-2), pts(pts.size-1), 0.5, 0)
+			ctx M pc
+			for(p <- left) ctx L p	
+			ctx M pll L left.last	
 			ctx.stroke()
+			Dim.tx(pll, left.last, 0.5, 0)
+			//right
+			ctx.beginPath()
+			ctx.lineWidth = Dev.thinlineWidth
+			ctx M pr L pc 
+			ctx.stroke() 
+			Dim.tx( pr, pc, f(), -1)
+			for(p <- right){
+				ctx M pr L p 
+				ctx.stroke() 
+			    Dim.tx( pr, p, f(), -1)
+			}
+		//	ctx.stroke()
+			ctx.beginPath()
+			ctx.lineWidth = Dev.lineWidth
+			ctx M pc
+			for(p <- right) ctx L p		
+			ctx M prr L right.last
+			ctx.stroke()
+			Dim.tx(prr, right.last, 0.5, 0)
+	
+			Dim.ld( pc, left.head, 50, 0, 0.1)		
+	   }
+	   
+	   private def toSeq = left ++ right ++ Seq(pll, pl, pr, prr) ++ flL ++ flR ++ flC
+	   private def makeFlipper(a:Double,b:Double, c:Double) = {
+		  var count = c
+		  val cnt = () => {if(count==a) count = b else if(count == b) count = c else count = a; count}
+		  cnt
 		}
-		
-		flng(pts(0),0)
-		quat(pts(1))
-		/*flng(pts(2),1)
-		quat(pts(3))
-		flng(pts(4),-1)
-		Dim.ld( pts(1)(1), pts(1)(2), 50, 0, 0.1)  */
-		
-   }  
-   
-   /*    9_8_7_2_3_4_5
-    *    /\    /\    /\         |     _
-    *   /  \  /  \  /  \        |    / \
-    *  /____\/____\/____\       |   |   ]0
-     10      0     1     6
-    *  |____||____||____|
-    * 16  15 11  12 13  14
-    */
-
- /*  def devPoints0 (side : Side) : Seq[Vec] = {
-		val bp = model.cn.bpts
-		val tp = model.cn.tpts
-		val s = BGeometry.segments
-		val dd = (Pi * model.d) / (s/step)
-		var pts = Seq( Vec(-model.a1/2,0), Vec(model.a1/2,0) )
-		var (l1,l2) = side match {
-			case TOP    => ( (tp(s/4)-bp(0)).mod, (tp(s/4)-bp(1)).mod )
-			case BOTTOM => ( (tp(3*s/4)-bp(2)).mod, (tp(3*s/4)-bp(3)).mod )
-		}
-		pts :+= (pts(0), l1) /\ (pts(1), l2)
-		val (pnr, flr) = side match {
-			case TOP    =>(Map( (s/4 + step) -> 2, 
-							    (s/4 + 2*step) -> 3, 
-							    (s/4 + 3*step) -> 4),
-							    (i : Int) => (tp(i)-bp(1)).mod
-						)
-			case BOTTOM => (Map( (3*s/4 + step) -> 2, 
-				                 (3*s/4 + 2*step) -> 3, 
-				                 (3*s/4 + 3*step) -> 4),
-				                 (i : Int) => (tp(i)-bp(3)).mod
-						)
-		}
-		for( (i,j) <- pnr ) pts :+= (pts(j), dd) /\ (pts(1), flr(i) )
-		l1 = side match {
-			case TOP    => (tp(s/2) - ((bp(2)-bp(1))*0.5 + bp(1))).mod
-			case BOTTOM => (tp(0) - ((bp(0)-bp(3))*0.5 + bp(3))).mod
-		}
-		pts :+= (pts(5), l1 ) /\ (pts(1), model.b1/2)
-		val (pnl, fll) = side match {
-			case TOP    =>(Map( (s/4 - step) -> 2,
-					            (s/4 - 2*step) -> 7,
-					            (s/4 - 3*step) -> 8 ),
-							    (i : Int) => (tp(i)-bp(0)).mod
-						)
-			case BOTTOM => (Map( (3*s/4 - step) -> 2, 
-				                 (3*s/4 - 2*step) -> 7, 
-				                 (3*s/4 - 3*step) -> 8 ),
-				                 (i : Int) => (tp(i)-bp(2)).mod
-						)
-		}
-		for( (i,j) <- pnl )	pts :+= (pts(0),fll(i) ) /\ (pts(j),dd)
-		l1 = side match {
-			case TOP    => (tp(0) - ((bp(3)-bp(0))*0.5 + bp(0))).mod
-			case BOTTOM => (tp(s/2) - ((bp(1)-bp(2))*0.5 + bp(2))).mod
-		}
-		pts :+= (pts(0), model.b1/2) /\ (pts(9), l1 )
-	 
-		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(0)
-		 pts :+= (pts(1)-pts(0),model.df1).perp + pts(1)
-
-		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(1)
-		 pts :+= (pts(6)-pts(1),model.df1).perp + pts(6)
-
-		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(0)
-		 pts :+= (pts(0)-pts(10),model.df1).perp + pts(10)
-
-	   pts
-   }
-      
-   def drawDev0(pts : Seq[Vec])(implicit ctx : Context2d){
-		ctx.beginPath()
-        ctx.lineWidth = Dev.lineWidth
-		ctx M pts(0) L pts(1)
-		ctx M pts(2) L pts(3) L pts(4) L pts(5) L pts(6) L pts(1) 
-		ctx M pts(2) L pts(7) L pts(8) L pts(9) L pts(10) L pts(0)
-		
-		ctx M pts(0) L pts(11) L pts(12) L pts(1)
-		ctx M pts(1) L pts(13) L pts(14) L pts(6)
-		ctx M pts(10) L pts(16) L pts(15) L pts(0) 
-		ctx.stroke()
-		
-		ctx.beginPath()
-        ctx.lineWidth=Dev.thinlineWidth
-        ctx M pts(0) L pts(2) M pts(0) L pts(7) M pts(0) L pts(8) M pts(0) L pts(9)
-        ctx M pts(1) L pts(2) M pts(1) L pts(3) M pts(1) L pts(4) M pts(1) L pts(5)
-		ctx.stroke()
-		//dims
-		Dim.tx( pts(15), pts(16), 0.5, -1)	   
-		Dim.tx( pts(13), pts(14), 0.5,  1)	   
-		Dim.tx( pts(11), pts(12), 0.5,  0)	   
-
-		Dim.tx( pts(9), pts(10), 0.5, -1)	   
-		Dim.tx( pts(5), pts(6), 0.5, 1)
-		//9872
-		Dim.tx( pts(0), pts(9), 0.2, -1)	   
-		Dim.tx( pts(0), pts(8), 0.4, -1)	   
-		Dim.tx( pts(0), pts(7), 0.6, -1)	   
-		Dim.tx( pts(0), pts(2), 0.8, -1)	   
-		//2345
-		Dim.tx( pts(1), pts(2), 0.2, -1)	   
-		Dim.tx( pts(1), pts(3), 0.4, -1)	   
-		Dim.tx( pts(1), pts(4), 0.6, -1)	   
-		Dim.tx( pts(1), pts(5), 0.8, -1)
-		
-		Dim.ld( pts(2), pts(3), 50, 0, 0.1)  
-		
-   }
- */  
+	   
+	   def topmostY = toSeq.foldLeft(0.0)((h : Double,v : Vec) => if(h > v.y) h else v.y)
+	   def lowestY = toSeq.foldLeft(0.0)((h : Double,v : Vec) => if(h < v.y) h else v.y)	
+	   def devH = topmostY - lowestY	
+	}
+  
    def drawLetter(ltr : String, x : Double, y : Double, h : String)(implicit ctx : Context2d){
 		ctx.save()
 		ctx.translate(x, y)
@@ -455,7 +354,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		ctx.restore()
    }
    
-   def drawSleeve(ctx : Context2d){
+/*   def drawSleeve(ctx : Context2d){
 		val ls = Pi * (m.d -5)
 		ctx.beginPath()
         ctx.lineWidth = Dev.lineWidth
@@ -470,57 +369,38 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 		ctx.fillText(s"Ø${m.d -5}",0,0)
 		ctx.restore()
 
-   }
+   }*/
            
     def draw(ctx : Context2d){
-		implicit val mctx =ctx
-	   def maxminY(pts : Seq[Seq[Vec]]) = {
-		   val m = (v1:Vec, v2:Vec) => {
-			  val mx = if(v1.x > v2.y) v1.x else v2.y
-			  val mn = if(v1.y < v2.y) v1.y else v2.y
-			  Vec(mx,mn)
-		   }
-		   var v =Vec(0,0)
-		   for (pp <- pts) {
-		    val fpp = pp.foldLeft(Vec(0,0))(m(_, _))
-			val mx = if(v.x > fpp.x) v.x else fpp.x
-			val mn = if(v.y < fpp.y) v.y else fpp.y
-			v = Vec(mx,mn)
-			}
-		   v
-	   }
-		val ptst = devPoints(TOP)
-		val ptsb = devPoints(BOTTOM)
-		val mmt = maxminY(ptst)
-		val mmb = maxminY(ptsb)
-		val figH = vsz/2 - 2 * (dimspace/*+dimstep*/)
-		val sclt = figH / (mmt.x - mmt.y) 
-		val sclb = figH / (mmb.x - mmb.y) 
-		mscl = sclt min sclb
-		ctx.save()
-		val dst = dist(ptst(1)(1), ptst(1)(2),0.1)
+	  implicit val mctx =ctx
+	  val top = new HalfDev( model.cn.halfA)
+	  val bottom = new HalfDev( model.cn.halfB)
+	  val figH = vsz/2 - 2 * (dimspace) - dimstep
+	  mscl = figH/top.devH min figH/bottom.devH
+	  ctx.save()
+/*		val dst = dist(ptst(1)(1), ptst(1)(2),0.1)
 		val sdia = "%1d".format((dst*12/Pi).round)
 		val sdst = "%.1f".format(dst) 
 		val sld1 = "%1d".format(((m.d -5)*Pi).round)	
 		val sld2 = "%1d".format((dst*12).round)				
 		val nfo = s"Ø${m.d -5} --- l = $sld1"
-		val nfo1 =s"$sdst x 12 = $sld2 --- Ø$sdia"
+		val nfo1 =s"$sdst x 12 = $sld2 --- Ø$sdia"*/
 		beginDraw(ctx)
-        ctx.translate(-hsz/2,vsz/2-40)
+/*        ctx.translate(-hsz/2,vsz/2-40)
         ctx.scale(1,-1)
 		ctx.fillStyle = "#000"
 		ctx.fillText(nfo,0,0)
- 		ctx.fillText(nfo1,0,40)
-       ctx.translate(hsz/2,vsz/2-40)
-        ctx.scale(1,-1)
+ 		ctx.fillText(nfo1,0,40)*/
+//        ctx.translate(hsz/2,vsz/2-40)
+//        ctx.scale(1,-1)
 		drawLetter("A",0,figH+32,"3em")
-        if(mmt.y < 0) ctx.translateS(0,-mmt.y)
-        drawDev(ptst)
-        if(mmt.y < 0) ctx.translateS(0,mmt.y)
+        if(top.lowestY < 0) ctx.translateS(0,-top.lowestY)
+        top.draw(ctx)
+        if(top.lowestY < 0) ctx.translateS(0,top.lowestY)
         ctx.translate(0,-(vsz/2-30))
 		drawLetter("B",0,figH+32,"3em")
-       if(mmb.y < 0) ctx.translateS(0,-mmb.y)
-       drawDev(ptsb)
+        if(bottom.lowestY < 0) ctx.translateS(0,-bottom.lowestY)
+        bottom.draw(ctx)
 		ctx.restore()
    }
 }

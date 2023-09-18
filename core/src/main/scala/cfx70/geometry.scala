@@ -63,6 +63,11 @@ object Plane3{
 
 }
 
+object Line3 {
+	def apply(p1:Vec,p2:Vec) = new Line3(p1,p2)
+    def point(p1:Vec,p2:Vec,t:Double) : Vec = p1+(p2-p1)*t
+}
+
 class Line3(val p1:Vec,val p2:Vec) extends LineIntersectable with WireframeHelper {
         val pts=jsA(p1,p2)
         val v=p2-p1
@@ -253,7 +258,30 @@ class BRCRed(val a1:Double,val b1:Double,
     def intersect(l:Line3) : Option[Vec] = None  
     
     def tophalf=Seq(bpts(3),tpts(0),tpts(segments/2-1),bpts(2))
-
+    
+    class Half( val pl : Vec,
+				val pr : Vec,
+				val pll : Vec,
+				val prr : Vec,
+				val pc : Vec,
+				val left : Seq[Vec],
+				val right : Seq[Vec])
+				    
+    def halfA : Half = new Half( pl = bpts(0),
+								  pr = bpts(1),
+								  pll = Line3.point(bpts(0),bpts(3),0.5),
+								  prr = Line3.point(bpts(1),bpts(2),0.5),
+								  pc = tpts(segments/4),
+								  left = tpts.slice(0,segments/4+1).reverse,
+								  right = tpts.slice(segments/4,segments/2+1) )
+				  
+    def halfB : Half = new Half( pl = bpts(2),
+								  pr = bpts(3),
+								  pll = Line3.point(bpts(2),bpts(1),0.5),
+								  prr = Line3.point(bpts(3),bpts(4),0.5),
+								  pc = tpts(segments*3/4),
+								  left = tpts.slice(segments/2,segments*3/4+1).reverse,
+								  right = tpts.slice(segments*3/4,segments+1) )
 }
                                      
 class BPyramid(val a1:Double,val b1:Double,
