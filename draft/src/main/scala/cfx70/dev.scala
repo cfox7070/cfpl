@@ -247,7 +247,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
     
    class HalfDev(mp : BRCRed#Half){
 	   val segments = BGeometry.segments
-	   val dd = (Pi * (model.d +5)) / (segments/step) //inscribe-owterscribe???
+	   val dd = (Pi * (model.d)) / (segments/step) //inscribe-owterscribe???
 	   val pl = Vec(-model.a1/2,0)
 	   val pr = Vec(model.a1/2,0)
 	   val pc = (pl,mp.pl <-> mp.pc) /\ (pr,mp.pr <-> mp.pc)
