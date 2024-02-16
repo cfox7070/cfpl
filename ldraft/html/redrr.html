@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)https://hvac.cfx70.ru/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Развертка перехода с прямоугольника на прямоугольник. </title>
+	<meta name="description" content="Построение развертки перехода с прямоугольного на прямоугольное сечение по заданным размерам онлайн.">
+    <style>
+            body { margin: 0; }
+            .container{position:relative;
+                       }
+            .det-label {font-family:"Lucida Console", Monaco, monospace;
+                        font-style: italic;
+                        font-size: 18px;
+                    }
+            canvas {
+                        width: 100%;
+                        }
+            .x11Lgray { background-color : #D3D3D3!important;}
+    </style>
+  <link rel="icon" href="https://hvac.cfx70.ru/favicon.ico" type="image/png">
+  <link rel="stylesheet" href="./redrr_files/w3.css">
+  <link rel="stylesheet" href="./redrr_files/w3-theme-blue-grey.css">
+</head>
+<body>
+<div class="w3-container">
+<div class="w3-bar w3-center w3-theme"> 
+	<a href="https://hvac.cfx70.ru/detail.php?type=redrr" class="w3-button">
+		 <img src="./redrr_files/redrr-icon.png" class="" alt="переход с прямоугольного на прямоугольное" style="width:58px;height:41px;"> </a>
+	<a href="https://hvac.cfx70.ru/detail.php?type=redrc" class="w3-button">
+		 <img src="./redrr_files/redrc-icon.png" class="w3-hover-grayscale" alt="переход с прямоугольного на круглое" style="width:58px;height:41px;"> </a>
+	<a href="https://hvac.cfx70.ru/detail.php?type=redcc" class="w3-button">
+		 <img src="./redrr_files/redcc-icon.png" class="w3-hover-grayscale" alt="переход с круглого на круглое" style="width:58px;height:41px;"> </a>
+</div>
+<p></p>
+<div class="w3-container">
+
+<div class="w3-row">
+
+	<div class="w3-third">
+	  <!--div class="w3-row"-->
+		  <div class=" w3-container"> <!--params-->
+				<img src="./redrr_files/red-r-ra.png" style="width:100%" alt="Развертка" перехода="" с="" прямоугольника="" на="" прямоугольник.="">
+		  </div>
+		  
+		  <div class=" w3-container"> 
+				<div class="w3-row">
+    <div class="w3-half">
+        <table class="w3-table w3-bordered w3-theme-d2">
+            <tbody><tr>
+            <td>a1</td>
+            <td><input id="a1" class="w3-input w3-border dims-input0" type="number" value="400" step="50"></td>
+            </tr>
+            <tr>
+            <td>b1</td>
+            <td><input id="b1" class="w3-input w3-border dims-input0" type="number" value="400" step="50"></td>
+            </tr>
+            <tr>
+            <td>a2</td>
+            <td><input id="a2" class="w3-input w3-border dims-input0" type="number" value="250" step="50"></td>
+            </tr>
+            <tr>
+            <td>b2</td>
+            <td><input id="b2" class="w3-input w3-border dims-input0" type="number" value="250" step="50"></td>
+            </tr>
+            <tr>
+            <td>h</td>
+            <td><input id="h" class="w3-input w3-border dims-input0" type="number" value="300" step="50"></td>      
+            </tr>
+        </tbody></table>
+    </div>
+    <div class="w3-half">
+        <table class="w3-table w3-bordered w3-theme-d2">
+            <tbody><tr>
+            <td>da</td>
+            <td><input id="da" class="w3-input w3-border dims-input0" type="number" value="175" step="5"></td>
+            </tr>
+            <tr>
+            <td>db</td>
+            <td><input id="db" class="w3-input w3-border dims-input0" type="number" value="75" step="5"></td>
+            </tr>
+            <tr>
+            <td>f1</td>
+            <td><input id="f1" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
+            </tr>
+            <tr>
+            <td>f2</td>
+            <td><input id="f2" class="w3-input w3-border dims-input0" type="number" value="30" step="5"></td>      
+            </tr>
+        </tbody></table>
+    </div>
+</div>
+    
+		  </div>
+	  <!--/div-->
+	</div>
+
+	<div class="w3-twothird">
+		
+		<div class="w3-container"><!--canvas-->
+			<p id="descr" class="w3-large w3-center det-label">Переход 400 × 400 − 250 × 250 l=300</p>
+			<div class="w3-bar w3-theme">
+				<button class="w3-bar-item w3-button tablink w3-theme-l4" onclick="openCity(event,&#39;3d&#39;)">Модель</button>
+				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,&#39;draft&#39;)">Эскиз</button>
+				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,&#39;dev&#39;)">Развертка</button>
+				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,&#39;mat&#39;)">Материалы</button>
+			</div>
+
+			<div id="3d" class="w3-container view">
+			<canvas class="w3-border" id="canvas3d" width="1600" height="1200" data-engine="three.js r140" style="touch-action: none;"></canvas>
+			<a id="download" download="" href="https://hvac.cfx70.ru/" onclick="download_model(this);">Сохранить</a>
+			<span class="w3-right"> можно покрутить</span>
+			</div>
+
+			<div id="draft" class="w3-container view" style="display:none">
+			<canvas class="w3-border" id="canvasdraft" width="1600" height="1200"></canvas>
+			<a id="download" download="" href="https://hvac.cfx70.ru/" onclick="download_draft(this);">Сохранить</a>
+			</div>
+
+			<div id="dev" class="w3-container view" style="display:none">
+			<canvas class="w3-border" id="canvasdev" width="1600" height="1200"></canvas>
+			<a id="download" download="" href="https://hvac.cfx70.ru/" onclick="download_dev(this);">Сохранить</a>
+			</div>
+
+			<div id="mat" class="w3-container view" style="display:none">
+				<table id="mattbl" class="w3-table w3-bordered w3-theme-light"><tbody><tr> <td>Металл<!--/td--> </td><td>0.42 <!--/td--> </td><td>м<sup>2<!--/sup--><!--/td--> <!--/tr--></sup></td></tr></tbody></table> 
+			</div>
+			<p></p>
+		</div>
+	</div>
+</div>
+	<footer class="w3-container w3-theme">
+		<p class="w3-left" style="font: 12px Arial, sans-serif;">© 2023 cfx70</p>
+		<p class="w3-right">feedback: <a href="mailto:info@cfx70.ru?subject=detail">info@cfx70.ru</a></p>
+	</footer>
+
+
+<script>
+	download_draft = function(el) {
+	  let cnv = document.getElementById("canvasdraft")
+	  let image = cnv.toDataURL();
+	  el.href = image;
+	};
+	download_dev = function(el) {
+	  let cnv = document.getElementById("canvasdev")
+	  let image = cnv.toDataURL();
+	  el.href = image;
+	};
+    openCity = function(evt,viewName) {
+	let i;
+	let x = document.getElementsByClassName("view");
+	for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none"  
+	}
+	let tablinks = document.getElementsByClassName("tablink")
+	for (i = 0; i < x.length; i++) {
+		tablinks[i].classList.remove("w3-theme-l4")
+	}
+	let view = document.getElementById(viewName)
+	view.style.display = "block"
+	evt.currentTarget.classList.add("w3-theme-l4")
+ }
+</script>
+
+<script src="./redrr_files/main.js"></script>
+
+
+</div></div></body></html>
