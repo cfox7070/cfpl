@@ -1,0 +1,47 @@
+	table#details {
+		table-layout: fixed;
+	}
+	#details th{
+		vertical-align: middle;
+	}
+	col.nmb {
+		width:3em;
+	}
+	col.fnmb {
+		width:4em;
+	}
+	col.dname {
+		width:10em;
+	}
+	col.ddims {
+		width:15em;
+	}
+	col.dnote {
+		width:10em;
+	}
+	col.ctrls {
+		width:5em;
+	}
+	
+	td.nmb {
+		text-align: right;
+	}
+	
+	td.ddims {
+		width:15em;
+		text-align: left;
+		font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+		font-style:italic;
+	}
+	
+    .vtext{
+		writing-mode: vertical-rl;
+		text-orientation: mixed; 
+		padding:8px;
+	}
+	#tblbox{
+		width:100%;
+		height:300px;
+		overflow-x:auto;
+		overflow-y:auto;
+	}

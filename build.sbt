@@ -1,8 +1,8 @@
 enablePlugins(ScalaJSPlugin)
 
+ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / organization := "com.cfx"
 ThisBuild / version      := "0.1.0"
-ThisBuild / scalaVersion := "2.12.16"
-ThisBuild / organization := "cfx70"
  
 import scala.sys.process._
 import sbt.Keys.streams
@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
     libraryDependencies +="org.scalactic" %%% "scalactic" % "3.2.14",
 //    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % "test",
 	libraryDependencies += "com.lihaoyi" %%% "utest" % "0.8.1" % "test",
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.3.0",
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.7.0",
     testFrameworks += new TestFramework("utest.runner.Framework"),
     scalacOptions ++= Seq(
           "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
@@ -56,7 +56,17 @@ lazy val draft = (project in file("draft"))
     name := "draft",
    commonSettings
    )
-   
+ 
+lazy val draft2 = (project in file("draft2"))
+//  .scalaJSUseMainModuleInitializer := true
+  .dependsOn(core)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "draft2",
+   libraryDependencies += "com.raquo" %%% "laminar" % "16.0.0",
+   commonSettings
+   )
+  
 lazy val scheme = (project in file("scheme"))
   .dependsOn(core)
   .enablePlugins(ScalaJSPlugin)
