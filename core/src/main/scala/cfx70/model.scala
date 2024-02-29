@@ -21,7 +21,7 @@ object Model {
         
     def makeMeshes(mat: Material, bgeoms : BGeometry*) : Object3D = {
         val m =new Object3D
-        for (bg <- bgeoms)  m.add(new Mesh(bg.getGeometry1,mat)) 
+        for (bg <- bgeoms)  m.add(new Mesh(bg.getGeometry1(),mat)) 
         m
     }
 
@@ -43,9 +43,9 @@ abstract class Model{
         e
     }
 	
-	def dispose(){
+	def dispose() : Unit = {
         for(m <- meshes.children) m match {
-            case mm : Mesh => mm.geometry.dispose
+            case mm : Mesh => mm.geometry.dispose()
   //        case _ =>
         }
 	}

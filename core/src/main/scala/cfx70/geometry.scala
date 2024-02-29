@@ -56,7 +56,7 @@ object Plane3{
     
     def apply(a:Double,b:Double,c:Double,d:Double) : Plane3 ={
         val v = Vec(a,b,c)
-        val nn=v.normalize
+        val nn=v.normalize()
         val pp= -d/v.mod
         new Plane3(nn,pp)
     }
@@ -69,8 +69,8 @@ object Line3 {
 }
 
 class Line3(val p1:Vec,val p2:Vec) extends LineIntersectable with WireframeHelper {
-        val pts=jsA(p1,p2)
-        val v=p2-p1
+        val pts = Seq(p1,p2)
+        val v = p2-p1
         
         def point (t:Double) : Vec = p1+v*t
         
@@ -186,7 +186,7 @@ object BGeometry {
     
     def shellNormals(b:Seq[Vec], t:Seq[Vec]) : Seq[Vec] = {
         if(b.length != t.length) throw new Exception("Seqs incompartible")
-        def NN(v1 : Vec,v2 : Vec) : Vec = (v1 X v2).normalize
+        def NN(v1 : Vec,v2 : Vec) : Vec = (v1 X v2).normalize()
         (for(i <- 0 until b.length-1) yield Seq(NN( b(i+1)-b(i)   , t(i)-b(i)     ),
                                                 NN( t(i+1)-b(i+1) , b(i)-b(i+1)   ),
                                                 NN( b(i)-t(i)     , t(i+1)-t(i)   ),
@@ -204,7 +204,7 @@ object BGeometry {
     }
     def fanNormals(b:Seq[Vec], t:Seq[Vec]) : Seq[Vec] = {
         if(((t.length-1) % (b.length-1)) != 0) throw new Exception("Seqs incompartible")
-        def NN(v1 : Vec,v2 : Vec) : Vec = (v1 X v2).normalize
+        def NN(v1 : Vec,v2 : Vec) : Vec = (v1 X v2).normalize()
         val tp = (t.length-1) / (b.length-1)
         (for(i <- 0 until b.length -1) yield {
             val s = for(j <- i*tp until (i+1)*tp) yield Seq( NN( t(j+1)-b(i) , t(j)-b(i) ),
@@ -384,7 +384,7 @@ class BCone(val d1:Double,val d2:Double,val h:Double,val dd:Double = 0,val ang:D
     
     def intersect(l:Line3) : Option[Vec] = {                                                        
         val p=Plane3(l.p1,l.p2,apex)
-        val lxy=p.intersectXY.get
+        val lxy=p.intersectXY().get
         lxy.intersectXYCircle(d1/2) match {
             case Some((pp1,pp2)) =>{ 
                         val pb= if((l.p1-pp1).norm < (l.p1-pp2).norm) pp1 else pp2

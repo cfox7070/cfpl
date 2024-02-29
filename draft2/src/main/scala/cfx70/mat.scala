@@ -31,7 +31,7 @@ abstract class Mats[M <: Model] (val model : M, val t : Table) {
 class RedRRMats(m:RedRR, t:Table) extends Mats(m,t) {
  //   val model = model.asInstanceOf[RedRC]    
    import Mats._
-   def writeMats(){
+   def writeMats() : Unit = {
 	   val ar = model.area/1000000
 	   val arstr = f"<tr> <td>Металл<//td> <td>$ar%.2f <//td> <td>м<sup>2<//sup><//td> <//tr>"
 	   t.innerHTML=arstr

@@ -44,7 +44,7 @@ object Dev{
 		   }					
 	   }
 	   def perp : Vec = {
-		   val mort = p.normalize
+		   val mort = p.normalize()
 		   Vec(mort.y, -mort.x) * rad
 	   }
 	  def /\( other : PRad ) : Vec = p3c(other.p,other.rad) 		
@@ -60,9 +60,9 @@ abstract class Dev[M <: Model] (val model : M) {
    var mscl = min((vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.y),
 						(vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.z))
         
-   def draw(ctx : Context2d)
+   def draw(ctx : Context2d) : Unit
       
-   protected def beginDraw(ctx : Context2d) {
+   protected def beginDraw(ctx : Context2d) : Unit = {
         ctx.beginPath()
         ctx.fillStyle = "#ffffff"
         ctx.fillRect(0, 0, hsz, vsz)
@@ -119,7 +119,7 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 		   0, 1)
 		(fcb ++ fct).map( scl * _ )
    }
-   def drawDev(pnts : Seq[Vec],letter : String)(implicit ctx:Context2d){
+   def drawDev(pnts : Seq[Vec],letter : String)(implicit ctx:Context2d) : Unit = {
 	   
 	   def leftmost(l:Vec, r:Vec) = if(l.x < r.x) l else Vec(r.x,l.y)
 
@@ -174,7 +174,7 @@ class RedRRDev(m:RedRR) extends Dev(m) {
 		}	   
    }
    
-    def draw(ctx : Context2d){
+    def draw(ctx : Context2d) : Unit = {
 		implicit val mctx = ctx
 		ctx.save()
 		beginDraw(ctx)
@@ -273,7 +273,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 							(p2-p1,model.df1).perp + p2,
 							(p2-p1,model.df1).perp + p1)
 
-	   def draw(implicit ctx : Context2d) {
+	   def draw(implicit ctx : Context2d) : Unit = {
 		   	//flanges bottom
 		   	ctx.beginPath()
 			ctx.lineWidth=Dev.thinlineWidth
@@ -343,7 +343,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 	   def devH = topmostY - lowestY	
 	}
   
-   def drawLetter(ltr : String, x : Double, y : Double, h : String)(implicit ctx : Context2d){
+   def drawLetter(ltr : String, x : Double, y : Double, h : String)(implicit ctx : Context2d) : Unit = {
 		ctx.save()
 		ctx.translate(x, y)
 		ctx.scale(1,-1)	
@@ -371,7 +371,7 @@ class RedRCDev(m:RedRC, val step :Int = 2) extends Dev(m) {
 
    }*/
            
-    def draw(ctx : Context2d){
+    def draw(ctx : Context2d) : Unit ={
 	  implicit val mctx =ctx
 	  val top = new HalfDev( model.cn.halfA)
 	  val bottom = new HalfDev( model.cn.halfB)
@@ -450,8 +450,8 @@ class RedCCDev(m:RedCC, val step : Int = 3) extends Dev(m) {
 	   (ptsb, ptst, ptsb1, ptst1)
    }
    
-   def drawDev(ptsb : Seq[Vec],ptst : Seq[Vec],ptsb1 : Seq[Vec],ptst1 : Seq[Vec], ctx : Context2d){
-	   def ln(pts :Seq[Vec]){
+   def drawDev(ptsb : Seq[Vec],ptst : Seq[Vec],ptsb1 : Seq[Vec],ptst1 : Seq[Vec], ctx : Context2d) : Unit = {
+	   def ln(pts :Seq[Vec]) : Unit = {
 		   ctx M pts(0)
 		   for(i <- 1 until pts.size)
 			   ctx L pts(i)
@@ -463,7 +463,7 @@ class RedCCDev(m:RedCC, val step : Int = 3) extends Dev(m) {
 		  val cnt = () => {if(count==a) count = b else count = a; 1d/count.toDouble}
 		  cnt
 		}
-	   def thln(b :Seq[Vec],t :Seq[Vec]){	
+	   def thln(b :Seq[Vec],t :Seq[Vec]) : Unit = {	
 		   ctx M t(0)	   
 		   for(i <- 1 until b.size) ctx L b(i-1) L t(i)
 		   ctx.stroke()
@@ -499,7 +499,7 @@ class RedCCDev(m:RedCC, val step : Int = 3) extends Dev(m) {
 	   	   
   }
 
-	def draw(ctx : Context2d){
+	def draw(ctx : Context2d) : Unit = {
 		val (ptsb,ptst,ptsb1,ptst1) = devPoints()
 		val dst = dist(ptst(0), ptst(1), 0.1)
 		val sdia = "%1d".format((dst*12/Pi).round)

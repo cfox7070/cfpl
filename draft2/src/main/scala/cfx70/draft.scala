@@ -30,14 +30,14 @@ abstract class Draft[M <: Model] (val model : M) {
    val mscl = min((vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.y),
 						(vsz/2 - (dimspace + dimstep) * 2) /( model.whdsize.z))
    
-   def drawVisible(v:Vec,ps:Seq[Seq[Vec]])(implicit ctx : Context2d){
+   def drawVisible(v:Vec,ps:Seq[Seq[Vec]])(implicit ctx : Context2d) : Unit = {
         for(p <- ps){
            if(p.length < 3) throw new Exception("not surface")
            if((v * ((p(2)-p(1)) X (p(0)-p(1))) ) > 0) ctx.polygon(p)
         }
    }
    
-   def trianglesVisible(v:Vec,p:Seq[Vec])(implicit ctx : Context2d){
+   def trianglesVisible(v:Vec,p:Seq[Vec])(implicit ctx : Context2d) : Unit = {
         if(p.length < 3) throw new Exception("not surface")
         for(i <- 2 until p.length by 3){
            val t=Seq(p(i-2),p(i-1),p(i))
@@ -45,9 +45,9 @@ abstract class Draft[M <: Model] (val model : M) {
         }
    }
      
-   def draw(ctx : Context2d)
+   def draw(ctx : Context2d) : Unit
    
-   protected def beginDraw(ctx : Context2d) {
+   protected def beginDraw(ctx : Context2d) : Unit = {
         ctx.beginPath()
         ctx.fillStyle = "#ffffff"
         ctx.fillRect(0, 0, hsz, vsz)
@@ -61,7 +61,7 @@ abstract class Draft[M <: Model] (val model : M) {
 
 class RedRRDraft(m:RedRR) extends Draft(m) {    
    import Draft._
-    def draw(ctx : Context2d){
+    def draw(ctx : Context2d) : Unit ={
         implicit val mctx=ctx
 		val back = model.cn.back
 		val front = model.cn.front
@@ -136,7 +136,7 @@ class RedRRDraft(m:RedRR) extends Draft(m) {
 class RedRCDraft(m:RedRC) extends Draft(m) {    
    import Draft._
    val segs = BGeometry.segments
-    def draw(ctx : Context2d){
+    def draw(ctx : Context2d) : Unit = {
         implicit val mctx=ctx
 		val back = model.cn.back
 		val front = model.cn.front
@@ -228,7 +228,7 @@ class RedCCDraft(m:RedCC) extends Draft(m) {
     
    import Draft._
    val segs = BGeometry.segments
-    def draw(ctx : Context2d){
+    def draw(ctx : Context2d) : Unit = {
         implicit val mctx=ctx
         ctx.save()
         beginDraw(ctx)

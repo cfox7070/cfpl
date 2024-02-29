@@ -58,10 +58,10 @@ lazy val draft = (project in file("draft"))
    )
  
 lazy val draft2 = (project in file("draft2"))
-//  .scalaJSUseMainModuleInitializer := true
   .dependsOn(core)
   .enablePlugins(ScalaJSPlugin)
   .settings(
+    scalaJSUseMainModuleInitializer := true,
     name := "draft2",
    libraryDependencies += "com.raquo" %%% "laminar" % "16.0.0",
    commonSettings

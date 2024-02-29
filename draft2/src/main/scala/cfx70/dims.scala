@@ -80,7 +80,7 @@ abstract class Dim (val p1:Vec,val p2 : Vec,val cln : Double, val hint : Int = 0
 		)		
    }
    
-   def drawDim(pnts :  Seq[Vec], hint : Int, dtxt:String, tang :Double = 0)(implicit ctx : Context2d){
+   def drawDim(pnts :  Seq[Vec], hint : Int, dtxt:String, tang :Double = 0)(implicit ctx : Context2d) : Unit = {
 	   ctx.save()
 	   ctx.beginPath()
 	   ctx.lineWidth=Dim.lineWidth
@@ -132,7 +132,7 @@ class VertDimRev (p1:Vec,p2 : Vec, cln : Double, hint : Int = 0, prec : Double =
 class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) extends Dim(p1,p2,cln,hint,prec){
    import Dim._
    val dist =  s"%.${-log10(prec)}f".format((sqrt( (p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y) )/prec).round * prec)
-   def draw(ctx : Context2d){ 
+   def draw(ctx : Context2d) : Unit = { 
 	val p = Vec((p2.x-p1.x)*cln, (p2.y-p1.y)*cln) + p1
 	ctx.save()
 	ctx.beginPath()
@@ -155,7 +155,7 @@ class TxDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 
 class LdDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) extends TxDim(p1,p2,cln,hint,prec){
    import Dim._
-   def drawArrow(p1:Vec, p2:Vec)(implicit ctx : Context2d){
+   def drawArrow(p1:Vec, p2:Vec)(implicit ctx : Context2d) : Unit = {
 	   ctx.save()
 	   val cosa = (p2-p1)* Vec(1d,0d)/(p2-p1).mod
 	   ctx.translateS(p1.x, p1.y)
@@ -168,7 +168,7 @@ class LdDim (p1:Vec,p2 : Vec,cln : Double, hint : Int = 0, prec : Double = 1d) e
 	   ctx.restore()
    }
    
-   override def draw(ctx : Context2d){
+   override def draw(ctx : Context2d) : Unit = {
 	   implicit val mctx = ctx 
 		val pl1 = (p2-p1)*0.5 + p1
 		val pl2 =Vec(pl1.x-50, pl1.y+cln)

@@ -13,7 +13,7 @@ import scala.math._
 
 class Vec(val crds:Vector[Double]){
 
-    def this(ncrds:Double*){ this(ncrds.toVector) }
+    def this(ncrds:Double*) = { this(ncrds.toVector) }
     
     override def toString()=crds.map((a:Double) => f"$a%.2f").mkString("V(",",",")")
 
@@ -70,7 +70,7 @@ class Vec(val crds:Vector[Double]){
     def -(v2:Vec) : Vec=new Vec( (for(i<-0 until crds.length) yield crds(i)-v2(i)): _* )       
     def unary_- : Vec=this * (-1) 
    
-    def project(v2:Vec): Vec={val v2u=v2.normalize; val a=this*v2u;; v2u*a}
+    def project(v2:Vec): Vec={val v2u=v2.normalize(); val a=this*v2u;; v2u*a}
 	
     def ang(v2:Vec): Double=acos(dotProd(v2)/(mod*v2.mod))
     
@@ -79,9 +79,9 @@ class Vec(val crds:Vector[Double]){
                         val ang=acos(dotProd(v2)/(mod*v2.mod))
                         if(cp.mod==0){
                              val pp=Vec(y,-x,0)
-                            (ang,pp.normalize)
+                            (ang,pp.normalize())
                         }else{
-                            (ang,cp.normalize)
+                            (ang,cp.normalize())
                         }
                     }
      def dist(v2:Vec) : Double = (v2 - this).mod
@@ -260,7 +260,7 @@ class Quat(val s:Double,val v:Vec){
     def dotProduct(q2:Quat) : Double=s*q2.s+v*q2.v
     def cosAng(q2:Quat) : Double=dotProduct(q2)/(norm*q2.norm)
 	
-	def rotate(v2:Vec):Vec=(this * v2 * inverse).toVec
+	def rotate(v2:Vec):Vec=(this * v2 * inverse()).toVec
 	
 	def decompST(twistAxis:Vec):(Quat,Quat)={
 		var twist:Quat=Quat.identity
@@ -277,8 +277,8 @@ class Quat(val s:Double,val v:Vec){
          twist = Quat.rot(Pi,twistAxis)  // always twist 180 degree on singularity
       } else {
 		  val p = v project twistAxis
-		  twist = (Quat(s,p)).normalize
-		  swing = this * twist.inverse
+		  twist = (Quat(s,p)).normalize()
+		  swing = this * twist.inverse()
 	  }
 	  (swing,twist)
     }
@@ -291,12 +291,12 @@ class Quat(val s:Double,val v:Vec){
 object Quat{
     def apply(s:Double,v:Vec)=new Quat(s,v)
     def apply(v:Vec)=new Quat(0,v)
-    def rot(ang:Double,v:Vec)=new Quat(cos(ang/2),v.normalize * sin(ang/2)) 
+    def rot(ang:Double,v:Vec)=new Quat(cos(ang/2),v.normalize() * sin(ang/2)) 
     def rotate (vr:Vec,ang:Double,v:Vec):Vec={
         val qr=vr.toQuat
         val q=rot(ang,v)
         val qr1=q*qr
-        val qr2=qr1*q.inverse
+        val qr2=qr1*q.inverse()
         qr2.toVec
     }
 	def identity=Quat(1,Vec(0,0,0))

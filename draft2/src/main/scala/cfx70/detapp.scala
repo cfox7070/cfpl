@@ -19,8 +19,48 @@ import cfx70.threejsfacade.THREE._
 
 import cfx70.vecquat._
 
-class Ui{
+object Ui{
+	def paramTable(params : Seq[(String,Double)]) : HtmlElement  = {
+		val sz : Int = params.size / 2
+		div(cls:="w3-row",
+			div(cls:="w3-half",
+				table(cls:="w3-table w3-bordered w3-theme-d2",
+					tbody(
+						for(i <- 0 until sz) yield {
+						  val (nm,v) = params(i)
+						  tr(
+						    td(nm),
+						    td(
+							  input(cls:="w3-input w3-border dims-input0",
+								  typ:="number",
+								  value:=v.toString)))
+						}
+					)
+				)
+			),
+			div(cls:="w3-half",
+				table(cls:="w3-table w3-bordered w3-theme-d2",
+					tbody(
+						for(i <- sz until params.size) yield {
+						  val (nm,v) = params(i)
+						  tr(
+						  td(nm),
+						  td(
+							input(cls:="w3-input w3-border dims-input0",
+								  typ:="number",
+								  value:=v.toString)))
+						}
+					)
+				)
+			)
+		)
+	}
 	
+	def main(args: Array[String]): Unit = {
+		val pars : Seq[(String,Double)] = Seq(("a",100),("b",200),("c",300),("d",400),("e",500),("f",600))
+		val parContainer: dom.Element = dom.document.querySelector("#params")
+		val parRoot: RootNode = render(parContainer, paramTable(pars))
+    }
 }
 
 class DetApp{
@@ -40,7 +80,7 @@ class DetApp{
     var model:Model=null
     var animation:Boolean=true
 	
-	def setDev(st:Int=1){
+	def setDev(st:Int=1) : Unit ={
 	   Dev(model,st) match {
 		   case Some(dv) => dv.draw(ctxDev)
 		   case None =>}		
@@ -86,9 +126,9 @@ class DetApp{
                             renderer.render(scene, camera3d)
 			}
 
-    def setAnimation(a:Boolean){ animation=a;animate(0) }
+    def setAnimation(a:Boolean) : Unit ={ animation=a;animate(0) }
     
-	def updateScene(){renderer.render(scene, camera3d)}
+	def updateScene() : Unit ={renderer.render(scene, camera3d)}
 	
 	def show3d():Unit=model match {
 		case m:Model =>{
@@ -109,7 +149,7 @@ class DetApp{
 		case null => {}
 	}
 	
-        def setModel(m:Model) {
+        def setModel(m:Model) : Unit = {
                    if(model != null){
                         scene.remove(model.meshes)
                         model.dispose()
@@ -124,7 +164,7 @@ class DetApp{
          }
 	
 	    
-     def animate(time:Double) {     
+     def animate(time:Double) : Unit = {     
         if(animation){ //println(s"animation $animation")
                         dom.window.requestAnimationFrame(animate)}
         controls.update()

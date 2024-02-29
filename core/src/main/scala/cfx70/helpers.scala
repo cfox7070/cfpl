@@ -21,11 +21,11 @@ object Ordinal extends Enumeration {
 
 object CommonHelpers {
 	
-	implicit def vec2vec3(pt: Vec)=new Vector3(pt.x,pt.y,pt.z)
+	implicit def vec2vec3(pt: Vec) : Vector3 = new Vector3(pt.x,pt.y,pt.z)
 	//implicit def vec2vec2(pt: Vec)=new Vector2(pt.x,pt.y)
-	implicit def vec3Vec(v: Vector3)=Vec(v.x,v.y,v.z)
-	implicit def plane3threePlane(p: Plane3) = new Plane(p.n,p.p)
-	implicit def tuple22vec(tp: (Double,Double) ) = Vec(tp._1, tp._2)
+	implicit def vec3Vec(v: Vector3) : Vec = Vec(v.x,v.y,v.z)
+	implicit def plane3threePlane(p: Plane3) : Plane = new Plane(p.n,p.p)
+	implicit def tuple22vec(tp: (Double,Double) ) : Vec = Vec(tp._1, tp._2)
 
 	val $=js.Dynamic.literal
 	def jsA[T](v1:T*)=js.Array[T](v1: _*)
@@ -48,7 +48,7 @@ object CommonHelpers {
     def addListener(evt:String,listener: js.Function1[Event, _],els:dom.Element*)=
         for(el <- els) el.addEventListener(evt,listener,false)
     
-    def dimsChange(e:dom.Event){
+    def dimsChange(e:dom.Event) : Unit = {
         println("smth changed")
     }
 
@@ -86,7 +86,7 @@ object Helpers2d{
 		def polygon(st:Vec,pts:Vec *) : RichContext.type={
 			M(st)
 			for (pt <- pts) L(pt)
-			ctx.closePath
+			ctx.closePath()
 			this
 		}
 		def polygon(pts:Seq[Vec]) : RichContext.type = polygon(pts.head,pts.tail: _*)
@@ -107,7 +107,7 @@ object Helpers2d{
 						tm.actualBoundingBoxAscent,tm.actualBoundingBoxDescent)			
 		}
 		
-		def drawAx(){
+		def drawAx() : Unit = {
 		   ctx.save()
 		   ctx.beginPath()
 		   ctx.strokeStyle = "#ff0000"
@@ -135,7 +135,7 @@ object Helpers2d{
 		}
 	    
 	    import Side._
-	    def text(tx:String, pt:Vec, halign:Side.Side = LEFT, valign:Side.Side = BOTTOM, ang:Double = 0){
+	    def text(tx:String, pt:Vec, halign:Side.Side = LEFT, valign:Side.Side = BOTTOM, ang:Double = 0) : Unit = {
 			val t = (ctx.asInstanceOf[RichContext.MoreContext]).getTransform()
 			val sx = if(t.a < 0) -1 else 1
 			val sy = if(t.d < 0) -1 else 1

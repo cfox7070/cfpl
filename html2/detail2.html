@@ -1,96 +1,3 @@
-<?php
-function curver($fname){
-	if (file_exists($fname)) {
-		return $fname . "?v=" . filemtime($fname);
-	}
-	return $fname;
-}
-$detimport = curver("./js/det.js");
-$selpointsrc = <<<END
-<span class="w3-right"> Окружность из
-	<select class="w3-select" id="stp" style="width:inherit;" onchange = "selchange(event)">
-	<option value="3" selected>8</option>
-	<option value="2">12</option>
-  </select>
-  точек.
- </span>
-END;
-$selpointscc = <<<END
-<span class="w3-right"> Окружность из
-	<select class="w3-select" id="stp" style="width:inherit;" onchange = "selchange(event)">
-	<option value="4">6</option>
-	<option value="3" selected>8</option>
-	<option value="2">12</option>
-  </select>
-  точек.
- </span>
-END;
-		if(isset($_GET["type"])) $dtype=filter_var($_GET["type"], FILTER_SANITIZE_STRING);
-        if(!isset($dtype) && $_SERVER['REQUEST_URI']=='/') $dtype="redrr";
-        switch ($dtype)
-        {
-            case "redrr":
-                $title="Развертка перехода с прямоугольника на прямоугольник.";
-                $title1="Переход с прямоугольника на прямоугольник.";
-                $descr="Построение развертки перехода с прямоугольного на прямоугольное сечение по заданным размерам онлайн.";
-                $imgsrc=curver("img/red-r-ra.png");
-                $detailparams="redrr-params.php";
-                $detailscript="redrr-script.js";
-                $rpoints = "";
-                break;
-            
-            case "redrc":
-                $title="Развертка перехода с прямоугольника на круг.";
-                $title1="Переход с прямоугольника на круг.";
-                $descr="Построение развертки перехода с прямоугольного на круглое сечение по заданным размерам онлайн.";
-                $imgsrc=curver("img/red-r-c.png");
-                $detailparams="redrc-params.php";
-                $detailscript="redrc-script.js";
-                $rpoints = $selpointsrc;
-                break;
-
-            case "redcc":
-                $title="Развертка перехода с круга на круг.";
-                $title1="Переход с круга на круг.";
-                $descr="Построение развертки перехода с круглого на круглое сечение по заданным размерам онлайн.";
-                $imgsrc=curver("img/red-c-c.png");
-                $detailparams="redcc-params.php";
-                $detailscript="redcc-script.js";
-                $rpoints = $selpointscc;
-                break;
-
-        /*    case "elbrr":
-                $title="Отвод прямоугольный";
-                $imgsrc="img/elb-r-r.png";
-                $detailparams="elbrr-params.php";
-                $detailscript="elbrr-script.js";
-                break;
-            case "elbcc":
-                $title="Отвод круглый";
-                $imgsrc="img/elb-с-с.png";
-                $detailparams="elbcc-params.php";
-                $detailscript="elbcc-script.js";
-                break;
-            case "brunchcc":
-                $title="Врезка круглое в круглое";
-                $imgsrc="img/brunch-c-c.png";
-                $detailparams="brunchcc-params.php";
-                $detailscript="brunchcc-script.js";
-                break;
-            case "cone":
-                $title="cone test";
-                $imgsrc="none";
-                $detailparams="cone-params.php";
-                $detailscript="cone-script.js";
-                break;*/
-            
-            default:
-				http_response_code(404);
-				include("404.shtml");
-				die();
-       }
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,11 +29,11 @@ END;
     <!-- detail params -->
 	<div class="w3-third">
 		  <div class=" w3-container"> <!--params-->
-				<img src=<?= $imgsrc ?> style="width:100%" alt=<?= $title ?>>
+				<img src="img/red-r-c.png" style="width:100%" alt="Развертка перехода с прямоугольника на круг.">
 		  </div>
 		  
-		  <div class=" w3-container"> 
-				<?php require $detailparams ?>    
+		  <div id="params" class=" w3-container"> 
+				<!--?php require $detailparams ?-->    
 		  </div>
 	</div>
 
@@ -214,34 +121,7 @@ END;
 
 </script>
 
-<script async="" src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+<script src="js/main.js"></script>
 
-<script type="importmap">
-{
-  "imports": {
-			"three": "./js/three.module.js",
-			"detapp": "<?= $detimport ?>",
-			"three/addons/": "./js/addons/"
-  }
-}
 
-</script>
-
-<script type="module">
-           
-import {DetApp}  from 'detapp';
-
-DetApp.setAnimation(false)
-
-window.download_model = function(el) {
-	  let cnv = document.getElementById("canvas3d")
-	  DetApp.updateScene()
-	  let image = cnv.toDataURL();
-	  el.href = image;
-	};
-
-const inputs = document.querySelectorAll('.dims-input0')
-    <?php require $detailscript ?>
-
-</script>
 </html>
