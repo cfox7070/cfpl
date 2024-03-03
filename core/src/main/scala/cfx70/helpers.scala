@@ -21,6 +21,10 @@ object Ordinal extends Enumeration {
 
 object CommonHelpers {
 	
+	case class ParamsItem(name : String, v : Double, step : String = "50", list : String = "")
+	type ParamsSeq = Seq[ParamsItem]
+
+	
 	implicit def vec2vec3(pt: Vec) : Vector3 = new Vector3(pt.x,pt.y,pt.z)
 	//implicit def vec2vec2(pt: Vec)=new Vector2(pt.x,pt.y)
 	implicit def vec3Vec(v: Vector3) : Vec = Vec(v.x,v.y,v.z)

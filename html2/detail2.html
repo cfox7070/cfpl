@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>"Развертки переходов" </title>
+    <title>Развертки переходов </title>
 	<meta name="description" content="Развертка перехода с прямоугольника на круг, с прямоугольника на прямоугольник,
 										с круга на круг"/>
   <link rel="icon" href="https://hvac.cfx70.ru/favicon.ico" type="image/png">
@@ -90,6 +90,37 @@
 		<p class="w3-left" style="font: 12px Arial, sans-serif;">&copy; 2023-2024 cfx70</p>
 		<p class="w3-right">feedback: <a href="mailto:info@cfx70.ru?subject=detail">info@cfx70.ru</a></p>
 	</footer>
+
+		  <datalist id="diams">
+			<option value="80">
+			<option value="100">
+			<option value="125">
+			<option value="140">
+			<option value="160">
+			<option value="180">
+			<option value="200">
+			<option value="225">
+			<option value="250">
+			<option value="280">
+			<option value="315">
+			<option value="355">
+			<option value="400">
+			<option value="450">
+			<option value="500">
+			<option value="560">
+			<option value="630">
+			<option value="710">
+			<option value="800">
+			<option value="900">
+			<option value="1000">
+			<option value="1120">
+			<option value="1250">
+			<option value="1400">
+			<option value="1600">
+			<option value="1800">
+			<option value="2000">
+		  </datalist>
+
 </body>
 
 <script>
@@ -121,7 +152,16 @@
 
 </script>
 
-<script src="js/main.js"></script>
+<script type="importmap">
+{
+  "imports": {
+			"three": "./js/three.module.js",
+			"three/addons/": "./js/addons/"
+  }
+}
+</script>
+
+<script type="module" src="js/main.js"></script>
 
 
 </html>

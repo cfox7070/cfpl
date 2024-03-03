@@ -7,6 +7,7 @@ import org.scalajs.dom.{html,document,Event}
 import scala.scalajs.js.timers._
 
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.codecs.StringAsIsCodec
 
 import scala.math._
 
@@ -19,11 +20,62 @@ import cfx70.threejsfacade.THREE._
 
 import cfx70.vecquat._
 
+object App{
+	
+	def main(args: Array[String]): Unit = {
+		/*val pars : ParamsSeq = Seq(ParamsItem("a", 100),
+								   ParamsItem("b", 200),
+								   ParamsItem("c", 315,"5","diams"),
+								   ParamsItem("d", 400),
+								   ParamsItem("e", 500),
+								   ParamsItem("f", 600))*/
+								   
+		val pars = RedRC.defaultParamsSeq
+
+		val parContainer: dom.Element = dom.document.querySelector("#params")
+		val parRoot: RootNode = render(parContainer, Ui.paramTable(pars))
+		
+		val mod = RedRC(pars)
+		DetApp.setModel(mod)
+    }
+
 object Ui{
-	def paramTable(params : Seq[(String,Double)]) : HtmlElement  = {
-		val sz : Int = params.size / 2
+	
+	val step: HtmlProp[String] = htmlProp("step", StringAsIsCodec)
+	val list: HtmlAttr[String] = htmlAttr("list", StringAsIsCodec)
+		
+	def paramTable(params : ParamsSeq) : HtmlElement  = {
+//		val sz : Int = params.size / 2
+		val paramsVar: Var[ParamsSeq] = Var(params)
+		val paramsSignal = paramsVar.signal
+
+		def valueChanged(n : String, v : Double) : Unit = {
+			
+			paramsVar.update(ps => ps.map(itm =>  if(itm.name == n) ParamsItem(n,v,itm.step,itm.list) else itm ))
+									
+			val s : ParamsSeq = paramsVar.now()
+			println(s)
+		}
+				
+		def renderParamsItem(itm : ParamsItem ) : Element = {	
+			tr(	
+				td(itm.name),
+				td(
+				  input(cls:="w3-input w3-border dims-input0",
+					  typ:="number",
+					  step:=itm.step,
+					  list:=itm.list,
+					  value := itm.v.toString,
+					  onChange.mapToValue --> (vs => valueChanged(itm.name, vs.toDouble) ))))
+		}
+
 		div(cls:="w3-row",
-			div(cls:="w3-half",
+			table(cls:="w3-table w3-bordered w3-theme-d2",
+				tbody(
+					children <-- paramsSignal.map(data => data.map { item =>
+						renderParamsItem(item)
+				})))
+			/*div(cls:="w3-half",
 				table(cls:="w3-table w3-bordered w3-theme-d2",
 					tbody(
 						for(i <- 0 until sz) yield {
@@ -52,18 +104,12 @@ object Ui{
 						}
 					)
 				)
-			)
+			)*/
 		)
 	}
-	
-	def main(args: Array[String]): Unit = {
-		val pars : Seq[(String,Double)] = Seq(("a",100),("b",200),("c",300),("d",400),("e",500),("f",600))
-		val parContainer: dom.Element = dom.document.querySelector("#params")
-		val parRoot: RootNode = render(parContainer, paramTable(pars))
-    }
 }
 
-class DetApp{
+object DetApp{
 
     val descr=document.querySelector("#descr")
     
@@ -78,7 +124,7 @@ class DetApp{
     val (renderer,scene,camera3d,light,controls) = set3dRenderer("#canvas3d")
 
     var model:Model=null
-    var animation:Boolean=true
+    var animation:Boolean=false
 	
 	def setDev(st:Int=1) : Unit ={
 	   Dev(model,st) match {
@@ -172,7 +218,7 @@ class DetApp{
         renderer.render(scene, camera3d)
   }	
 }
-
+}
 
 
 

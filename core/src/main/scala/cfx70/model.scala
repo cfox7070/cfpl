@@ -7,7 +7,12 @@ import math._
 import cfx70.threejsfacade.THREE
 import cfx70.threejsfacade.THREE._
 import cfx70.vecquat._
-import CommonHelpers.{$,vec3Vec}
+import CommonHelpers._
+
+trait FromParamsSeq {
+	def defaultParamsSeq : ParamsSeq
+	def apply(ps : ParamsSeq) : Model
+}
 
 object Model {
 
@@ -85,6 +90,23 @@ class RedRC(val a1:Double,val b1:Double,val d:Double,
        val cn  = new BRCRed(a1,b1,d,h-df1-df2,da,db).translate(Vec(0,0,df1))
                                                 
        val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
+}
+object RedRC extends FromParamsSeq{
+	def defaultParamsSeq : ParamsSeq = Seq(ParamsItem("a1",400),
+										 ParamsItem("b1",300),
+										 ParamsItem("d",250,"5","diams"),
+										 ParamsItem("h",350),
+										 ParamsItem("da",325),
+										 ParamsItem("db",225),
+										 ParamsItem("df1",30),
+										 ParamsItem("df2",40)
+										)
+	def apply(ps : ParamsSeq) : RedRC = {
+		val pm = ps.view.map(p => p.name -> p).toMap
+		def V (n : String) : Double = pm(n).v
+		new RedRC(V("a1"), V("b1"), V("d"), V("h"), V("da")-V("a1")/2,V("db")-V("b1")/2,V("df1"),V("df2"))
+	}
+	
 }
 
 class RedCC(val d1:Double,val d2:Double,val dc:Double,val h:Double,
