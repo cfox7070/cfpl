@@ -31,9 +31,10 @@ object App{
 								   ParamsItem("f", 600))*/
 								   
 		val pars = RedRC.defaultParamsSeq
+		Ui.paramsVar.update(paramsVar)
 
 		val parContainer: dom.Element = dom.document.querySelector("#params")
-		val parRoot: RootNode = render(parContainer, Ui.paramTable(pars))
+		val parRoot: RootNode = render(parContainer, Ui.paramTable())
 		
 		val mod = RedRC(pars)
 		DetApp.setModel(mod)
@@ -44,10 +45,65 @@ object Ui{
 	val step: HtmlProp[String] = htmlProp("step", StringAsIsCodec)
 	val list: HtmlAttr[String] = htmlAttr("list", StringAsIsCodec)
 		
-	def paramTable(params : ParamsSeq) : HtmlElement  = {
+	val paramsVar: Var[ParamsSeq] = Var()
+	val paramsSignal = paramsVar.signal
+	
+	def selView() : HtmlElement  = {
+		val curV = Var("3d")
+		val curVS = curV.signal
+		def tablinkButton(cap : String, vname :String) : HtmlElement =
+				button(cls("w3-bar-item", "w3-button")
+					cap,
+					onClick.mapTo(vname) --> curV,
+					cls.toggle("w3-theme-l4") <-- curV.signal.map(s => s match {
+														 case vname => true
+														 case _ => false
+														}))
+			def appcanvas(cId : String) : HtmlElement = 
+					canvas(cls:="w3-border", idAttr := cId, width :="1600", height :="1200")
+			def cnvTooltip(cap : String, ttext : String,) : HtmlElement = 
+				div(cls("tooltip"),
+					a(cls("w3-button", "w3-theme", "w3-round-large"),
+					  download:="", href:="",
+					  cap,
+					  onclick="download_model(this);"),
+					span(cls("tooltiptext"),ttext))
+			def hideIfNotCurrent(vname : String) : Mod[HtmlElement] =
+				display <-- curV.signal.map(s => s match {case vname => "block"
+														 case _ => "none"
+														})
+					
+		div(cls:="w3-container",
+		
+			div(cls:="w3-bar w3-theme",
+				tablinkButton("Модель","3d"),
+				tablinkButton("Эскиз","draft"),
+				tablinkButton("Развертка","dev"),
+				tablinkButton("Инфо","mat")),
+				
+			div(idAttr :="3d", cls:="w3-container view",
+				hideIfNotCurrent("3d"),
+				appcanvas("canvas3d"),
+				cnvTooltip("Сохранить .png", "Сохранить модель для программ просмотра рисунков"),
+				span(cls("w3-right"),"можно покрутить")),
+			div(idAttr :="draft", cls:="w3-container view",
+				hideIfNotCurrent("3d"),
+				appcanvas("canvasdraft"),
+				cnvTooltip("Сохранить .png", "Сохранить эскиз для программ просмотра рисунков")),				
+			div(idAttr :="dev", cls:="w3-container view",
+				hideIfNotCurrent("3d"),
+				appcanvas("canvasdev"),
+				cnvTooltip("Сохранить .png", "Сохранить развертку для программ просмотра рисунков"),
+				cnvTooltip("Сохранить .dxf", "Сохранить развертку для редактирования в CAD программах")),
+				//<?=$rpoints?>
+			div(idAttr :="mat", cls:="w3-container view",
+								hideIfNotCurrent("3d")))
+	}
+
+}
+
+	def paramTable() : HtmlElement  = {
 //		val sz : Int = params.size / 2
-		val paramsVar: Var[ParamsSeq] = Var(params)
-		val paramsSignal = paramsVar.signal
 
 		def valueChanged(n : String, v : Double) : Unit = {
 			
@@ -75,36 +131,6 @@ object Ui{
 					children <-- paramsSignal.map(data => data.map { item =>
 						renderParamsItem(item)
 				})))
-			/*div(cls:="w3-half",
-				table(cls:="w3-table w3-bordered w3-theme-d2",
-					tbody(
-						for(i <- 0 until sz) yield {
-						  val (nm,v) = params(i)
-						  tr(
-						    td(nm),
-						    td(
-							  input(cls:="w3-input w3-border dims-input0",
-								  typ:="number",
-								  value:=v.toString)))
-						}
-					)
-				)
-			),
-			div(cls:="w3-half",
-				table(cls:="w3-table w3-bordered w3-theme-d2",
-					tbody(
-						for(i <- sz until params.size) yield {
-						  val (nm,v) = params(i)
-						  tr(
-						  td(nm),
-						  td(
-							input(cls:="w3-input w3-border dims-input0",
-								  typ:="number",
-								  value:=v.toString)))
-						}
-					)
-				)
-			)*/
 		)
 	}
 }

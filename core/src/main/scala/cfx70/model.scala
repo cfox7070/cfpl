@@ -12,6 +12,7 @@ import CommonHelpers._
 trait FromParamsSeq {
 	def defaultParamsSeq : ParamsSeq
 	def apply(ps : ParamsSeq) : Model
+    def default : Model = apply(defaultParamsSeq)
 }
 
 object Model {
