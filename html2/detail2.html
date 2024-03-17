@@ -13,75 +13,21 @@
 <body>
 <div class="w3-container">
 <!--type select -->
-<div class="w3-bar w3-center w3-theme"> 
-		 <img src="img/redrr-icon.png" id="redrr-btn" 
-				class="type-btn-img w3-button w3-hover-grayscale"  alt="переход с прямоугольного на прямоугольное"> 
-		 <img src="img/redrc-icon.png" id="redrc-btn" 
-				class="w3-button w3-hover-grayscale type-btn-img"  alt="переход с прямоугольного на круглое"> 
-		 <img src="img/redcc-icon.png" id="redcc-btn"  
-				class="w3-button w3-hover-grayscale type-btn-img"  alt="переход с круглого на круглое"> 
-</div>
+<div id="typebar"> </div>
 <p></p>
 <div class="w3-container">
 
 <div class="w3-row">
     <!-- detail params -->
-	<div class="w3-third">
-		  <div class=" w3-container"> <!--params-->
-				<img src="img/red-r-c.png" style="width:100%" alt="Развертка перехода с прямоугольника на круг.">
-		  </div>
-		  
-		  <div id="params" class=" w3-container"> 
+	<div class="w3-third" id= "params">
 				<!--?php require $detailparams ?-->    
-		  </div>
 	</div>
 
 	<div class="w3-twothird">
+			<h1 id="descr" class="w3-large w3-center det-label">Переход с прямоугольника на круг</h1>
 		
-		<div class="w3-container"><!--canvas-->
-			<h1 id="descr" class="w3-large w3-center det-label"><?=$title1?></h1>
-			<div class="w3-bar w3-theme">
-				<button class="w3-bar-item w3-button tablink w3-theme-l4" onclick="openCity(event,'3d')">Модель</button>
-				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'draft')">Эскиз</button>
-				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'dev')">Развертка</button>
-				<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'mat')">Материалы</button>
-			</div>
-
-			<div id="3d" class="w3-container view">
-			<canvas class="w3-border" id="canvas3d" width="1600" height="1200"></canvas>
-			<div class="tooltip">
-				<a id="download" download="" href="" onclick="download_model(this);" class="w3-button w3-theme w3-round-large">Сохранить .png</a>
-				<span class="tooltiptext">Сохранить модель для программ просмотра рисунков</span>
-			</div>
-			<span class="w3-right"> можно покрутить</span>
-			</div>
-
-			<div id="draft" class="w3-container view" style="display:none">
-			<canvas class="w3-border" id="canvasdraft" width="1600" height="1200"></canvas>
-			<div class="tooltip">
-				<a download="" href="" onclick="download_draft(this);" class="w3-button w3-theme w3-round-large">Сохранить .png</a>
-				<span class="tooltiptext">Сохранить эскиз для программ просмотра рисунков</span>
-			</div>
-			</div>
-
-			<div id="dev" class="w3-container view" style="display:none">
-			<canvas class="w3-border" id="canvasdev" width="1600" height="1200"></canvas>
-			<div class="tooltip">
-				<a download="" href="" onclick="download_dev(this);" class="w3-button w3-theme w3-round-large">Сохранить .png</a>
-				<span class="tooltiptext">Сохранить развертку для программ просмотра рисунков</span>
-			</div>
-			<div class="tooltip">
-				<a download="" href="" onclick="download_devdxf(this);" class="w3-button w3-theme w3-round-large">Сохранить .dxf</a>
-				<span class="tooltiptext">Сохранить развертку для редактирования в CAD программах</span>
-			</div>
-			<?=$rpoints?>
-			</div>
-
-			<div id="mat" class="w3-container view" style="display:none">
-				<table id= "mattbl" class="w3-table w3-bordered w3-theme-light" >
-				</table> 
-			</div>
-			<p></p>
+		<div id ="views"><!--canvas-->
+		<p></p>
 		</div>
 	</div>
 </div>
@@ -90,66 +36,15 @@
 		<p class="w3-right">feedback: <a href="mailto:info@cfx70.ru?subject=detail">info@cfx70.ru</a></p>
 	</footer>
 
-		  <datalist id="diams">
-			<option value="80">
-			<option value="100">
-			<option value="125">
-			<option value="140">
-			<option value="160">
-			<option value="180">
-			<option value="200">
-			<option value="225">
-			<option value="250">
-			<option value="280">
-			<option value="315">
-			<option value="355">
-			<option value="400">
-			<option value="450">
-			<option value="500">
-			<option value="560">
-			<option value="630">
-			<option value="710">
-			<option value="800">
-			<option value="900">
-			<option value="1000">
-			<option value="1120">
-			<option value="1250">
-			<option value="1400">
-			<option value="1600">
-			<option value="1800">
-			<option value="2000">
-		  </datalist>
+  <datalist id="diams"> <option value="80"><option value="100"><option value="125"><option value="140"><option value="160">
+	<option value="180"><option value="200"><option value="225"><option value="250"><option value="280"><option value="315">
+	<option value="355"><option value="400"><option value="450"><option value="500"><option value="560"><option value="630">
+	<option value="710"><option value="800"><option value="900"><option value="1000"><option value="1120"><option value="1250">
+	<option value="1400"><option value="1600"><option value="1800"><option value="2000">
+  </datalist>
 
 </body>
 
-<script>
-	download_draft = function(el) {
-	  let cnv = document.getElementById("canvasdraft")
-	  let image = cnv.toDataURL();
-	  el.href = image;
-	};
-	download_dev = function(el) {
-	  let cnv = document.getElementById("canvasdev")
-	  let image = cnv.toDataURL();
-	  el.href = image;
-	};
-    openCity = function(evt,viewName) {
-	let i;
-	let x = document.getElementsByClassName("view");
-	for (i = 0; i < x.length; i++) {
-		x[i].style.display = "none"  
-	}
-	let tablinks = document.getElementsByClassName("tablink")
-	for (i = 0; i < x.length; i++) {
-		tablinks[i].classList.remove("w3-theme-l4")
-	}
-	let view = document.getElementById(viewName)
-	view.style.display = "block"
-	evt.currentTarget.classList.add("w3-theme-l4")
-	}
-	
-
-</script>
 
 <script type="importmap">
 {

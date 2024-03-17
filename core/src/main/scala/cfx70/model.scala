@@ -10,6 +10,8 @@ import cfx70.vecquat._
 import CommonHelpers._
 
 trait FromParamsSeq {
+	val imgSrc : String
+	val imgAlt : String
 	def defaultParamsSeq : ParamsSeq
 	def apply(ps : ParamsSeq) : Model
     def default : Model = apply(defaultParamsSeq)
@@ -78,6 +80,25 @@ class RedRR(val a1:Double,val b1:Double,val a2:Double,val b2:Double,
        
        override def area : Double = cn.area + fcb.area + fct.area														
 }
+object RedRR extends FromParamsSeq{
+	val imgSrc = "img/red-r-ra.png"
+	val imgAlt = "Развертка перехода с прямоугольника на прямоугольник"
+	def defaultParamsSeq : ParamsSeq = Seq(ParamsItem("a1",400),
+										 ParamsItem("b1",300),
+										 ParamsItem("a2",300),
+										 ParamsItem("b2",250),	
+										 ParamsItem("h",350),
+										 ParamsItem("da",175),
+										 ParamsItem("db",75),
+										 ParamsItem("df1",30),
+										 ParamsItem("df2",30)
+										)
+	def apply(ps : ParamsSeq) : RedRR = {
+		val pm = ps.view.map(p => p.name -> p).toMap
+		def V (n : String) : Double = pm(n).v
+		new RedRR(V("a1"), V("b1"), V("a2"),V("b2"), V("h"),V("da")-V("a1")/2+V("a2")/2,V("b1")/2 - V("db") - V("b2")/2,V("df1"),V("df2"))
+	}	
+}
 /////////////////////////////
 class RedRC(val a1:Double,val b1:Double,val d:Double,
                 val h:Double,val da:Double,val db:Double, 
@@ -93,6 +114,8 @@ class RedRC(val a1:Double,val b1:Double,val d:Double,
        val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
 }
 object RedRC extends FromParamsSeq{
+	val imgSrc = "img/red-r-c.png"
+	val imgAlt = "Развертка перехода с прямоугольника на круг"
 	def defaultParamsSeq : ParamsSeq = Seq(ParamsItem("a1",400),
 										 ParamsItem("b1",300),
 										 ParamsItem("d",250,"5","diams"),
@@ -106,8 +129,7 @@ object RedRC extends FromParamsSeq{
 		val pm = ps.view.map(p => p.name -> p).toMap
 		def V (n : String) : Double = pm(n).v
 		new RedRC(V("a1"), V("b1"), V("d"), V("h"), V("da")-V("a1")/2,V("db")-V("b1")/2,V("df1"),V("df2"))
-	}
-	
+	}	
 }
 
 class RedCC(val d1:Double,val d2:Double,val dc:Double,val h:Double,
@@ -121,6 +143,22 @@ class RedCC(val d1:Double,val d2:Double,val dc:Double,val h:Double,
        val cn  = new BCone(d1,d2,h-f1-f2,dc).translate(Vec(0,0,f1))
        						
        val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
+}
+object RedCC extends FromParamsSeq{
+	val imgSrc = "img/red-c-c.png"
+	val imgAlt = "Развертка перехода с круга на круг"
+	def defaultParamsSeq : ParamsSeq = Seq(ParamsItem("d1",400,"5","diams"),
+										 ParamsItem("d2",250,"5","diams"),
+										 ParamsItem("h",350),
+										 ParamsItem("dc",50),
+										 ParamsItem("df1",40),
+										 ParamsItem("df2",40)
+										)
+	def apply(ps : ParamsSeq) : RedCC = {
+		val pm = ps.view.map(p => p.name -> p).toMap
+		def V (n : String) : Double = pm(n).v
+		new RedCC(V("d1"), V("d2"), V("dc"), V("h"),V("df1"),V("df2"))
+	}	
 }
 
 class ElbR(val a:Double,val b:Double,

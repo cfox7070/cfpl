@@ -17,61 +17,127 @@ import cfx70.cfpl.core.Helpers3d._
 import cfx70.cfpl.core.Helpers2d._
 
 import cfx70.threejsfacade.THREE._
+import cfx70.threejsfacade.OrbitControls
 
 import cfx70.vecquat._
 
 object App{
 	
 	def main(args: Array[String]): Unit = {
-		/*val pars : ParamsSeq = Seq(ParamsItem("a", 100),
-								   ParamsItem("b", 200),
-								   ParamsItem("c", 315,"5","diams"),
-								   ParamsItem("d", 400),
-								   ParamsItem("e", 500),
-								   ParamsItem("f", 600))*/
-								   
-		val pars = RedRC.defaultParamsSeq
-		Ui.paramsVar.update(paramsVar)
+
+		val viewContainer: dom.Element = dom.document.querySelector("#views")
+		val vewRoot: RootNode = render(viewContainer, Ui.selView())
+		
+		val typeContainer: dom.Element = dom.document.querySelector("#typebar")
+		val typeRoot: RootNode = render(typeContainer, Ui.typeBar())
 
 		val parContainer: dom.Element = dom.document.querySelector("#params")
 		val parRoot: RootNode = render(parContainer, Ui.paramTable())
 		
-		val mod = RedRC(pars)
-		DetApp.setModel(mod)
+		DetApp.setup3d("#canvas3d")
+		
+		//typeContainer.firstElementChild.children(1).click()
+
+//		Ui.curModelVar.update(s => "redrc")
+		Ui.setModelType("redrc")
+	//	Ui.setModel()
+		
+//		val b = typeContainer.firstElementChild.children(1)
+//		val c =
     }
+    
+}
 
 object Ui{
 	
-	val step: HtmlProp[String] = htmlProp("step", StringAsIsCodec)
-	val list: HtmlAttr[String] = htmlAttr("list", StringAsIsCodec)
+	val curModelVar: Var[String] = Var("redrc")
+	
+	val parImgVar: Var[String] = Var("")
+	val parImgAltVar: Var[String] = Var("")
+	
 		
-	val paramsVar: Var[ParamsSeq] = Var()
-	val paramsSignal = paramsVar.signal
+	val paramsVar: Var[ParamsSeq] = Var(Seq())
+	val paramsObserver = Observer[ParamsSeq](onNext = x => {/*dom.console.log(x);println(x);*/setModel()})
+		
+	
+	def getParSrc(tp : String) : Option[FromParamsSeq] = tp match {
+			case "redrr" => Some(RedRR)
+			case "redrc" => Some(RedRC)
+			case "redcc" => Some(RedCC)
+			case _ => None
+		}
+	
+	def setModelType(mtype : String) : Unit = {
+		val parsrc = getParSrc(mtype)
+		parsrc match {
+			case Some(src) =>{parImgVar.update(s => src.imgSrc)
+							  parImgAltVar.update(s => src.imgAlt)
+							  paramsVar.update(s => src.defaultParamsSeq)
+							 // println(src.defaultParamsSeq+ " - setModelType defaultParamsSeq")
+							 // println(paramsVar.now()+ " - setModelType paramsVar.now")
+							  /*setModel()*/}
+			case None => println("unknown detail")
+		}
+	}
+	
+	def setModel() : Unit = {
+		val parsrc = getParSrc(curModelVar.now())
+		val mod = parsrc match {
+			case Some(src) => {src(paramsVar.now())}
+			case None => null
+		}
+		if(mod != null) DetApp.setModel(mod) else println("model null")
+	}
+
+	def downloadPng(cnvId : String) :String = {
+	  val cnv = document.getElementById(cnvId).asInstanceOf[html.Canvas]
+	  cnv.toDataURL("image/png")
+	}
+	
+	def typeBar() : HtmlElement = {
+		def typeBtn(modtype : String, imgsrc : String, alttxt : String) : HtmlElement = {
+				img(cls :="w3-button w3-hover-grayscale typebtn",
+					cls.toggle("w3-theme-l4") <-- curModelVar.signal.map(s => if(s == modtype){ setModelType(s); true} else false),
+					alt := alttxt,
+					src := imgsrc,
+					onClick.mapTo(modtype) --> curModelVar,
+					paramsVar.signal --> paramsObserver )
+			
+		}
+		div(cls :="w3-bar w3-center w3-theme",
+			typeBtn("redrr","img/redrr-icon.png","переход с прямоугольного на прямоугольное"),
+			typeBtn("redrc","img/redrc-icon.png","переход с прямоугольного на круглое"),
+			typeBtn("redcc","img/redcc-icon.png","переход с круглого на круглое"))
+	}
 	
 	def selView() : HtmlElement  = {
 		val curV = Var("3d")
 		val curVS = curV.signal
+		
 		def tablinkButton(cap : String, vname :String) : HtmlElement =
-				button(cls("w3-bar-item", "w3-button")
+				button(cls("w3-bar-item", "w3-button"),
 					cap,
 					onClick.mapTo(vname) --> curV,
-					cls.toggle("w3-theme-l4") <-- curV.signal.map(s => s match {
-														 case vname => true
-														 case _ => false
-														}))
-			def appcanvas(cId : String) : HtmlElement = 
-					canvas(cls:="w3-border", idAttr := cId, width :="1600", height :="1200")
-			def cnvTooltip(cap : String, ttext : String,) : HtmlElement = 
+					cls.toggle("w3-theme-l4") <-- curV.signal.map(s => if(s == vname) true else false))
+					
+		def appcanvas(cId : String) : HtmlElement = 
+					canvasTag(cls:="w3-border", idAttr := cId, widthAttr := 1600, heightAttr := 1200)
+					
+		val picBus = new EventBus[String]
+        val picStream: EventStream[String] = picBus.events.map(cId => downloadPng(cId))
+
+		def cnvTooltip(cnvId:String, cap : String, ttext : String) : HtmlElement = 
 				div(cls("tooltip"),
 					a(cls("w3-button", "w3-theme", "w3-round-large"),
-					  download:="", href:="",
+					  download:="", 
+					  href <-- picStream,
 					  cap,
-					  onclick="download_model(this);"),
-					span(cls("tooltiptext"),ttext))
-			def hideIfNotCurrent(vname : String) : Mod[HtmlElement] =
-				display <-- curV.signal.map(s => s match {case vname => "block"
-														 case _ => "none"
-														})
+					  span(cls("tooltiptext"),ttext),
+					  onClick.mapTo(cnvId) --> picBus.writer
+					  ))
+					  
+		def hideIfNotCurrent(vname : String) : Mod[HtmlElement] =
+				display <-- curV.signal.map(s => if(s == vname) "block" else "none")
 					
 		div(cls:="w3-container",
 		
@@ -84,33 +150,32 @@ object Ui{
 			div(idAttr :="3d", cls:="w3-container view",
 				hideIfNotCurrent("3d"),
 				appcanvas("canvas3d"),
-				cnvTooltip("Сохранить .png", "Сохранить модель для программ просмотра рисунков"),
+				p(" "),
+				cnvTooltip("canvas3d", "Сохранить .png", "Сохранить модель для программ просмотра рисунков"),
 				span(cls("w3-right"),"можно покрутить")),
 			div(idAttr :="draft", cls:="w3-container view",
-				hideIfNotCurrent("3d"),
+				hideIfNotCurrent("draft"),
 				appcanvas("canvasdraft"),
-				cnvTooltip("Сохранить .png", "Сохранить эскиз для программ просмотра рисунков")),				
+				p(" "),
+				cnvTooltip("canvasdraft", "Сохранить .png", "Сохранить эскиз для программ просмотра рисунков")),				
 			div(idAttr :="dev", cls:="w3-container view",
-				hideIfNotCurrent("3d"),
+				hideIfNotCurrent("dev"),
 				appcanvas("canvasdev"),
-				cnvTooltip("Сохранить .png", "Сохранить развертку для программ просмотра рисунков"),
-				cnvTooltip("Сохранить .dxf", "Сохранить развертку для редактирования в CAD программах")),
+				p(" "),
+				cnvTooltip("canvasdev", "Сохранить .png", "Сохранить развертку для программ просмотра рисунков"),
+				/*cnvTooltip("canvasdev", "Сохранить .dxf", "Сохранить развертку для редактирования в CAD программах")*/),
 				//<?=$rpoints?>
 			div(idAttr :="mat", cls:="w3-container view",
-								hideIfNotCurrent("3d")))
+								hideIfNotCurrent("mats")),
+			p(" "))								
 	}
-
-}
 
 	def paramTable() : HtmlElement  = {
 //		val sz : Int = params.size / 2
 
-		def valueChanged(n : String, v : Double) : Unit = {
-			
+		def valueChanged(n : String, v : Double) : Unit = {			
 			paramsVar.update(ps => ps.map(itm =>  if(itm.name == n) ParamsItem(n,v,itm.step,itm.list) else itm ))
-									
-			val s : ParamsSeq = paramsVar.now()
-			println(s)
+			//setModel()					
 		}
 				
 		def renderParamsItem(itm : ParamsItem ) : Element = {	
@@ -119,40 +184,62 @@ object Ui{
 				td(
 				  input(cls:="w3-input w3-border dims-input0",
 					  typ:="number",
-					  step:=itm.step,
-					  list:=itm.list,
+					  stepAttr:=itm.step,
+					  listId:=itm.list,
 					  value := itm.v.toString,
 					  onChange.mapToValue --> (vs => valueChanged(itm.name, vs.toDouble) ))))
 		}
-
-		div(cls:="w3-row",
-			table(cls:="w3-table w3-bordered w3-theme-d2",
-				tbody(
-					children <-- paramsSignal.map(data => data.map { item =>
-						renderParamsItem(item)
-				})))
-		)
+		div(
+			div(cls := "w3-container",
+				img(src <-- parImgVar,
+					alt <-- parImgAltVar,
+				    width :="100%")),
+			div(cls:="w3-row w3-container",
+				table(cls:="w3-table w3-bordered w3-theme-d2",
+					tbody(
+						children <-- paramsVar.signal.map(data => data.map { item =>
+							renderParamsItem(item)
+					}))),
+			p(" ")))
 	}
 }
 
-object DetApp{
-
-    val descr=document.querySelector("#descr")
-    
-    val ctxDraft={  val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
-					cnvDraft.getContext("2d").asInstanceOf[Context2d]}
-		ctxDraft.font="italic 2.1em sans-serif"
-    
-    val ctxDev={  val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
-				  cnvDev.getContext("2d").asInstanceOf[Context2d]}
-		ctxDev.font="italic 2.1em sans-serif"
-   
-    val (renderer,scene,camera3d,light,controls) = set3dRenderer("#canvas3d")
+object DetApp{  
+    var renderer : WebGLRenderer= null
+    var scene : Scene = null
+    var camera3d : PerspectiveCamera = null
+    var light : DirectionalLight = null
+    var controls : OrbitControls =null
 
     var model:Model=null
     var animation:Boolean=false
 	
+	def setup3d(cnvId : String) : Unit = {
+		renderer = {  val cnvDev=document.querySelector(cnvId).asInstanceOf[html.Canvas]
+                          new WebGLRenderer($(canvas = cnvDev ))}
+                                  
+        scene = new Scene()
+        scene.background=new Color(0xF3F3FA)
+        
+        camera3d = new PerspectiveCamera(75, 800.0/600.0, 0.1, 2000)
+        light = new DirectionalLight(0xffffff, 0.6)
+		val alight = new AmbientLight(0xffffff, 0.5)
+        scene.add(light)
+        scene.add(alight)
+    
+        controls = new OrbitControls( camera3d, renderer.domElement )
+        controls.addEventListener("change",(e:dom.Event)=>{    
+                                                            light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
+                                                            renderer.render(scene,camera3d) 
+                                                        })
+ 
+		//(renderer,scene,camera3d,light,controls) = set3dRenderer(cnvId)
+	}
+	
 	def setDev(st:Int=1) : Unit ={
+       val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
+	   val ctxDev=cnvDev.getContext("2d").asInstanceOf[Context2d]
+	   ctxDev.font="italic 2.1em sans-serif"
 	   Dev(model,st) match {
 		   case Some(dv) => dv.draw(ctxDev)
 		   case None =>}		
@@ -161,8 +248,6 @@ object DetApp{
 	def setRedRR(a1:Double,b1:Double,a2:Double,b2:Double,da:Double,db:Double,h:Double,f1:Double,f2:Double):Unit = {
           setModel(new RedRR(a1,b1,a2,b2,h,da-a1/2+a2/2,b1/2 -db - b2/2,f1,f2))		  
 		}
-        def setRedRC(a1:Double,b1:Double,d:Double,da:Double,db:Double,h:Double,f1:Double=30,f2:Double=40):Unit = 
-            setModel(new RedRC(a1,b1,d,h,da-a1/2,db-b1/2,f1,f2))
         def setRedCC(d1:Double,d2:Double,dc:Double,h:Double,f1:Double=40,f2:Double=40):Unit = 
             setModel(new RedCC(d1,d2,dc,h,f1,f2))
         def setBrunchCC( d1:Double, d2:Double,  h1:Double,  dd1:Double,
@@ -227,12 +312,26 @@ object DetApp{
                         model.dispose()
                    }
                    model=m
+                   
+                   val descr=document.querySelector("#descr")
                    descr.innerHTML=model.description("ru")
+                   
                    show3d()
-                   Draft(model)match{ case Some(dr) => dr.draw(ctxDraft) case None =>}
-                   Mats(model,document.querySelector("#mattbl").asInstanceOf[html.Table]) match {
+                   
+                   Draft(model)match{ 
+					   case Some(dr) =>{ val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
+										 val ctxDraft = cnvDraft.getContext("2d").asInstanceOf[Context2d]
+										 ctxDraft.font="italic 2.1em sans-serif"
+										 dr.draw(ctxDraft)
+									   }
+					   case None =>
+					   }
+					   
+				   setDev(3)
+				   
+                   /*Mats(model,document.querySelector("#mattbl").asInstanceOf[html.Table]) match {
 					   case Some(mt) => mt.writeMats()
-					   case None =>}
+					   case None =>}*/
          }
 	
 	    
@@ -244,7 +343,7 @@ object DetApp{
         renderer.render(scene, camera3d)
   }	
 }
-}
+
 
 
 
