@@ -1,8 +1,8 @@
 enablePlugins(ScalaJSPlugin)
 
 ThisBuild / scalaVersion := "2.13.12"
-ThisBuild / organization := "com.cfx"
-ThisBuild / version      := "0.1.0"
+ThisBuild / organization := "com.cfx70"
+ThisBuild / version      := "0.1.1"
  
 import scala.sys.process._
 import sbt.Keys.streams

@@ -36,14 +36,7 @@ object App{
 		
 		DetApp.setup3d("#canvas3d")
 		
-		//typeContainer.firstElementChild.children(1).click()
-
-//		Ui.curModelVar.update(s => "redrc")
 		Ui.setModelType("redrc")
-	//	Ui.setModel()
-		
-//		val b = typeContainer.firstElementChild.children(1)
-//		val c =
     }
     
 }
@@ -57,7 +50,7 @@ object Ui{
 	
 		
 	val paramsVar: Var[ParamsSeq] = Var(Seq())
-	val paramsObserver = Observer[ParamsSeq](onNext = x => {/*dom.console.log(x);println(x);*/setModel()})
+	val paramsObserver = Observer[ParamsSeq](onNext = x => setModel())
 		
 	
 	def getParSrc(tp : String) : Option[FromParamsSeq] = tp match {
@@ -72,10 +65,7 @@ object Ui{
 		parsrc match {
 			case Some(src) =>{parImgVar.update(s => src.imgSrc)
 							  parImgAltVar.update(s => src.imgAlt)
-							  paramsVar.update(s => src.defaultParamsSeq)
-							 // println(src.defaultParamsSeq+ " - setModelType defaultParamsSeq")
-							 // println(paramsVar.now()+ " - setModelType paramsVar.now")
-							  /*setModel()*/}
+							  paramsVar.update(s => src.defaultParamsSeq)}
 			case None => println("unknown detail")
 		}
 	}
@@ -100,14 +90,13 @@ object Ui{
 					cls.toggle("w3-theme-l4") <-- curModelVar.signal.map(s => if(s == modtype){ setModelType(s); true} else false),
 					alt := alttxt,
 					src := imgsrc,
-					onClick.mapTo(modtype) --> curModelVar,
-					paramsVar.signal --> paramsObserver )
-			
+					onClick.mapTo(modtype) --> curModelVar )			
 		}
 		div(cls :="w3-bar w3-center w3-theme",
 			typeBtn("redrr","img/redrr-icon.png","переход с прямоугольного на прямоугольное"),
 			typeBtn("redrc","img/redrc-icon.png","переход с прямоугольного на круглое"),
-			typeBtn("redcc","img/redcc-icon.png","переход с круглого на круглое"))
+			typeBtn("redcc","img/redcc-icon.png","переход с круглого на круглое"),
+			paramsVar.signal --> paramsObserver)
 	}
 	
 	def selView() : HtmlElement  = {
@@ -139,26 +128,25 @@ object Ui{
 		def hideIfNotCurrent(vname : String) : Mod[HtmlElement] =
 				display <-- curV.signal.map(s => if(s == vname) "block" else "none")
 					
-		div(cls:="w3-container",
-		
+		div(		
 			div(cls:="w3-bar w3-theme",
 				tablinkButton("Модель","3d"),
 				tablinkButton("Эскиз","draft"),
 				tablinkButton("Развертка","dev"),
 				tablinkButton("Инфо","mat")),
 				
-			div(idAttr :="3d", cls:="w3-container view",
+			div(idAttr :="3d",
 				hideIfNotCurrent("3d"),
 				appcanvas("canvas3d"),
 				p(" "),
 				cnvTooltip("canvas3d", "Сохранить .png", "Сохранить модель для программ просмотра рисунков"),
 				span(cls("w3-right"),"можно покрутить")),
-			div(idAttr :="draft", cls:="w3-container view",
+			div(idAttr :="draft",
 				hideIfNotCurrent("draft"),
 				appcanvas("canvasdraft"),
 				p(" "),
 				cnvTooltip("canvasdraft", "Сохранить .png", "Сохранить эскиз для программ просмотра рисунков")),				
-			div(idAttr :="dev", cls:="w3-container view",
+			div(idAttr :="dev",
 				hideIfNotCurrent("dev"),
 				appcanvas("canvasdev"),
 				p(" "),
