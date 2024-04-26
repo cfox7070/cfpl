@@ -1,6 +1,6 @@
 package cfx70.cfpl.draft
 
-//import scala.scalajs.js.annotation._
+import scala.scalajs.js.annotation._
 import scala.scalajs.js
 import org.scalajs.dom
 import org.scalajs.dom.{html,document,Event}
@@ -20,6 +20,14 @@ import cfx70.threejsfacade.THREE._
 import cfx70.threejsfacade.OrbitControls
 
 import cfx70.vecquat._
+
+@js.native
+@JSGlobalScope
+object Android extends js.Object {
+	def savepng(dturl : String) : Unit = js.native
+	def savedxf(dxf : String) : Unit = js.native
+}
+
 
 object App{
 	
@@ -42,6 +50,8 @@ object App{
 }
 
 object Ui{
+	
+	val android = false
 	
 	val curModelVar: Var[String] = Var("redrc")
 	
@@ -81,7 +91,12 @@ object Ui{
 
 	def downloadPng(cnvId : String) :String = {
 	  val cnv = document.getElementById(cnvId).asInstanceOf[html.Canvas]
-	  cnv.toDataURL("image/png")
+	  if(cnvId == "canvas3d") DetApp.updateScene()
+	  val dturl = cnv.toDataURL("image/png")
+	  if(android){
+		   Android.savepng(dturl)
+	   }
+	  dturl
 	}
 	
 	def typeBar() : HtmlElement = {
@@ -115,15 +130,12 @@ object Ui{
 		val picBus = new EventBus[String]
         val picStream: EventStream[String] = picBus.events.map(cId => downloadPng(cId))
 
-		def cnvTooltip(cnvId:String, cap : String, ttext : String) : HtmlElement = 
-				div(cls("tooltip"),
+		def cnvBtn(cnvId:String, cap : String) : HtmlElement = 
 					a(cls("w3-button", "w3-theme", "w3-round-large"),
 					  download:="", 
 					  href <-- picStream,
 					  cap,
-					  span(cls("tooltiptext"),ttext),
-					  onClick.mapTo(cnvId) --> picBus.writer
-					  ))
+					  onClick.mapTo(cnvId) --> picBus.writer)
 					  
 		def hideIfNotCurrent(vname : String) : Mod[HtmlElement] =
 				display <-- curV.signal.map(s => if(s == vname) "block" else "none")
@@ -139,18 +151,18 @@ object Ui{
 				hideIfNotCurrent("3d"),
 				appcanvas("canvas3d"),
 				p(" "),
-				cnvTooltip("canvas3d", "Сохранить .png", "Сохранить модель для программ просмотра рисунков"),
+				cnvBtn("canvas3d", "Сохранить .png"),
 				span(cls("w3-right"),"можно покрутить")),
 			div(idAttr :="draft",
 				hideIfNotCurrent("draft"),
 				appcanvas("canvasdraft"),
 				p(" "),
-				cnvTooltip("canvasdraft", "Сохранить .png", "Сохранить эскиз для программ просмотра рисунков")),				
+				cnvBtn("canvasdraft", "Сохранить .png")),				
 			div(idAttr :="dev",
 				hideIfNotCurrent("dev"),
 				appcanvas("canvasdev"),
 				p(" "),
-				cnvTooltip("canvasdev", "Сохранить .png", "Сохранить развертку для программ просмотра рисунков"),
+				cnvBtn("canvasdev", "Сохранить .png"),
 				/*cnvTooltip("canvasdev", "Сохранить .dxf", "Сохранить развертку для редактирования в CAD программах")*/),
 				//<?=$rpoints?>
 			div(idAttr :="mat", cls:="w3-container view",
