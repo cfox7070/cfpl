@@ -27,19 +27,30 @@ import android.webkit.WebSettings;
 import android.webkit.WebSettings.ZoomDensity;
 import android.webkit.WebView;
 
-public class MainActivity extends CordovaActivity{
-	
-	 class JSItf {
+import android.widget.Toast;
+import android.content.Context;
+import android.webkit.JavascriptInterface;
+
+public class MainActivity extends CordovaActivity
+{
+ 	 class JSItf {
+		Context mContext;
+
+		/** Instantiate the interface and set the context. */
+		JSItf(Context c) {
+			mContext = c;
+		}
+		
 		@JavascriptInterface
-		public savepng(String dturl){
-			
+		public void savepng(String dturl){			
+			Toast.makeText(mContext, "saving png", Toast.LENGTH_SHORT).show();
 		}
 		@JavascriptInterface
-		public savedxf(String dxf){
-			
+		public void savedxf(String dxf){
+			Toast.makeText(mContext, "saving dxf", Toast.LENGTH_SHORT).show();			
 		}
 	 }
-
+	 
    @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -52,13 +63,14 @@ public class MainActivity extends CordovaActivity{
         }
 		
         // Set by <content src="index.html" /> in config.xml
-        
-        
+        if (appView == null) {
+            init();
+        }
 		WebView webview= (WebView) appView.getEngine().getView();
         webview.getSettings().setBuiltInZoomControls(true);
 		webview.getSettings().setDisplayZoomControls(false);
 		
-		webView.addJavascriptInterface(new JSItf(), "Android");
+		webview.addJavascriptInterface(new JSItf(this), "Android");
 		
 		loadUrl(launchUrl);
     }

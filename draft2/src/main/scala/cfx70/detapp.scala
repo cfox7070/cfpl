@@ -51,7 +51,7 @@ object App{
 
 object Ui{
 	
-	val android = false
+	val android = true
 	
 	val curModelVar: Var[String] = Var("redrc")
 	
