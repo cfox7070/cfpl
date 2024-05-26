@@ -22,7 +22,7 @@ import cfx70.threejsfacade.OrbitControls
 import cfx70.vecquat._
 
 @js.native
-@JSGlobalScope
+@JSGlobal
 object Android extends js.Object {
 	def savepng(dturl : String) : Unit = js.native
 	def savedxf(dxf : String) : Unit = js.native
@@ -67,7 +67,7 @@ object Ui{
 			case "redrr" => Some(RedRR)
 			case "redrc" => Some(RedRC)
 			case "redcc" => Some(RedCC)
-			case _ => None
+			case _ => NonecurModelVar
 		}
 	
 	def setModelType(mtype : String) : Unit = {
