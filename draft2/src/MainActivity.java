@@ -62,16 +62,46 @@ public class MainActivity extends CordovaActivity
             moveTaskToBack(true);
         }
 		
-        // Set by <content src="index.html" /> in config.xml
-        if (appView == null) {
+       if (appView == null) {
             init();
         }
 		WebView webview= (WebView) appView.getEngine().getView();
         webview.getSettings().setBuiltInZoomControls(true);
 		webview.getSettings().setDisplayZoomControls(false);
-		
+
+		webview.getSettings().setJavaScriptEnabled(true);		
 		webview.addJavascriptInterface(new JSItf(this), "Android");
-		
+ 		
 		loadUrl(launchUrl);
     }
+    
+	private static final int CREATE_FILE = 1;
+
+	private void createFile(/*Uri pickerInitialUri*/) {
+		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TITLE, "sampletext.txt");
+
+		// Optionally, specify a URI for the directory that should be opened in
+		// the system file picker when your app creates the document.
+		//intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+		startActivityForResult(intent, CREATE_FILE);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode,
+			Intent resultData) {
+		if (requestCode == CREATE_FILE
+				&& resultCode == Activity.RESULT_OK) {
+			// The result data contains a URI for the document or directory that
+			// the user selected.
+			Uri uri = null;
+			if (resultData != null) {
+				uri = resultData.getData();
+				// Perform operations on the document using its URI.
+			}
+		}
+	}
 }
