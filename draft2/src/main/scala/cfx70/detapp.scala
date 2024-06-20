@@ -24,8 +24,11 @@ import cfx70.vecquat._
 @js.native
 @JSGlobal
 object Android extends js.Object {
-	def savepng(dturl : String) : Unit = js.native
-	def savedxf(dxf : String) : Unit = js.native
+	def savepng : js.UndefOr[js.Function1[String,Unit]] = js.native
+	def savedxf : js.UndefOr[js.Function1[String,Unit]] = js.native
+
+/*	def savepng(dturl : String) : Unit = js.native
+	def savedxf(dxf : String) : Unit = js.native */
 }
 
 
@@ -51,7 +54,7 @@ object App{
 
 object Ui{
 	
-	val android = true
+//	val android = true
 	
 	val curModelVar: Var[String] = Var("redrc")
 	
@@ -67,7 +70,7 @@ object Ui{
 			case "redrr" => Some(RedRR)
 			case "redrc" => Some(RedRC)
 			case "redcc" => Some(RedCC)
-			case _ => NonecurModelVar
+			case _ => None /*curModelVar*/
 		}
 	
 	def setModelType(mtype : String) : Unit = {
@@ -93,9 +96,20 @@ object Ui{
 	  val cnv = document.getElementById(cnvId).asInstanceOf[html.Canvas]
 	  if(cnvId == "canvas3d") DetApp.updateScene()
 	  val dturl = cnv.toDataURL("image/png")
-	  if(android){
-		   Android.savepng(dturl)
-	   }
+//	  if(android){
+//		   Android.savepng(dturl)
+//	   }
+     if (!js.isUndefined(js.Dynamic.global.Android)) {
+	  	println(js.typeOf(Android))
+		Android.savepng.toOption.foreach(fn => { val sfn: String => Unit = fn; sfn(dturl)})
+	 } else {
+	  // Promises are not supported
+	 }
+
+ /*    if(!js.isUndefined(Android)){
+		 println(js.typeOf(Android))
+		Android.savepng.toOption.foreach(fn => { val sfn: String => Unit = fn; sfn(dturl)})
+	 }*/
 	  dturl
 	}
 	
