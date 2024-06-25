@@ -24,8 +24,8 @@ import cfx70.vecquat._
 @js.native
 @JSGlobal
 object Android extends js.Object {
-	def savepng : js.UndefOr[js.Function1[String,Unit]] = js.native
-	def savedxf : js.UndefOr[js.Function1[String,Unit]] = js.native
+	def savepng (dt : String) : Unit = js.native
+	def savedxf (dt : String) : Unit = js.native
 
 /*	def savepng(dturl : String) : Unit = js.native
 	def savedxf(dxf : String) : Unit = js.native */
@@ -44,9 +44,7 @@ object App{
 
 		val parContainer: dom.Element = dom.document.querySelector("#params")
 		val parRoot: RootNode = render(parContainer, Ui.paramTable())
-		
-		DetApp.setup3d("#canvas3d")
-		
+				
 		Ui.setModelType("redrc")
     }
     
@@ -96,20 +94,7 @@ object Ui{
 	  val cnv = document.getElementById(cnvId).asInstanceOf[html.Canvas]
 	  if(cnvId == "canvas3d") DetApp.updateScene()
 	  val dturl = cnv.toDataURL("image/png")
-//	  if(android){
-//		   Android.savepng(dturl)
-//	   }
-     if (!js.isUndefined(js.Dynamic.global.Android)) {
-	  	println(js.typeOf(Android))
-		Android.savepng.toOption.foreach(fn => { val sfn: String => Unit = fn; sfn(dturl)})
-	 } else {
-	  // Promises are not supported
-	 }
-
- /*    if(!js.isUndefined(Android)){
-		 println(js.typeOf(Android))
-		Android.savepng.toOption.foreach(fn => { val sfn: String => Unit = fn; sfn(dturl)})
-	 }*/
+      if (js.typeOf(Android)!="undefined") Android.savepng(dturl)
 	  dturl
 	}
 	
@@ -219,7 +204,33 @@ object Ui{
 }
 
 object DetApp{  
-    var renderer : WebGLRenderer= null
+	
+    lazy val renderer : WebGLRenderer = {  val cnv=document.querySelector("canvas3d").asInstanceOf[html.Canvas]
+										println(cnv)
+                          new WebGLRenderer($(canvas = cnv ))}
+
+    val camera3d : PerspectiveCamera = new PerspectiveCamera(75, 800.0/600.0, 0.1, 2000)
+    val light : DirectionalLight = new DirectionalLight(0xffffff, 0.6)
+	val alight = new AmbientLight(0xffffff, 0.5)
+    val scene : Scene = { val s = new Scene()
+						  s.background=new Color(0xF3F3FA)
+						  s.add(light)
+                          s.add(alight)
+                          s}
+                          
+    lazy val controls : OrbitControls = { val c =new OrbitControls( camera3d, renderer.domElement )
+                                         c.addEventListener("change",(e:dom.Event)=>{    
+                                                            light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
+                                                            renderer.render(scene,camera3d) 
+                                                        })
+                                      c}
+
+
+    var model:Model=null
+    var animation:Boolean=false
+	
+
+ /*   var renderer : WebGLRenderer= null
     var scene : Scene = null
     var camera3d : PerspectiveCamera = null
     var light : DirectionalLight = null
@@ -248,7 +259,7 @@ object DetApp{
                                                         })
  
 		//(renderer,scene,camera3d,light,controls) = set3dRenderer(cnvId)
-	}
+	}*/
 	
 	def setDev(st:Int=1) : Unit ={
        val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
