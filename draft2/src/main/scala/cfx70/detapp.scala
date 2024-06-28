@@ -45,6 +45,7 @@ object App{
 		val parContainer: dom.Element = dom.document.querySelector("#params")
 		val parRoot: RootNode = render(parContainer, Ui.paramTable())
 				
+		Ui.maySetModel = true
 		Ui.setModelType("redrc")
     }
     
@@ -53,6 +54,7 @@ object App{
 object Ui{
 	
 //	val android = true
+    var maySetModel = false
 	
 	val curModelVar: Var[String] = Var("redrc")
 	
@@ -87,7 +89,7 @@ object Ui{
 			case Some(src) => {src(paramsVar.now())}
 			case None => null
 		}
-		if(mod != null) DetApp.setModel(mod) else println("model null")
+		if(mod != null && maySetModel) DetApp.setModel(mod) else println("model null")
 	}
 
 	def downloadPng(cnvId : String) :String = {
@@ -205,7 +207,7 @@ object Ui{
 
 object DetApp{  
 	
-    lazy val renderer : WebGLRenderer = {  val cnv=document.querySelector("canvas3d").asInstanceOf[html.Canvas]
+    lazy val renderer : WebGLRenderer = {  val cnv=document.querySelector("#canvas3d").asInstanceOf[html.Canvas]
 										println(cnv)
                           new WebGLRenderer($(canvas = cnv ))}
 
@@ -228,38 +230,6 @@ object DetApp{
 
     var model:Model=null
     var animation:Boolean=false
-	
-
- /*   var renderer : WebGLRenderer= null
-    var scene : Scene = null
-    var camera3d : PerspectiveCamera = null
-    var light : DirectionalLight = null
-    var controls : OrbitControls =null
-
-    var model:Model=null
-    var animation:Boolean=false
-	
-	def setup3d(cnvId : String) : Unit = {
-		renderer = {  val cnvDev=document.querySelector(cnvId).asInstanceOf[html.Canvas]
-                          new WebGLRenderer($(canvas = cnvDev ))}
-                                  
-        scene = new Scene()
-        scene.background=new Color(0xF3F3FA)
-        
-        camera3d = new PerspectiveCamera(75, 800.0/600.0, 0.1, 2000)
-        light = new DirectionalLight(0xffffff, 0.6)
-		val alight = new AmbientLight(0xffffff, 0.5)
-        scene.add(light)
-        scene.add(alight)
-    
-        controls = new OrbitControls( camera3d, renderer.domElement )
-        controls.addEventListener("change",(e:dom.Event)=>{    
-                                                            light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
-                                                            renderer.render(scene,camera3d) 
-                                                        })
- 
-		//(renderer,scene,camera3d,light,controls) = set3dRenderer(cnvId)
-	}*/
 	
 	def setDev(st:Int=1) : Unit ={
        val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]

@@ -20,8 +20,18 @@
 package com.cfx70.shmw;
 
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor; 
+
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.apache.cordova.*;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 
 import android.webkit.WebSettings; 
 import android.webkit.WebSettings.ZoomDensity;
@@ -44,6 +54,7 @@ public class MainActivity extends CordovaActivity
 		@JavascriptInterface
 		public void savepng(String dturl){			
 			Toast.makeText(mContext, "saving png", Toast.LENGTH_SHORT).show();
+			createFile();
 		}
 		@JavascriptInterface
 		public void savedxf(String dxf){
@@ -100,8 +111,28 @@ public class MainActivity extends CordovaActivity
 			Uri uri = null;
 			if (resultData != null) {
 				uri = resultData.getData();
+				alterDocument(uri);
 				// Perform operations on the document using its URI.
 			}
 		}
 	}
+	
+	private void alterDocument(Uri uri) {
+    try {
+			ParcelFileDescriptor pfd = getContentResolver().
+					openFileDescriptor(uri, "w");
+			FileOutputStream fileOutputStream =
+					new FileOutputStream(pfd.getFileDescriptor());
+			fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
+					"\n").getBytes());
+			// Let the document provider know you're done by closing the stream.
+			fileOutputStream.close();
+			pfd.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
