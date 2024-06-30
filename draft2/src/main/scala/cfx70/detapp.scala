@@ -53,7 +53,6 @@ object App{
 
 object Ui{
 	
-//	val android = true
     var maySetModel = false
 	
 	val curModelVar: Var[String] = Var("redrc")
@@ -176,7 +175,6 @@ object Ui{
 
 		def valueChanged(n : String, v : Double) : Unit = {			
 			paramsVar.update(ps => ps.map(itm =>  if(itm.name == n) ParamsItem(n,v,itm.step,itm.list) else itm ))
-			//setModel()					
 		}
 				
 		def renderParamsItem(itm : ParamsItem ) : Element = {	
@@ -228,14 +226,14 @@ object DetApp{
                                       c}
 
 
-    var model:Model=null
+    var model:Option[Model]=None
     var animation:Boolean=false
 	
 	def setDev(st:Int=1) : Unit ={
        val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
 	   val ctxDev=cnvDev.getContext("2d").asInstanceOf[Context2d]
 	   ctxDev.font="italic 2.1em sans-serif"
-	   Dev(model,st) match {
+	   Dev(model.get(),st) match {
 		   case Some(dv) => dv.draw(ctxDev)
 		   case None =>}		
 	}
@@ -283,7 +281,7 @@ object DetApp{
 	def updateScene() : Unit ={renderer.render(scene, camera3d)}
 	
 	def show3d():Unit=model match {
-		case m:Model =>{
+		case Some(m) =>{
                         val s=m.bsphere
                         camera3d.position.z= (s.radius /** 2*/)/tan((camera3d.fov/2).toRadians)
                         camera3d.position.x= -s.radius
@@ -292,37 +290,34 @@ object DetApp{
 //                        camera3d.rotation.y= -Pi/6
                         camera3d.updateProjectionMatrix()
 
-                        scene.add(model.meshes)
+                        scene.add(model.get().meshes)
 			controls.update()
 			light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
 			//animation=true
 			animate(0)
 		}
-		case null => {}
+		case None => {}
 	}
 	
         def setModel(m:Model) : Unit = {
-                   if(model != null){
-                        scene.remove(model.meshes)
-                        model.dispose()
-                   }
-                   model=m
+            model.foreach(mm => {scene.remove(mm.meshes); mm.dispose()}
+            model=Some(m)
                    
-                   val descr=document.querySelector("#descr")
-                   descr.innerHTML=model.description("ru")
-                   
-                   show3d()
-                   
-                   Draft(model)match{ 
-					   case Some(dr) =>{ val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
-										 val ctxDraft = cnvDraft.getContext("2d").asInstanceOf[Context2d]
-										 ctxDraft.font="italic 2.1em sans-serif"
-										 dr.draw(ctxDraft)
-									   }
-					   case None =>
-					   }
-					   
-				   setDev(3)
+		   val descr=document.querySelector("#descr")
+		   descr.innerHTML = m.description("ru")
+		   
+		   show3d()
+		   
+		   Draft(m)match{ 
+			   case Some(dr) =>{ val cnvDraft=document.querySelector("#canvasdraft").asInstanceOf[html.Canvas]
+								 val ctxDraft = cnvDraft.getContext("2d").asInstanceOf[Context2d]
+								 ctxDraft.font="italic 2.1em sans-serif"
+								 dr.draw(ctxDraft)
+							   }
+			   case None =>
+			   }
+			   
+		   setDev(3)
 				   
                    /*Mats(model,document.querySelector("#mattbl").asInstanceOf[html.Table]) match {
 					   case Some(mt) => mt.writeMats()

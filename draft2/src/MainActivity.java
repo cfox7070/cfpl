@@ -26,6 +26,10 @@ import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+
+
 import org.apache.cordova.*;
 
 import android.app.Activity;
@@ -43,6 +47,8 @@ import android.webkit.JavascriptInterface;
 
 public class MainActivity extends CordovaActivity
 {
+	 String imgdturl="";
+	 
  	 class JSItf {
 		Context mContext;
 
@@ -53,7 +59,8 @@ public class MainActivity extends CordovaActivity
 		
 		@JavascriptInterface
 		public void savepng(String dturl){			
-			Toast.makeText(mContext, "saving png", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(mContext, "saving png", Toast.LENGTH_SHORT).show();
+			imgdturl = dturl;
 			createFile();
 		}
 		@JavascriptInterface
@@ -91,8 +98,8 @@ public class MainActivity extends CordovaActivity
 	private void createFile(/*Uri pickerInitialUri*/) {
 		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_TITLE, "sampletext.txt");
+		intent.setType("image/png");
+		intent.putExtra(Intent.EXTRA_TITLE, "detail.png"); 
 
 		// Optionally, specify a URI for the directory that should be opened in
 		// the system file picker when your app creates the document.
@@ -123,10 +130,11 @@ public class MainActivity extends CordovaActivity
 					openFileDescriptor(uri, "w");
 			FileOutputStream fileOutputStream =
 					new FileOutputStream(pfd.getFileDescriptor());
-			fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
-					"\n").getBytes());
+			writeImg(fileOutputStream);
+//			fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
+//					"\n").getBytes());
 			// Let the document provider know you're done by closing the stream.
-			fileOutputStream.close();
+//			fileOutputStream.close();
 			pfd.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -134,5 +142,21 @@ public class MainActivity extends CordovaActivity
 			e.printStackTrace();
 		}
 	}
+	
+	private void writeImg(FileOutputStream fos){
+		
+		final byte[] imgBytesData = android.util.Base64.decode(imgdturl,
+            android.util.Base64.DEFAULT);
+
+		Bitmap bitmap = BitmapFactory.decodeByteArray(imgBytesData, 0, imgBytesData.length);
+
+		try {
+			 bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+			 fos.flush();
+			 fos.close();
+		} catch (Exception e) {
+			 e.printStackTrace();
+		}
+    }
 
 }
