@@ -145,7 +145,12 @@ public class MainActivity extends CordovaActivity
 	
 	private void writeImg(FileOutputStream fos){
 		
-		final byte[] imgBytesData = android.util.Base64.decode(imgdturl,
+/*		String str = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA...";
+		byte[] imagedata = java.util.Base64.getDecoder().decode(str.substring(str.indexOf(",") + 1));
+		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagedata));
+		ImageIO.write(bufferedImage, "png", new File("img.png"));*/
+//		Toast.makeText(this, imgdturl, Toast.LENGTH_SHORT).show();
+		final byte[] imgBytesData = android.util.Base64.decode(imgdturl.substring(imgdturl.indexOf(",") + 1),
             android.util.Base64.DEFAULT);
 
 		Bitmap bitmap = BitmapFactory.decodeByteArray(imgBytesData, 0, imgBytesData.length);

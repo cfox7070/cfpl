@@ -161,6 +161,35 @@ object RedCC extends FromParamsSeq{
 	}	
 }
 
+class ElbC(val d:Double,val ang:Double,val rad:Double, val segs,
+							val f1:Double,val f2:Double) extends Model{
+        import Model._						
+	def description(lang:String):String = 
+			s"Отвод &Oslash;$d &lt;ang Rc=$rad"
+		       
+       val fcb = new BCylinder(d1,f1)
+       val fct = new BCylinder(d2,f2).translate(Vec(dc,0,h-f2))
+       val cn  = new BCone(d1,d2,h-f1-f2,dc).translate(Vec(0,0,f1))
+       						
+       val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
+}
+object ElbC extends FromParamsSeq{
+	val imgSrc = "img/elb-c.png"
+	val imgAlt = "Развертка круглого отвода"
+	def defaultParamsSeq : ParamsSeq = Seq(ParamsItem("d",200,"5","diams"),
+										 ParamsItem("&lt;",90),
+										 ParamsItem("Rc",200,"5"),
+										 ParamsItem("segments",4),
+										 ParamsItem("df1",40),
+										 ParamsItem("df2",40)
+										)
+	def apply(ps : ParamsSeq) : ElbC = {
+		val pm = ps.view.map(p => p.name -> p).toMap
+		def V (n : String) : Double = pm(n).v
+		new ElbC(V("d"), V("&lt;"), V("Rc"),V("segments"),V("df1"),V("df2"))
+	}	
+}
+
 class ElbR(val a:Double,val b:Double,
 						val r:Double, val ang:Double, val f:Double=0) extends Model{
     import Model._
