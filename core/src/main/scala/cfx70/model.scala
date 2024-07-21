@@ -161,17 +161,17 @@ object RedCC extends FromParamsSeq{
 	}	
 }
 
-class ElbC(val d:Double,val ang:Double,val rad:Double, val segs,
+class ElbC(val d:Double,val ang:Double,val rad:Double, val segs : Double,
 							val f1:Double,val f2:Double) extends Model{
         import Model._						
 	def description(lang:String):String = 
 			s"Отвод &Oslash;$d &lt;ang Rc=$rad"
 		       
-       val fcb = new BCylinder(d1,f1)
-       val fct = new BCylinder(d2,f2).translate(Vec(dc,0,h-f2))
-       val cn  = new BCone(d1,d2,h-f1-f2,dc).translate(Vec(0,0,f1))
+       val fcb = new BCylinder(d,f1)
+       /*val fct = new BCylinder(d2,f2).translate(Vec(dc,0,h-f2))
+       val cn  = new BCone(d1,d2,h-f1-f2,dc).translate(Vec(0,0,f1))*/
        						
-       val meshes = makeMeshes(phongBlueMaterial,fcb,fct,cn)                                                             
+       val meshes = makeMeshes(phongBlueMaterial,fcb)                                                             
 }
 object ElbC extends FromParamsSeq{
 	val imgSrc = "img/elb-c.png"

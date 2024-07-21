@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.13"
 ThisBuild / organization := "com.cfx70"
 ThisBuild / version      := "0.1.1"
  

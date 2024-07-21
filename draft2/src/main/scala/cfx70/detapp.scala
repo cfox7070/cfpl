@@ -233,7 +233,7 @@ object DetApp{
        val cnvDev=document.querySelector("#canvasdev").asInstanceOf[html.Canvas]
 	   val ctxDev=cnvDev.getContext("2d").asInstanceOf[Context2d]
 	   ctxDev.font="italic 2.1em sans-serif"
-	   Dev(model.get(),st) match {
+	   Dev(model.get,st) match {
 		   case Some(dv) => dv.draw(ctxDev)
 		   case None =>}		
 	}
@@ -290,7 +290,7 @@ object DetApp{
 //                        camera3d.rotation.y= -Pi/6
                         camera3d.updateProjectionMatrix()
 
-                        scene.add(model.get().meshes)
+                        scene.add(model.get.meshes)
 			controls.update()
 			light.position.set(camera3d.position.x, camera3d.position.y, camera3d.position.z)
 			//animation=true
@@ -300,7 +300,7 @@ object DetApp{
 	}
 	
         def setModel(m:Model) : Unit = {
-            model.foreach(mm => {scene.remove(mm.meshes); mm.dispose()}
+            model.foreach(mm => {scene.remove(mm.meshes); mm.dispose()})
             model=Some(m)
                    
 		   val descr=document.querySelector("#descr")
